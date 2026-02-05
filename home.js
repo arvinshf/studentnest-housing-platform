@@ -2,11 +2,13 @@
 (function() {
   'use strict';
 
+  const API_BASE_URL = 'https://studentnest-housing-platform.onrender.com/api';
+
   // Check if user is authenticated
   async function checkAuthentication() {
     console.log('Checking authentication...');
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/check-session/', {
+      const response = await fetch(`${API_BASE_URL}/check-session/`, {
         credentials: 'include'
       });
       const data = await response.json();
@@ -42,7 +44,7 @@
   // Logout functionality
   async function logout() {
     try {
-      await fetch('http://127.0.0.1:8000/api/logout/', {
+      await fetch(`${API_BASE_URL}/logout/`, {
         method: 'POST',
         credentials: 'include'
       });
@@ -64,7 +66,7 @@
   async function loadUserFavorites() {
     console.log('Loading user favorites...');
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/favorites/', {
+      const response = await fetch(`${API_BASE_URL}/favorites/`, {
         credentials: 'include'
       });
       
@@ -88,7 +90,7 @@
   async function fetchRooms() {
     console.log('Fetching rooms from API...');
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/rooms/', {
+      const response = await fetch(`${API_BASE_URL}/rooms/`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -373,7 +375,7 @@
       if (isFavorited) {
         // Remove from favorites
         console.log('Attempting to remove favorite...');
-        const response = await fetch(`http://127.0.0.1:8000/api/favorites/${roomId}/remove/`, {
+        const response = await fetch(`${API_BASE_URL}/favorites/${roomId}/remove/`, {
           method: 'DELETE',
           credentials: 'include'
         });
@@ -396,7 +398,7 @@
       } else {
         // Add to favorites
         console.log('Attempting to add favorite...');
-        const response = await fetch('http://127.0.0.1:8000/api/favorites/add/', {
+        const response = await fetch(`${API_BASE_URL}/favorites/add/`, {
           method: 'POST',
           credentials: 'include',
           headers: {

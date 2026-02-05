@@ -1,7 +1,7 @@
 
 // Backend API Configuration
 (function () {
-  const API_BASE_URL = "http://127.0.0.1:8000/api";
+  const API_BASE_URL = "https://studentnest-housing-platform.onrender.com/api";
 
   function byId(id){ return document.getElementById(id); }
 

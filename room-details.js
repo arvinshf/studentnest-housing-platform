@@ -1,5 +1,7 @@
 // Room Details Page JavaScript
 
+const API_BASE_URL = 'https://studentnest-housing-platform.onrender.com/api';
+
 // Current image index for gallery
 let currentImageIndex = 0;
 let currentRoom = null;
@@ -26,7 +28,7 @@ async function loadRoomDetails(roomId) {
   console.log('Loading room details for ID:', roomId);
   
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/rooms/${roomId}/`, {
+    const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -290,14 +292,14 @@ async function toggleSaveRoom(roomId) {
     savedRooms.push(roomId);
     
     console.log('TROUBLESHOOT - Adding to favorites');
-    console.log('TROUBLESHOOT - API URL: http://127.0.0.1:8000/api/favorites/add/');
+    console.log('TROUBLESHOOT - API URL: ${API_BASE_URL}/favorites/add/');
     console.log('TROUBLESHOOT - Method: POST');
     console.log('TROUBLESHOOT - Credentials: include');
     console.log('TROUBLESHOOT - Body:', { room_id: roomId });
     
     // Call backend API to add to favorites
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/favorites/add/', {
+      const response = await fetch('${API_BASE_URL}/favorites/add/', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -338,7 +340,7 @@ async function toggleSaveRoom(roomId) {
     // Remove from favorites
     savedRooms.splice(index, 1);
     
-    const deleteUrl = `http://127.0.0.1:8000/api/favorites/${roomId}/remove/`;
+    const deleteUrl = `${API_BASE_URL}/favorites/${roomId}/remove/`;
     console.log('TROUBLESHOOT - Removing from favorites');
     console.log('TROUBLESHOOT - API URL:', deleteUrl);
     console.log('TROUBLESHOOT - Method: DELETE');
@@ -389,7 +391,7 @@ async function updateSaveButtonState() {
   
   // Check backend for favorite status
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/favorites/${currentRoom.id}/check/`, {
+    const response = await fetch(`${API_BASE_URL}/favorites/${currentRoom.id}/check/`, {
       credentials: 'include'
     });
     
@@ -444,7 +446,7 @@ let currentUser = null;
 
 async function checkAuthentication() {
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/check-session/', {
+    const response = await fetch('${API_BASE_URL}/check-session/', {
       method: 'GET',
       credentials: 'include'
     });
@@ -503,7 +505,7 @@ function updateNavForLoggedInUser(student) {
 // Logout
 async function logout() {
   try {
-    await fetch('http://127.0.0.1:8000/api/logout/', {
+    await fetch('${API_BASE_URL}/logout/', {
       method: 'POST',
       credentials: 'include'
     });
@@ -574,7 +576,7 @@ async function setupDeleteButton(roomId, ownerEmail) {
   
   // Check if user is logged in
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/check-session/', {
+    const response = await fetch('${API_BASE_URL}/check-session/', {
       credentials: 'include'
     });
     
@@ -613,7 +615,7 @@ async function deleteRoom(roomId) {
   console.log('Deleting room:', roomId);
   
   try {
-    const response = await fetch(`http://127.0.0.1:8000/api/rooms/${roomId}/`, {
+    const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/`, {
       method: 'DELETE',
       credentials: 'include',
       headers: {
@@ -689,7 +691,7 @@ function setupMessageModal() {
       } else {
         // Double-check with API before redirecting
         try {
-          const response = await fetch('http://127.0.0.1:8000/api/check-session/', {
+          const response = await fetch('${API_BASE_URL}/check-session/', {
             method: 'GET',
             credentials: 'include'
           });
@@ -799,7 +801,7 @@ async function handleMessageSubmit(e) {
   
   try {
     // Send message to backend API
-    const response = await fetch('http://127.0.0.1:8000/api/messages/send/', {
+    const response = await fetch('${API_BASE_URL}/messages/send/', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -1060,7 +1062,7 @@ async function submitReport(e) {
   submitBtn.innerHTML = '<span style="display: inline-block; animation: spin 1s linear infinite;">⏳</span> Submitting...';
   
   try {
-    const response = await fetch('http://127.0.0.1:8000/api/reports/create/', {
+    const response = await fetch('${API_BASE_URL}/reports/create/', {
       method: 'POST',
       credentials: 'include',
       headers: {

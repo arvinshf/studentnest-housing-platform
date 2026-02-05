@@ -1,7 +1,7 @@
 // Post Room JavaScript
 (function() {
   console.log('POST-ROOM.JS LOADED - v2');
-  const API_BASE_URL = "http://127.0.0.1:8000/api";
+  const API_BASE_URL = "https://studentnest-housing-platform.onrender.com/api";
 
   // Check authentication on page load
   document.addEventListener('DOMContentLoaded', async () => {
