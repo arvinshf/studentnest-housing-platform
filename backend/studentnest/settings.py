@@ -147,6 +147,8 @@ SESSION_COOKIE_SECURE = True  # Required for SameSite=None with HTTPS
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_AGE = 86400  # 24 hours
 SESSION_SAVE_EVERY_REQUEST = True  # Save session on every request
+SESSION_COOKIE_NAME = 'studentnest_sessionid'  # Custom session cookie name
+SESSION_COOKIE_PATH = '/'  # Cookie available for all paths
 
 # Media files (uploads)
 MEDIA_URL = '/media/'
