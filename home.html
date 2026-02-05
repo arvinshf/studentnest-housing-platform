@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>StudentNest - Find Your Perfect Student Accommodation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="description" content="Find rooms, flatmates, and student accommodation near your university. Search thousands of verified student properties." />
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./home.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&display=swap" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="home-nav">
+    <div class="home-nav-container">
+      <div class="home-nav-brand">
+        <span class="home-logo-text">StudentNest</span>
+      </div>
+      <div class="home-nav-links">
+        <a href="home.html" class="home-nav-link active">Home</a>
+        <a href="#find-room" class="home-nav-link">Find a Room</a>
+        <a href="#advertise" class="home-nav-link">Advertise</a>
+        <a href="#how-it-works" class="home-nav-link">How it Works</a>
+      </div>
+      <div class="home-nav-actions">
+        <a href="portal.html" class="home-nav-btn-icon" title="Dashboard">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </a>
+        <a href="index.html" class="home-nav-btn-outline">Login</a>
+        <a href="signup.html" class="home-nav-btn-primary">Sign Up</a>
+        <button class="home-nav-mobile-toggle" id="mobileMenuToggle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="home-mobile-menu" id="mobileMenu">
+    <div class="home-mobile-menu-header">
+      <span class="home-logo-text">StudentNest</span>
+      <button class="home-mobile-menu-close" id="mobileMenuClose">
+        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6L6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="home-mobile-menu-content">
+      <a href="home.html" class="home-mobile-link">Home</a>
+      <a href="portal.html" class="home-mobile-link">Dashboard</a>
+      <a href="#find-room" class="home-mobile-link">Find a Room</a>
+      <a href="#advertise" class="home-mobile-link">Advertise</a>
+      <a href="#how-it-works" class="home-mobile-link">How it Works</a>
+      <div class="home-mobile-actions">
+        <a href="index.html" class="home-nav-btn-outline">Login</a>
+        <a href="signup.html" class="home-nav-btn-primary">Sign Up</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="home-hero">
+    <div class="home-hero-bg">
+      <video autoplay muted loop playsinline class="home-hero-video">
+        <source src="https://videos.pexels.com/video-files/4056275/4056275-uhd_2560_1440_25fps.mp4" type="video/mp4">
+      </video>
+      <div class="home-hero-overlay"></div>
+    </div>
+    <div class="home-hero-content">
+      <h1 class="home-hero-title">Find Your Perfect Student Room</h1>
+      <p class="home-hero-subtitle">Search thousands of verified student accommodations near your university</p>
+      
+      <!-- Search Box -->
+      <div class="home-search-card">
+        <div class="home-search-tabs">
+          <button class="home-search-tab active" data-tab="room">Find a Room</button>
+        </div>
+        <form class="home-search-form" id="searchForm">
+          <div class="home-search-row">
+            <div class="home-search-field">
+              <label for="location">Location</label>
+              <div class="home-search-input-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <input type="text" id="location" placeholder="e.g. Westminster, London" />
+              </div>
+            </div>
+            <div class="home-search-field">
+              <label for="maxPrice">Max Price (£/month)</label>
+              <div class="home-search-input-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="23"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                <input type="number" id="maxPrice" placeholder="800" />
+              </div>
+            </div>
+            <div class="home-search-field">
+              <label for="moveDate">Move In Date</label>
+              <div class="home-search-input-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="16" y1="2" x2="16" y2="6"></line>
+                  <line x1="8" y1="2" x2="8" y2="6"></line>
+                  <line x1="3" y1="10" x2="21" y2="10"></line>
+                </svg>
+                <input type="date" id="moveDate" />
+              </div>
+            </div>
+          </div>
+          <button type="submit" class="home-search-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+            <span>Search Rooms</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Quick Stats -->
+  <section class="home-stats-section">
+    <div class="home-container">
+      <div class="home-stats-grid">
+        <div class="home-stat-card">
+          <div class="home-stat-number">50,000+</div>
+          <div class="home-stat-label">Active Listings</div>
+        </div>
+        <div class="home-stat-card">
+          <div class="home-stat-number">100+</div>
+          <div class="home-stat-label">Universities</div>
+        </div>
+        <div class="home-stat-card">
+          <div class="home-stat-number">4.8/5</div>
+          <div class="home-stat-label">User Rating</div>
+        </div>
+        <div class="home-stat-card">
+          <div class="home-stat-number">24/7</div>
+          <div class="home-stat-label">Support</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Rooms -->
+  <section class="home-featured-section" id="find-room">
+    <div class="home-container">
+      <div class="home-section-header">
+        <h2 class="home-section-title">Featured Student Rooms</h2>
+        <p class="home-section-subtitle">Verified properties near top universities</p>
+      </div>
+      <div class="home-rooms-grid">
+        <!-- Room Card 1 -->
+        <div class="home-room-card">
+          <div class="home-room-image">
+            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop" alt="Modern Student Room" />
+            <span class="home-room-badge">Featured</span>
+          </div>
+          <div class="home-room-content">
+            <div class="home-room-price">£650<span>/month</span></div>
+            <h3 class="home-room-title">Spacious Double Room - Westminster</h3>
+            <p class="home-room-location">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              0.3 miles from University of Westminster
+            </p>
+            <div class="home-room-features">
+              <span class="home-room-feature">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                  <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                Furnished
+              </span>
+              <span class="home-room-feature">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M5 12s2.545-5 7-5c4.454 0 7 5 7 5s-2.546 5-7 5c-4.455 0-7-5-7-5z"></path>
+                  <path d="M12 13a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"></path>
+                </svg>
+                Bills Included
+              </span>
+            </div>
+            <button class="home-room-btn">View Details</button>
+          </div>
+        </div>
+
+        <!-- Room Card 2 -->
+        <div class="home-room-card">
+          <div class="home-room-image">
+            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&h=400&fit=crop" alt="Cozy Single Room" />
+            <span class="home-room-badge verified">Verified</span>
+          </div>
+          <div class="home-room-content">
+            <div class="home-room-price">£550<span>/month</span></div>
+            <h3 class="home-room-title">Cozy Single Room - King's Cross</h3>
+            <p class="home-room-location">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              0.5 miles from UCL
+            </p>
+            <div class="home-room-features">
+              <span class="home-room-feature">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                Furnished
+              </span>
+              <span class="home-room-feature">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 16.1A5 5 0 0 1 5.9 20M2 12.05A9 9 0 0 1 9.95 20M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"></path>
+                  <line x1="2" y1="20" x2="2.01" y2="20"></line>
+                </svg>
+                WiFi
+              </span>
+            </div>
+            <button class="home-room-btn">View Details</button>
+          </div>
+        </div>
+
+        <!-- Room Card 3 -->
+        <div class="home-room-card">
+          <div class="home-room-image">
+            <img src="https://images.unsplash.com/photo-1556020685-ae41abfc9365?w=600&h=400&fit=crop" alt="Luxury Studio" />
+            <span class="home-room-badge new">New</span>
+          </div>
+          <div class="home-room-content">
+            <div class="home-room-price">£850<span>/month</span></div>
+            <h3 class="home-room-title">Modern Studio - Shoreditch</h3>
+            <p class="home-room-location">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              1.2 miles from London Metropolitan University
+            </p>
+            <div class="home-room-features">
+              <span class="home-room-feature">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                Private Bathroom
+              </span>
+              <span class="home-room-feature">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                </svg>
+                Kitchen
+              </span>
+            </div>
+            <button class="home-room-btn">View Details</button>
+          </div>
+        </div>
+      </div>
+      <div class="home-section-cta">
+        <a href="#find-room" class="home-btn-large">View All Rooms</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="home-how-section" id="how-it-works">
+    <div class="home-container">
+      <div class="home-section-header">
+        <h2 class="home-section-title">How StudentNest Works</h2>
+        <p class="home-section-subtitle">Find your perfect room in 3 simple steps</p>
+      </div>
+      <div class="home-steps-grid">
+        <div class="home-step-card">
+          <div class="home-step-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </div>
+          <div class="home-step-number">01</div>
+          <h3 class="home-step-title">Search & Filter</h3>
+          <p class="home-step-text">Browse thousands of verified student rooms. Use filters for location, price, and amenities.</p>
+        </div>
+        <div class="home-step-card">
+          <div class="home-step-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="home-step-number">02</div>
+          <h3 class="home-step-title">Connect & Chat</h3>
+          <p class="home-step-text">Message landlords and potential flatmates directly through our secure platform.</p>
+        </div>
+        <div class="home-step-card">
+          <div class="home-step-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+          </div>
+          <div class="home-step-number">03</div>
+          <h3 class="home-step-title">Move In</h3>
+          <p class="home-step-text">Sign your contract securely online and move into your new home hassle-free.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Advertise Section -->
+  <section class="home-advertise-section" id="advertise">
+    <div class="home-container">
+      <div class="home-advertise-card">
+        <div class="home-advertise-content">
+          <h2 class="home-advertise-title">Have a Room to Let?</h2>
+          <p class="home-advertise-text">Reach thousands of students looking for accommodation. List your property in minutes.</p>
+          <ul class="home-advertise-list">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Free to advertise
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Verified student profiles
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Secure messaging system
+            </li>
+          </ul>
+          <a href="post-room.html" class="home-advertise-btn">Start Advertising</a>
+        </div>
+        <div class="home-advertise-image">
+          <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=600&fit=crop" alt="Advertise Your Property" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="home-footer">
+    <div class="home-container">
+      <div class="home-footer-grid">
+        <div class="home-footer-col">
+          <span class="home-logo-text">StudentNest</span>
+          <p class="home-footer-text">The UK's leading student accommodation platform. Helping students find their perfect home since 2024.</p>
+        </div>
+        <div class="home-footer-col">
+          <h4 class="home-footer-title">Quick Links</h4>
+          <a href="#find-room" class="home-footer-link">Find a Room</a>
+          <a href="#advertise" class="home-footer-link">Advertise</a>
+          <a href="#how-it-works" class="home-footer-link">How it Works</a>
+          <a href="portal.html" class="home-footer-link">Dashboard</a>
+        </div>
+        <div class="home-footer-col">
+          <h4 class="home-footer-title">Support</h4>
+          <a href="#" class="home-footer-link">Help Center</a>
+          <a href="#" class="home-footer-link">Contact Us</a>
+          <a href="#" class="home-footer-link">Safety Tips</a>
+          <a href="#" class="home-footer-link">FAQs</a>
+        </div>
+        <div class="home-footer-col">
+          <h4 class="home-footer-title">Legal</h4>
+          <a href="#" class="home-footer-link">Terms of Service</a>
+          <a href="#" class="home-footer-link">Privacy Policy</a>
+          <a href="#" class="home-footer-link">Cookie Policy</a>
+        </div>
+      </div>
+      <div class="home-footer-bottom">
+        <p>&copy; 2026 StudentNest. All rights reserved.</p>
+        <div class="home-footer-social">
+          <a href="#" class="home-social-link">Facebook</a>
+          <a href="#" class="home-social-link">Twitter</a>
+          <a href="#" class="home-social-link">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="./home.js"></script>
+</body>
+</html>

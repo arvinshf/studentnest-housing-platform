@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Post Your Room - StudentNest</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./home.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&display=swap" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+
+    .post-room-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 100px 20px 60px;
+    }
+
+    .post-room-header {
+      text-align: center;
+      margin-bottom: 40px;
+      color: white;
+    }
+
+    .post-room-header h1 {
+      font-size: 42px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+    }
+
+    .post-room-header p {
+      font-size: 18px;
+      opacity: 0.95;
+    }
+
+    .post-room-form {
+      background: white;
+      border-radius: 24px;
+      padding: 48px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .form-section {
+      margin-bottom: 40px;
+    }
+
+    .form-section:last-child {
+      margin-bottom: 0;
+    }
+
+    .form-section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #212529;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 3px solid #007bff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .form-section-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 18px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .form-row-full {
+      display: grid;
+      grid-template-columns: 1fr;
+      margin-bottom: 24px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #495057;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .required {
+      color: #dc3545;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 14px 16px;
+      border: 2px solid #e9ecef;
+      border-radius: 12px;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 4px rgba(0,123,255,0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .form-help {
+      font-size: 13px;
+      color: #6c757d;
+      font-style: italic;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .feature-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .feature-checkbox:hover {
+      background: #e9ecef;
+    }
+
+    .feature-checkbox input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+      accent-color: #007bff;
+    }
+
+    .feature-checkbox label {
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .submit-section {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 2px solid #e9ecef;
+      display: flex;
+      gap: 16px;
+      justify-content: flex-end;
+    }
+
+    .btn-submit {
+      padding: 16px 48px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(102,126,234,0.4);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(102,126,234,0.5);
+    }
+
+    .btn-cancel {
+      padding: 16px 48px;
+      background: white;
+      color: #6c757d;
+      border: 2px solid #dee2e6;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-cancel:hover {
+      background: #f8f9fa;
+      border-color: #adb5bd;
+    }
+
+    .alert {
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+    }
+
+    .alert.show {
+      display: flex;
+    }
+
+    .alert-success {
+      background: #d4edda;
+      color: #155724;
+      border: 2px solid #c3e6cb;
+    }
+
+    .alert-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 2px solid #f5c6cb;
+    }
+
+    /* Image Upload Styles */
+    .image-upload-container {
+      position: relative;
+    }
+
+    .image-upload-btn {
+      width: 100%;
+      padding: 48px 24px;
+      background: rgba(79, 70, 229, 0.05);
+      border: 2px dashed rgba(79, 70, 229, 0.3);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: #4f46e5;
+      font-weight: 500;
+    }
+
+    .image-upload-btn:hover {
+      background: rgba(79, 70, 229, 0.1);
+      border-color: rgba(79, 70, 229, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .upload-icon {
+      font-size: 32px;
+    }
+
+    .upload-text {
+      font-size: 16px;
+    }
+
+    .image-preview {
+      position: relative;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid rgba(79, 70, 229, 0.3);
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .remove-image-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 32px;
+      height: 32px;
+      background: rgba(239, 68, 68, 0.9);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .remove-image-btn:hover {
+      background: rgba(239, 68, 68, 1);
+      transform: scale(1.1);
+    }
+
+    @media (max-width: 768px) {
+      .post-room-form {
+        padding: 32px 24px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .submit-section {
+        flex-direction: column;
+      }
+
+      .btn-submit,
+      .btn-cancel {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <script>
+    // Redirect to 127.0.0.1 if user is on localhost to prevent cookie domain mismatch
+    if (window.location.hostname === 'localhost') {
+      const newUrl = window.location.href.replace('localhost', '127.0.0.1');
+      console.log('Redirecting from localhost to 127.0.0.1 for cookie consistency');
+      window.location.href = newUrl;
+    }
+  </script>
+  <!-- Navigation -->
+  <nav class="home-nav">
+    <div class="home-nav-container">
+      <div class="home-nav-brand">
+        <a href="home.html" style="text-decoration: none;">
+          <span class="home-logo-text">StudentNest</span>
+        </a>
+      </div>
+      <div class="home-nav-links">
+        <a href="home.html" class="home-nav-link">Home</a>
+        <a href="home.html#find-room" class="home-nav-link">Find a Room</a>
+        <a href="home.html#advertise" class="home-nav-link">Advertise</a>
+      </div>
+      <div class="home-nav-actions" id="navActions">
+        <a href="portal.html" class="home-nav-btn-icon" title="Dashboard">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="7"></rect>
+            <rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect>
+            <rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </a>
+        <a href="index.html" class="home-nav-btn-outline">Login</a>
+        <a href="signup.html" class="home-nav-btn-primary">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Post Room Content -->
+  <div class="post-room-container">
+    <div class="post-room-header">
+      <h1>Post Your Room</h1>
+      <p>Fill in the details below to advertise your room to students</p>
+    </div>
+
+    <form class="post-room-form" id="postRoomForm">
+      <div class="alert alert-success" id="successAlert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span id="successMessage">Room posted successfully!</span>
+      </div>
+
+      <div class="alert alert-error" id="errorAlert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span id="errorMessage">Please fix the errors below</span>
+      </div>
+
+      <!-- Basic Information -->
+      <div class="form-section">
+        <h2 class="form-section-title">
+          <span class="form-section-icon">Info</span>
+          Basic Information
+        </h2>
+        <div class="form-row-full">
+          <div class="form-group">
+            <label>Room Title <span class="required">*</span></label>
+            <input type="text" id="title" required placeholder="e.g. Spacious Double Room in Westminster" />
+            <span class="form-help">Make it catchy and descriptive</span>
+          </div>
+        </div>
+        <div class="form-row-full">
+          <div class="form-group">
+            <label>Description <span class="required">*</span></label>
+            <textarea id="description" required placeholder="Describe your room in detail..."></textarea>
+            <span class="form-help">Include details about the room, flatmates, and neighborhood</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="form-section">
+        <h2 class="form-section-title">
+          <span class="form-section-icon">Location</span>
+          Location
+        </h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Location/Area <span class="required">*</span></label>
+            <input type="text" id="location" required placeholder="e.g. Westminster, London" />
+          </div>
+          <div class="form-group">
+            <label>Postcode</label>
+            <input type="text" id="postcode" placeholder="e.g. SW1A 1AA" />
+          </div>
+        </div>
+        <div class="form-row-full">
+          <div class="form-group">
+            <label>Distance to Transport <span class="required">*</span></label>
+            <input type="text" id="distance_to_transport" required placeholder="e.g. 5 min walk to Westminster Tube" />
+            <span class="form-help">How far is the nearest station/bus stop?</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing -->
+      <div class="form-section">
+        <h2 class="form-section-title">
+          <span class="form-section-icon">Price</span>
+          Pricing
+        </h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Monthly Rent (£) <span class="required">*</span></label>
+            <input type="number" id="price" required min="0" step="0.01" placeholder="650" />
+          </div>
+          <div class="form-group">
+            <label>Deposit (£) <span class="required">*</span></label>
+            <input type="number" id="deposit" required min="0" step="0.01" placeholder="650" />
+          </div>
+        </div>
+        <div class="form-row-full">
+          <div class="form-group">
+            <label>Bills <span class="required">*</span></label>
+            <select id="bills" required>
+              <option value="">Select...</option>
+              <option value="included">Included</option>
+              <option value="not_included">Not Included</option>
+              <option value="partial">Partially Included</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Room Details -->
+      <div class="form-section">
+        <h2 class="form-section-title">
+          <span class="form-section-icon">Room</span>
+          Room Details
+        </h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Room Type <span class="required">*</span></label>
+            <select id="room_type" required>
+              <option value="">Select...</option>
+              <option value="single">Single Room</option>
+              <option value="double">Double Room</option>
+              <option value="ensuite">Ensuite Room</option>
+              <option value="studio">Studio</option>
+              <option value="shared">Shared Room</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Furnished <span class="required">*</span></label>
+            <select id="furnished" required>
+              <option value="">Select...</option>
+              <option value="fully">Fully Furnished</option>
+              <option value="part">Part Furnished</option>
+              <option value="unfurnished">Unfurnished</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Available From <span class="required">*</span></label>
+            <input type="date" id="available_from" required />
+          </div>
+          <div class="form-group">
+            <label>Minimum Stay (months) <span class="required">*</span></label>
+            <input type="number" id="min_stay_months" required min="1" value="6" />
+          </div>
+        </div>
+        <div class="form-row-full">
+          <div class="form-group">
+            <label>Maximum Stay (months) <span class="required">*</span></label>
+            <input type="number" id="max_stay_months" required min="1" value="12" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Images -->
+      <div class="form-section">
+        <h2 class="form-section-title">
+          <span class="form-section-icon">Photos</span>
+          Images
+        </h2>
+        <p class="form-help" style="margin-bottom: 20px; color: #94a3b8;">
+          Upload high-quality photos of your room. First image is required (max 5MB each).
+        </p>
+        <div class="form-row-full">
+          <div class="form-group">
+            <label>Main Image <span class="required">*</span></label>
+            <div class="image-upload-container">
+              <input type="file" id="image_1" accept="image/*" required style="display: none;" />
+              <button type="button" class="image-upload-btn" data-target="image_1">
+                <span class="upload-icon">+</span>
+                <span class="upload-text">Choose Image 1</span>
+              </button>
+              <div class="image-preview" id="preview_1" style="display: none;">
+                <img src="" alt="Preview" />
+                <button type="button" class="remove-image-btn" data-target="image_1">X</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Additional Image 2</label>
+            <div class="image-upload-container">
+              <input type="file" id="image_2" accept="image/*" style="display: none;" />
+              <button type="button" class="image-upload-btn" data-target="image_2">
+                <span class="upload-icon">+</span>
+                <span class="upload-text">Choose Image 2</span>
+              </button>
+              <div class="image-preview" id="preview_2" style="display: none;">
+                <img src="" alt="Preview" />
+                <button type="button" class="remove-image-btn" data-target="image_2">X</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Additional Image 3</label>
+            <div class="image-upload-container">
+              <input type="file" id="image_3" accept="image/*" style="display: none;" />
+              <button type="button" class="image-upload-btn" data-target="image_3">
+                <span class="upload-icon">+</span>
+                <span class="upload-text">Choose Image 3</span>
+              </button>
+              <div class="image-preview" id="preview_3" style="display: none;">
+                <img src="" alt="Preview" />
+                <button type="button" class="remove-image-btn" data-target="image_3">X</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Additional Image 4</label>
+            <div class="image-upload-container">
+              <input type="file" id="image_4" accept="image/*" style="display: none;" />
+              <button type="button" class="image-upload-btn" data-target="image_4">
+                <span class="upload-icon">+</span>
+                <span class="upload-text">Choose Image 4</span>
+              </button>
+              <div class="image-preview" id="preview_4" style="display: none;">
+                <img src="" alt="Preview" />
+                <button type="button" class="remove-image-btn" data-target="image_4">X</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Additional Image 5</label>
+            <div class="image-upload-container">
+              <input type="file" id="image_5" accept="image/*" style="display: none;" />
+              <button type="button" class="image-upload-btn" data-target="image_5">
+                <span class="upload-icon">+</span>
+                <span class="upload-text">Choose Image 5</span>
+              </button>
+              <div class="image-preview" id="preview_5" style="display: none;">
+                <img src="" alt="Preview" />
+                <button type="button" class="remove-image-btn" data-target="image_5">X</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features & Amenities -->
+      <div class="form-section">
+        <h2 class="form-section-title">
+          <span class="form-section-icon">Features</span>
+          Features & Amenities
+        </h2>
+        <div class="features-grid">
+          <div class="feature-checkbox">
+            <input type="checkbox" id="wifi" />
+            <label for="wifi">WiFi</label>
+          </div>
+          <div class="feature-checkbox">
+            <input type="checkbox" id="washing_machine" />
+            <label for="washing_machine">Washing Machine</label>
+          </div>
+          <div class="feature-checkbox">
+            <input type="checkbox" id="dishwasher" />
+            <label for="dishwasher">Dishwasher</label>
+          </div>
+          <div class="feature-checkbox">
+            <input type="checkbox" id="parking" />
+            <label for="parking">Parking</label>
+          </div>
+          <div class="feature-checkbox">
+            <input type="checkbox" id="garden" />
+            <label for="garden">Garden</label>
+          </div>
+          <div class="feature-checkbox">
+            <input type="checkbox" id="gym" />
+            <label for="gym">Gym</label>
+          </div>
+          <div class="feature-checkbox">
+            <input type="checkbox" id="central_heating" />
+            <label for="central_heating">Central Heating</label>
+          </div>
+          <div class="feature-checkbox">
+            <input type="checkbox" id="double_glazing" />
+            <label for="double_glazing">Double Glazing</label>
+          </div>
+          <div class="feature-checkbox">
+            <input type="checkbox" id="security_system" />
+            <label for="security_system">Security System</label>
+          </div>
+          <div class="feature-checkbox">
+            <input type="checkbox" id="bike_storage" />
+            <label for="bike_storage">Bike Storage</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-section">
+        <button type="button" class="btn-cancel" onclick="window.location.href='home.html'">Cancel</button>
+        <button type="submit" class="btn-submit">Post Room</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="./post-room.js?v=6"></script>
+</body>
+</html>

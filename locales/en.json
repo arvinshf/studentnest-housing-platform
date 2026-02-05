@@ -1,0 +1,11 @@
+{
+  "app": {
+    "name": "StudentNest",
+    "description": "Student Housing Portal"
+  },
+  "auth": {
+    "signup": "Sign Up",
+    "login": "Login",
+    "error_all_fields_required": "All fields must be filled out"
+  }
+}
