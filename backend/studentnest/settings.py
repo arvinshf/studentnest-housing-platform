@@ -116,10 +116,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:8080",
     "http://127.0.0.1:8080",
+    "https://studentnest-housing.netlify.app",
 ]
 
 # Allow requests from file:// for development (when opening HTML directly)
-CORS_ALLOW_ALL_ORIGINS = True  # Only for development!
+CORS_ALLOW_ALL_ORIGINS = False  # Disabled in production
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -129,6 +130,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8080",
     "http://localhost:5500",
     "http://127.0.0.1:5500",
+    "https://studentnest-housing.netlify.app",
 ]
 
 # REST Framework settings
@@ -140,8 +142,8 @@ REST_FRAMEWORK = {
 }
 
 # Session settings
-SESSION_COOKIE_SAMESITE = None  # Allow cross-site cookies
-SESSION_COOKIE_SECURE = False  # Set to True in production with HTTPS
+SESSION_COOKIE_SAMESITE = 'None'  # Allow cross-site cookies
+SESSION_COOKIE_SECURE = True  # Required for SameSite=None with HTTPS
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_AGE = 86400  # 24 hours
 SESSION_SAVE_EVERY_REQUEST = True  # Save session on every request
