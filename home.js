@@ -524,7 +524,12 @@
     console.log('Page initialization complete');
   }
 
-  initializePage();
+  // Wait for DOM to be ready before initializing
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializePage);
+  } else {
+    initializePage();
+  }
 
   // Add CSS for modal and notifications
   const style = document.createElement('style');
