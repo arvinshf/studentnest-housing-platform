@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'accounts',
+    'frontend',
 ]
 
 MIDDLEWARE = [
@@ -48,7 +49,7 @@ ROOT_URLCONF = 'studentnest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -101,6 +102,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
@@ -141,9 +143,9 @@ REST_FRAMEWORK = {
     ],
 }
 
-# Session settings
-SESSION_COOKIE_SAMESITE = 'None'  # Allow cross-site cookies
-SESSION_COOKIE_SECURE = True  # Required for SameSite=None with HTTPS
+# Session settings - simplified for same-domain deployment
+SESSION_COOKIE_SAMESITE = 'Lax'  # Same domain, can use Lax
+SESSION_COOKIE_SECURE = True  # HTTPS required in production
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_AGE = 86400  # 24 hours
 SESSION_SAVE_EVERY_REQUEST = True  # Save session on every request

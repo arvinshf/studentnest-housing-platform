@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Test Signup</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./signup.css" />
+</head>
+<body>
+    <h1>Test Signup Page</h1>
+    <p>If this page doesn't glitch, the issue is in the main signup.html file.</p>
+    
+    <form id="testForm">
+        <input type="text" placeholder="Name" id="test-name" required />
+        <button type="submit">Test Submit</button>
+    </form>
+    
+    <div id="message"></div>
+
+    <script>
+        console.log("Test page loaded");
+        
+        document.getElementById('testForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log("Form submitted");
+            document.getElementById('message').textContent = "Form works! No glitching.";
+        });
+    </script>
+</body>
+</html>
