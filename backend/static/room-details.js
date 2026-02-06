@@ -446,7 +446,7 @@ let currentUser = null;
 
 async function checkAuthentication() {
   try {
-    const response = await fetch('${API_BASE_URL}/check-session/', {
+    const response = await fetch(`${API_BASE_URL}/check-session/`, {
       method: 'GET',
       credentials: 'include'
     });
@@ -576,7 +576,7 @@ async function setupDeleteButton(roomId, ownerEmail) {
   
   // Check if user is logged in
   try {
-    const response = await fetch('${API_BASE_URL}/check-session/', {
+    const response = await fetch(`${API_BASE_URL}/check-session/`, {
       credentials: 'include'
     });
     
@@ -691,7 +691,7 @@ function setupMessageModal() {
       } else {
         // Double-check with API before redirecting
         try {
-          const response = await fetch('${API_BASE_URL}/check-session/', {
+          const response = await fetch(`${API_BASE_URL}/check-session/`, {
             method: 'GET',
             credentials: 'include'
           });
