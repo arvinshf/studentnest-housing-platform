@@ -14,6 +14,11 @@ function getRoomIdFromURL() {
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 PAGE LOADED - Room Details');
+  console.log('🚀 API_BASE_URL:', API_BASE_URL);
+  console.log('🚀 Current URL:', window.location.href);
+  console.log('🚀 Cookies:', document.cookie);
+  
   const roomId = getRoomIdFromURL();
   loadRoomDetails(roomId);
   setupGalleryNavigation();
@@ -21,6 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupMessageModal();
   setupReportModal();
   checkAuthentication();
+  
+  console.log('🚀 All setup functions called');
 });
 
 // Load room details
