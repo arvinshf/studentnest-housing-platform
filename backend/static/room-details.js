@@ -292,14 +292,14 @@ async function toggleSaveRoom(roomId) {
     savedRooms.push(roomId);
     
     console.log('TROUBLESHOOT - Adding to favorites');
-    console.log('TROUBLESHOOT - API URL: ${API_BASE_URL}/favorites/add/');
+    console.log(`TROUBLESHOOT - API URL: ${API_BASE_URL}/favorites/add/`);
     console.log('TROUBLESHOOT - Method: POST');
     console.log('TROUBLESHOOT - Credentials: include');
     console.log('TROUBLESHOOT - Body:', { room_id: roomId });
     
     // Call backend API to add to favorites
     try {
-      const response = await fetch('${API_BASE_URL}/favorites/add/', {
+      const response = await fetch(`${API_BASE_URL}/favorites/add/`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -516,7 +516,7 @@ function updateNavForLoggedInUser(student) {
 // Logout
 async function logout() {
   try {
-    await fetch('${API_BASE_URL}/logout/', {
+    await fetch(`${API_BASE_URL}/logout/`, {
       method: 'POST',
       credentials: 'include'
     });
@@ -812,7 +812,7 @@ async function handleMessageSubmit(e) {
   
   try {
     // Send message to backend API
-    const response = await fetch('${API_BASE_URL}/messages/send/', {
+    const response = await fetch(`${API_BASE_URL}/messages/send/`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -1073,7 +1073,7 @@ async function submitReport(e) {
   submitBtn.innerHTML = '<span style="display: inline-block; animation: spin 1s linear infinite;">⏳</span> Submitting...';
   
   try {
-    const response = await fetch('${API_BASE_URL}/reports/create/', {
+    const response = await fetch(`${API_BASE_URL}/reports/create/`, {
       method: 'POST',
       credentials: 'include',
       headers: {
