@@ -446,31 +446,42 @@ let currentUser = null;
 
 async function checkAuthentication() {
   try {
+    console.log('🔍 DEBUG: Starting authentication check...');
+    console.log('🔍 DEBUG: API_BASE_URL =', API_BASE_URL);
+    console.log('🔍 DEBUG: Full URL =', `${API_BASE_URL}/check-session/`);
+    
     const response = await fetch(`${API_BASE_URL}/check-session/`, {
       method: 'GET',
       credentials: 'include'
     });
     
-    console.log('Auth check response status:', response.status);
+    console.log('🔍 DEBUG: Response status:', response.status);
+    console.log('🔍 DEBUG: Response ok:', response.ok);
     
     if (response.ok) {
       const data = await response.json();
-      console.log('Auth check data:', data);
+      console.log('🔍 DEBUG: Response data:', JSON.stringify(data, null, 2));
       
       // Handle both authenticated and isAuthenticated properties
       if (data.authenticated || data.isAuthenticated) {
+        console.log('🔍 DEBUG: User IS authenticated');
+        console.log('🔍 DEBUG: Student data:', data.student);
         currentUser = data.student;
         updateNavForLoggedInUser(data.student);
+      } else {
+        console.log('❌ DEBUG: User NOT authenticated (data.authenticated and data.isAuthenticated are both false)');
       }
+    } else {
+      console.log('❌ DEBUG: Response not OK, status:', response.status);
     }
   } catch (error) {
-    console.log('Auth check failed:', error);
+    console.log('❌ DEBUG: Auth check error:', error);
   }
 }
 
 // Update nav for logged in user
 function updateNavForLoggedInUser(student) {
-  console.log('Updating nav for user:', student);
+  console.log('🔧 DEBUG: updateNavForLoggedInUser called with:', student);
   
   const navActions = document.querySelector('.home-nav-actions');
   if (!navActions) {
