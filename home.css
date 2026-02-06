@@ -366,13 +366,11 @@ body {
   align-items: center;
 }
 
-.home-search-input-wrapper .home-price-symbol {
+.home-search-input-wrapper svg {
   position: absolute;
   left: 14px;
   color: var(--text-secondary);
   pointer-events: none;
-  font-weight: 600;
-  font-size: 16px;
 }
 
 .home-search-input-wrapper input {
