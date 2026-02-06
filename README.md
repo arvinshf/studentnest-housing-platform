@@ -1,40 +1,40 @@
 # StudentNest - Student Housing Platform
 
-A comprehensive student housing platform built with Django backend and vanilla JavaScript frontend, allowing students to find rooms and landlords to list properties.
+A comprehensive student housing platform built with Django REST Framework backend and vanilla JavaScript frontend, allowing students to find rooms, save favorites, message landlords, and post properties.
 
-## 🔗 Important Links
+## 🌐 Live Deployment
 
-### Application URLs
-- **Frontend (Homepage)**: http://127.0.0.1:3000/home.html
-- **Login Page**: http://127.0.0.1:3000/index.html
-- **Signup Page**: 
-- **Dashboard**: http://127.0.0.1:3000/portal.html
-- **Post Room**: http://127.0.0.1:3000/post-room.html
-- **Room Details**: http://127.0.0.1:3000/room-details.html?id={room_id}
+**Production URL**: https://arwin001.pythonanywhere.com
 
-### Backend URLs
+The application is fully deployed and operational on PythonAnywhere with PostgreSQL database.
+
+## ✨ Features
+
+- **User Authentication**: Secure signup/login with session-based authentication
+- **Password Security**: 12+ character requirement with uppercase and special characters
+- **Room Listings**: Browse available student accommodations with filters
+- **Favorites**: Save and manage favorite properties
+- **Messaging**: Contact landlords directly through the platform
+- **Room Posting**: Landlords can list properties with images and details
+- **Interactive Maps**: Google Maps integration for property locations
+- **Reporting**: Report inappropriate listings
+- **Responsive Design**: Mobile-friendly interface
+
+## 🔗 Application Pages
+
+### Production URLs
+- **Homepage**: https://arwin001.pythonanywhere.com/
+- **Login**: https://arwin001.pythonanywhere.com/
+- **Signup**: https://arwin001.pythonanywhere.com/signup
+- **Browse Rooms**: https://arwin001.pythonanywhere.com/home
+- **Dashboard**: https://arwin001.pythonanywhere.com/portal
+- **Post Room**: https://arwin001.pythonanywhere.com/post-room
+- **Django Admin**: https://arwin001.pythonanywhere.com/admin/
+
+### Local Development URLs
+- **Frontend**: http://127.0.0.1:8000/
 - **Django Admin Panel**: http://127.0.0.1:8000/admin/
 - **API Base**: http://127.0.0.1:8000/api/
-- **API Rooms Endpoint**: http://127.0.0.1:8000/api/rooms/
-- **API Session Check**: http://127.0.0.1:8000/api/check-session/
-
----
-
-## 🔐 Test Credentials
-
-### Test User Account
-- **Email**: w1921326@westminster.ac.uk
-- **Password**: (Use the password you set during signup)
-- **Name**: arvin shaf
-- **Student ID**: (Your 8-digit ID)
-
-### Django Admin Panel (Superuser)
-To create a superuser account for Django admin:
-```bash
-cd backend
-.\venv\Scripts\python.exe manage.py runserver
-```
-Then follow the prompts to set username, email, and password.
 
 ---
 
@@ -43,20 +43,20 @@ Then follow the prompts to set username, email, and password.
 Before running the project, ensure you have:
 - **Python 3.8+** installed
 - **pip** (Python package manager)
-- **Git** (optional, for version control)
+- **Git** (for cloning and version control)
 
 ---
 
-## 🚀 Project Setup & Installation
+## 🚀 Local Development Setup
 
-### Step 1: Navigate to Project Directory
+### Step 1: Clone Repository
 ```bash
-cd "c:\Users\arvin\Desktop\french-heavy-gaur-html-fixed-buttons-v2 (1)"
+git clone https://github.com/arvinshf/studentnest-housing-platform.git
+cd studentnest-housing-platform/backend
 ```
 
 ### Step 2: Set Up Python Virtual Environment
 ```bash
-cd backend
 python -m venv venv
 ```
 
@@ -65,38 +65,52 @@ python -m venv venv
 # On Windows (PowerShell)
 .\venv\Scripts\Activate.ps1
 
-# On Windows (Command Prompt)
-.\venv\Scripts\activate.bat
+# On macOS/Linux
+source venv/bin/activate
 ```
 
-### Step 4: Install Python Dependencies
+### Step 4: Install Dependencies
 ```bash
-.\venv\Scripts\pip.exe install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 **Key Dependencies:**
-- Django 4.0+
+- Django 6.0.1
 - djangorestframework
 - django-cors-headers
-- Pillow (for image handling)
+- Pillow (image handling)
+- psycopg2-binary (PostgreSQL support)
+- gunicorn (production server)
+- whitenoise (static files serving)
 
 ### Step 5: Run Database Migrations
 ```bash
-.\venv\Scripts\python.exe manage.py migrate
+python manage.py migrate
 ```
 
-This will create the SQLite database (`db.sqlite3`) with all necessary tables.
-
-### Step 6: Create Superuser (Optional but Recommended)
+### Step 6: Create Superuser
 ```bash
-.\venv\Scripts\python.exe manage.py createsuperuser
+python manage.py createsuperuser
+```
+
+### Step 7: Collect Static Files
+```bash
+python manage.py collectstatic
 ```
 
 ---
 
-## 🏃 Running the Project
+## 🏃 Running Locally
 
-You need to run **TWO servers** simultaneously:
+### Start Django Server
+```bash
+cd backend
+python manage.py runserver
+```
+
+**Server runs at**: http://127.0.0.1:8000/
+
+Django serves both frontend templates and API endpoints.
 
 ### Terminal 1: Django Backend Server
 ```bash
@@ -183,39 +197,47 @@ Serving HTTP on 127.0.0.1 port 3000 (http://127.0.0.1:3000/) ...
 
 ```
 project-root/
+```
+studentnest-housing-platform/
 ├── backend/                    # Django backend
 │   ├── accounts/              # Main Django app
-│   │   ├── models.py         # Database models (Student, Room)
+│   │   ├── models.py         # Database models (Student, Room, Message, Favorite, Report)
 │   │   ├── views.py          # API endpoints
 │   │   ├── serializers.py    # Data serialization
 │   │   ├── urls.py           # URL routing
+│   │   ├── admin.py          # Django admin configuration
 │   │   └── migrations/       # Database migrations
-│   ├── media/                # Uploaded images
-│   │   └── room_images/      # Room photos
-│   ├── studentnest/          # Django project settings
-│   │   ├── settings.py       # Configuration
-│   │   └── urls.py           # Main URL routing
-│   ├── db.sqlite3            # SQLite database
-│   ├── manage.py             # Django management script
-│   ├── requirements.txt      # Python dependencies
-│   └── venv/                 # Virtual environment
+│   ├── templates/            # HTML templates
+│   │   ├── index.html       # Login page
+│   │   ├── signup.html      # Registration
+│   │   ├── home.html        # Room listings
+│   │   ├── portal.html      # User dashboard
+│   │   ├── post-room.html   # Post listing
+│   │   └── room-details.html # Room details
+│   ├── static/              # Static files
+│   │   ├── *.css           # Stylesheets
+│   │   ├── *.js            # JavaScript
+│   │   └── images/         # Static images
+│   ├── staticfiles/         # Collected static files (production)
+│   ├── media/              # User uploads
+│   │   └── room_images/   # Room photos
+│   ├── studentnest/        # Django project settings
+│   │   ├── settings.py    # Configuration
+│   │   ├── urls.py        # Main URL routing
+│   │   └── wsgi.py        # WSGI config
+│   ├── manage.py           # Django management
+│   └── requirements.txt    # Python dependencies
 │
-├── components/               # Reusable HTML components
+├── components/             # Reusable components
 │   ├── footer.html
 │   ├── navigation.html
 │   └── login-form.html
 │
-├── locales/                  # Internationalization
+├── locales/               # Internationalization
 │   └── en.json
 │
-├── *.html                    # Frontend pages
-├── *.css                     # Stylesheets
-├── *.js                      # JavaScript files
-├── auth-backend.js           # Authentication logic
-├── home.js                   # Homepage logic
-├── post-room.js              # Room posting logic
-├── room-details.js           # Room details logic
-└── package.json              # Node packages (if any)
+├── .gitignore            # Git ignore rules
+└── README.md             # This file
 ```
 
 ---
@@ -224,16 +246,34 @@ project-root/
 
 ### Authentication
 - `POST /api/signup/` - Create new student account
-- `POST /api/login/` - Login
-- `POST /api/logout/` - Logout
-- `GET /api/check-session/` - Check if user is logged in
+  - Required: name, surname, email, phone, city, password, student_id
+  - Password validation: 12+ chars, 1 uppercase, 1 special character
+- `POST /api/login/` - Login (session-based)
+- `POST /api/logout/` - Logout and clear session
+- `GET /api/check-session/` - Check authentication status
 
 ### Rooms
-- `GET /api/rooms/` - List all active rooms
+- `GET /api/rooms/` - List all active rooms with filters
+  - Query params: location, min_price, max_price, room_type, availability
 - `POST /api/rooms/` - Create new room (authenticated)
-- `GET /api/rooms/{id}/` - Get specific room details
+  - Supports up to 5 images
+- `GET /api/rooms/{id}/` - Get room details
 - `PUT /api/rooms/{id}/` - Update room (owner only)
 - `DELETE /api/rooms/{id}/` - Delete room (owner only)
+
+### Favorites
+- `GET /api/favorites/` - List user's favorite rooms
+- `POST /api/favorites/add/` - Add room to favorites
+- `POST /api/favorites/remove/` - Remove from favorites
+- `GET /api/favorites/check/` - Check if room is favorited
+
+### Messages
+- `GET /api/messages/` - List user's messages
+- `POST /api/messages/send/` - Send message to landlord
+- `POST /api/messages/mark-read/` - Mark message as read
+
+### Reports
+- `POST /api/reports/create/` - Report inappropriate listing
 - `GET /api/my-rooms/` - Get current user's rooms
 
 ### Students
@@ -257,84 +297,214 @@ project-root/
 - `password` - Hashed password
 - `course` - Course of study
 - `is_online` - Online status
+### Student Model
+- `id` - Auto-generated ID (Primary Key)
+- `email` - Student email (unique)
+- `name` - First name
+- `surname` - Last name
+- `password` - Hashed password
+- `phone` - Phone number
+- `city` - City of residence
+- `student_id` - 8-digit student ID
+- `is_online` - Online status
 - `last_activity` - Last activity timestamp
 
 ### Room Model
-- `id` - Auto-generated ID (Primary Key)
-- `title` - Room title/name
-- `location` - Room location
-- `price` - Monthly rent
-- `availability` - Available from date
-- `description` - Room description
-- `bedrooms` - Number of bedrooms
-- `bathrooms` - Number of bathrooms
-- `property_type` - Type of property
+- `id` - Auto-generated ID
+- `title` - Room title
+- `location` - Location description
+- `postcode` - Postal code for maps
+- `distance_to_transport` - Distance description
+- `price` - Monthly rent (decimal)
+- `available` - Available from date
+- `description` - Full description
+- `room_type` - Type (Single/Double/Ensuite/Studio)
 - `furnished` - Furnished status
-- `bills_included` - Bills included status
-- `image_1` to `image_5` - Room images (ImageField)
+- `bills_included` - Bills status
+- `deposit` - Deposit amount
+- `image_1` to `image_5` - Room photos
 - `owner` - Foreign key to Student
-- `is_active` - Active status
+- `owner_name` - Cached owner name
+- `owner_email` - Cached owner email
+- `is_active` - Active listing status
 - `created_at` - Creation timestamp
 
 ### Message Model
-- `id` - Auto-generated ID (Primary Key)
-- `sender` - Foreign key to Student (who sent the message)
-- `recipient` - Foreign key to Student (who receives the message)
-- `room` - Foreign key to Room (optional, message context)
+- `sender` - Foreign key to Student
+- `recipient` - Foreign key to Student
+- `room` - Optional foreign key to Room
 - `subject` - Message subject
-- `content` - Message content
-- `is_read` - Read status (boolean)
-- `read_at` - Timestamp when marked as read
-- `created_at` - Creation timestamp
+- `content` - Message body
+- `is_read` - Read status
+- `read_at` - Read timestamp
+- `created_at` - Sent timestamp
+
+### Favorite Model
+- `student` - Foreign key to Student
+- `room` - Foreign key to Room
+- `created_at` - Added timestamp
+- Unique constraint on (student, room)
+
+### Report Model
+- `reporter` - Foreign key to Student
+- `room` - Foreign key to Room
+- `reason` - Report reason
+- `description` - Detailed description
+- `is_reviewed` - Review status
+- `created_at` - Report timestamp
 
 ---
 
 ## 🎨 Key Features
 
 ### ✅ Implemented Features
-- [x] User registration and authentication
-- [x] Session management with cookies
-- [x] Room listing with images
-- [x] Image upload (up to 5 images per room)
-- [x] Room search and browsing
-- [x] Detailed room view with image gallery
-- [x] User dashboard
-- [x] "My Rooms" section for landlords
-- [x] Delete room functionality (owner only)
-- [x] Responsive design
-- [x] Room filtering by owner
-- [x] Image preview before upload
-- [x] Save room functionality
-- [x] Contact landlord messaging modal
-- [x] Full messaging system with database storage
-- [x] Messages inbox in dashboard
-- [x] Reply to messages functionality
-- [x] Unread message notifications
+- [x] **Authentication & Security**
+  - Session-based authentication with cookies
+  - Password strength validation (12+ chars, uppercase, special)
+  - Email validation (@westminster.ac.uk)
+  - Secure logout with session clearing
+  
+- [x] **Room Management**
+  - List rooms with filters (location, price, type, availability)
+  - Post new listings with up to 5 images
+  - Image preview before upload
+  - Edit/delete own listings
+  - Owner-only permissions
+  
+- [x] **User Dashboard**
+  - View posted rooms
+  - Manage favorites
+  - Inbox for messages
+  - Profile display
+  
+- [x] **Favorites System**
+  - Save/unsave rooms
+  - Persistent favorites list
+  - Quick access from dashboard
+  
+- [x] **Messaging**
+  - Contact landlords directly
+  - Message inbox with unread count
+  - Mark messages as read
+  - Room context in messages
+  
+- [x] **Interactive Maps**
+  - Google Maps integration
+  - Automatic geocoding from postcode
+  - Property location markers
+  
+- [x] **Reporting**
+  - Report inappropriate listings
+  - Admin review system
+  
+- [x] **Responsive Design**
+  - Mobile-friendly interface
+  - Touch-optimized controls
+  - Adaptive layouts
 
-### 🚧 Future Enhancements
-- [ ] Edit room functionality
-- [ ] Advanced search filters
-- [ ] Email notifications for new messages
-- [ ] Room favorites/bookmarks
-- [ ] Map integration for locations
-- [ ] Reviews and ratings
-- [ ] Payment integration
+---
+
+## 🛠️ Technology Stack
+
+### Backend
+- **Framework**: Django 6.0.1
+- **API**: Django REST Framework
+- **Database**: PostgreSQL (production), SQLite (development)
+- **Server**: Gunicorn + WhiteNoise
+- **Image Processing**: Pillow
+- **Authentication**: Session-based with cookies
+
+### Frontend
+- **HTML5** with Django templates
+- **CSS3** with custom styling
+- **JavaScript** (Vanilla ES6+)
+- **Google Maps API** for location features
+- **Fetch API** for AJAX requests
+
+### Deployment
+- **Platform**: PythonAnywhere
+- **Version Control**: Git + GitHub
+- **Static Files**: WhiteNoise
+- **Media Files**: PythonAnywhere media serving
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Issue: Django server won't start
-**Solution:**
+### Common Issues
+
+**Issue: Old cached JavaScript files loading**
 ```bash
-# Check if port 8000 is in use
+# On server
+cd ~/studentnest-housing-platform/backend
+rm -rf staticfiles
+python manage.py collectstatic --noinput
+
+# In browser
+# Open DevTools (F12) → Network tab → Check "Disable cache"
+# Or use Incognito/Private window
+```
+
+**Issue: Django server won't start**
+```bash
+# Check port availability
 netstat -ano | findstr :8000
 
-# Kill the process if needed
-taskkill /PID <process_id> /F
+# Activate virtualenv
+source venv/bin/activate  # Linux/Mac
+.\venv\Scripts\Activate.ps1  # Windows
 
-# Restart Django
-.\venv\Scripts\python.exe manage.py runserver
+# Run migrations
+python manage.py migrate
+```
+
+**Issue: Static files not loading**
+```bash
+python manage.py collectstatic --noinput
+```
+
+**Issue: Images not uploading**
+- Check `MEDIA_ROOT` and `MEDIA_URL` in settings.py
+- Ensure media folder has write permissions
+- Verify image size < 5MB
+
+---
+
+## 📝 Deployment Notes
+
+### PythonAnywhere Setup
+1. Git pull latest changes
+2. Activate virtualenv: `source ~/.virtualenvs/studentnest/bin/activate`
+3. Install dependencies: `pip install -r requirements.txt`
+4. Run migrations: `python manage.py migrate`
+5. Collect static files: `python manage.py collectstatic --noinput`
+6. Reload web app from Web tab
+
+### Environment Variables (Optional)
+Create `.env` file in backend folder:
+```
+SECRET_KEY=your-secret-key
+DEBUG=False
+ALLOWED_HOSTS=arwin001.pythonanywhere.com
+DATABASE_URL=your-database-url
+```
+
+---
+
+## 👥 Contributing
+
+This is a student project. For issues or suggestions:
+1. Fork the repository
+2. Create a feature branch
+3. Commit changes
+4. Push to branch
+5. Open Pull Request
+
+---
+
+## 📄 License
+
+This project is for educational purposes.
 ```
 
 ### Issue: Frontend server won't start
