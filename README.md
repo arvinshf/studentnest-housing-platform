@@ -470,7 +470,7 @@ python manage.py collectstatic --noinput
 
 ---
 
-## 📝 Deployment Notes
+# 📝 Deployment Notes
 
 ### PythonAnywhere Setup
 1. Git pull latest changes
