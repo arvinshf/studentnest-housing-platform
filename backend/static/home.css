@@ -292,7 +292,7 @@ body {
 .home-hero-title {
   font-size: clamp(36px, 5vw, 56px);
   font-weight: 800;
-  color: white;
+  color: black;
   margin-bottom: 16px;
   line-height: 1.2;
   text-shadow: 0 4px 20px rgba(0,0,0,0.2);
@@ -300,7 +300,7 @@ body {
 
 .home-hero-subtitle {
   font-size: clamp(18px, 2vw, 22px);
-  color: rgba(255, 255, 255, 0.95);
+  color: black;
   margin-bottom: 48px;
   line-height: 1.6;
 }
@@ -337,7 +337,7 @@ body {
 
 .home-search-tab.active {
   background: var(--primary-color);
-  color: white;
+  color: black;
 }
 
 .home-search-form {
