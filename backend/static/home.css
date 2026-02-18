@@ -1,13 +1,3 @@
-/* Force removal of any overlay/filter from hero section */
-.home-hero-bg,
-.home-hero-bg::before,
-.home-hero-bg::after,
-.home-hero-overlay,
-.home-hero-overlay::before,
-.home-hero-overlay::after {
-  background: transparent !important;
-  filter: none !important;
-}
 /* Home Page Styles - Spareroom-inspired Design */
 
 /* Color Variables */
