@@ -1,3 +1,28 @@
+# Edit student details (GET/PUT)
+from .serializers import StudentEditSerializer
+
+@api_view(['GET', 'PUT'])
+@csrf_exempt
+def edit_student_details(request):
+    """Get or update the logged-in student's details"""
+    student_id = request.session.get('student_id')
+    if not student_id:
+        return Response({'message': 'Not authenticated'}, status=status.HTTP_401_UNAUTHORIZED)
+    try:
+        student = Student.objects.get(id=student_id)
+    except Student.DoesNotExist:
+        return Response({'message': 'Student not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = StudentEditSerializer(student)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    elif request.method == 'PUT':
+        serializer = StudentEditSerializer(student, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Details updated successfully', 'student': serializer.data}, status=status.HTTP_200_OK)
+        return Response({'message': 'Validation failed', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
