@@ -169,18 +169,3 @@ if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
-
-# --- Email backend for password reset and notifications ---
-# Use Gmail SMTP to send emails from the app (e.g., for password reset)
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-# The email address you want to send emails from (support.studentnest@gmail.com)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='support.studentnest@gmail.com')
-# App password for Gmail (never use your main Gmail password)
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-# Default from email for sending
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-
-# Note: Set EMAIL_HOST_USER and EMAIL_HOST_PASSWORD in your .env file for security.

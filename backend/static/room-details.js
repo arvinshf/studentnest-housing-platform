@@ -958,37 +958,32 @@ async function initializeMap(searchQuery, locationName) {
       popupAnchor: [0, -40]
     });
     
-    // Mapbox GL JS implementation
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZGVtb3VzZXIiLCJhIjoiY2xvZ2ludGVzdGtleSIsImEiOiJja3B4b2Z2b2IwMDFwMnBvN2Z2b2J2b2J2In0.DEMO_TOKEN'; // Replace with your Mapbox access token
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: [lon, lat],
-      zoom: 14
-    });
-
-    // Add navigation controls
-    map.addControl(new mapboxgl.NavigationControl());
-
-    // Add marker
-    const marker = new mapboxgl.Marker()
-      .setLngLat([lon, lat])
-      .setPopup(new mapboxgl.Popup().setHTML(`
-        <div style="text-align: center; padding: 8px;">
-          <strong style="font-size: 14px; color: #212529;">${locationName}</strong><br>
-          <span style="font-size: 12px; color: #6c757d;">${data[0].display_name}</span>
-        </div>
-      `))
-      .addTo(map);
-    marker.togglePopup();
-
+    // Add marker with popup
+    marker = L.marker([lat, lon], { icon: customIcon }).addTo(map);
+    marker.bindPopup(`
+      <div style="text-align: center; padding: 8px;">
+        <strong style="font-size: 14px; color: #212529;">${locationName}</strong>
+        <br>
+        <span style="font-size: 12px; color: #6c757d;">${data[0].display_name}</span>
+      </div>
+    `).openPopup();
+    
+    // Add circle to show approximate area
+    L.circle([lat, lon], {
+      color: '#007bff',
+      fillColor: '#007bff',
+      fillOpacity: 0.1,
+      radius: 500 // 500 meters radius
+    }).addTo(map);
+    
     // Hide error message if any
     document.getElementById('mapError').style.display = 'none';
-
-    console.log('Mapbox map initialized successfully');
-
+    
+    console.log('Map initialized successfully');
+    
   } catch (error) {
     console.error('Error initializing map:', error);
+    
     // Show error message
     document.getElementById('map').style.display = 'none';
     document.getElementById('mapError').style.display = 'block';
