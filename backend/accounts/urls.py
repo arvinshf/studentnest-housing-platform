@@ -27,7 +27,13 @@ urlpatterns = [
     path('favorites/add/', views.add_favorite, name='add_favorite'),
     path('favorites/<int:room_id>/remove/', views.remove_favorite, name='remove_favorite'),
     path('favorites/<int:room_id>/check/', views.check_favorite, name='check_favorite'),
-
+    # Password Reset
+    # 1. Request password reset (send email with token)
+    path('password-reset/request/', views.password_reset_request, name='password_reset_request'),
+    # 2. Validate token and show reset form (handled by frontend, backend just verifies token)
+    path('password-reset/validate/', views.password_reset_validate, name='password_reset_validate'),
+    # 3. Set new password
+    path('password-reset/confirm/', views.password_reset_confirm, name='password_reset_confirm'),
     
     # Reports
     path('reports/create/', views.create_report, name='create_report'),
