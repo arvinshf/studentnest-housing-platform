@@ -27,6 +27,9 @@ urlpatterns = [
     path('favorites/add/', views.add_favorite, name='add_favorite'),
     path('favorites/<int:room_id>/remove/', views.remove_favorite, name='remove_favorite'),
     path('favorites/<int:room_id>/check/', views.check_favorite, name='check_favorite'),
+
+    # Dashboard: Edit student details (GET/PUT)
+    path('edit-details/', views.edit_student_details, name='edit_student_details'),
     
     # Reports
     path('reports/create/', views.create_report, name='create_report'),

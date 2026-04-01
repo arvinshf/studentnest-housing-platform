@@ -1,3 +1,5 @@
+# Import serializers from Django REST Framework
+from rest_framework import serializers
 # Serializer for editing student details from dashboard
 class StudentEditSerializer(serializers.ModelSerializer):
     # Only allow updating these fields
