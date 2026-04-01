@@ -1,13 +1,3 @@
-class StudentEditSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Student
-        fields = ['name', 'email', 'student_id', 'course', 'phone', 'city']
-    def validate_email(self, value):
-        value = value.lower()
-        student_id = self.instance.id if self.instance else None
-        if Student.objects.filter(email=value).exclude(id=student_id).exists():
-            raise serializers.ValidationError("An account with this email already exists.")
-        return value
 from rest_framework import serializers
 from .models import Student, Room, Message
 import re

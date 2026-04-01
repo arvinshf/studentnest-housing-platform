@@ -1,5 +1,3 @@
-    # Edit student details
-    path('edit-details/', views.edit_student_details, name='edit_student_details'),
 from django.urls import path
 from . import views
 
