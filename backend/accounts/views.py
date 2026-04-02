@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.utils import timezone
-from django.core.mail import send_mail
 from django.conf import settings as django_settings
 from .models import Student, Room, Message, Favorite, Report, PasswordResetToken
+from .gmail_api import send_email as gmail_send
 from .serializers import StudentSignupSerializer, StudentLoginSerializer, StudentSerializer, RoomSerializer, RoomCreateSerializer, MessageSerializer, MessageCreateSerializer
 import logging
 logger = logging.getLogger(__name__)
@@ -829,22 +829,20 @@ def request_password_reset(request):
     domain = django_settings.SITE_DOMAIN
     reset_url = f"https://{domain}/reset-password.html?token={token.token}"
     
-    # Send the email
+    # Send the email via Gmail REST API (HTTPS, no SMTP needed)
     try:
-        send_mail(
-            subject='StudentNest — Reset Your Password',
-            message=(
+        gmail_send(
+            to=student.email,
+            subject='StudentNest \u2014 Reset Your Password',
+            body=(
                 f"Hi {student.name},\n\n"
                 f"We received a request to reset your password.\n\n"
                 f"Click the link below to create a new password:\n"
                 f"{reset_url}\n\n"
                 f"This link expires in 1 hour.\n\n"
                 f"If you didn't request this, you can safely ignore this email.\n\n"
-                f"— The StudentNest Team"
+                f"\u2014 The StudentNest Team"
             ),
-            from_email=django_settings.DEFAULT_FROM_EMAIL,
-            recipient_list=[student.email],
-            fail_silently=False,
         )
     except Exception as e:
         logger.error(f"[Password Reset] Email send failed: {type(e).__name__}: {e}")

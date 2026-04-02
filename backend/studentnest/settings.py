@@ -139,13 +139,11 @@ CSRF_TRUSTED_ORIGINS = [
     "https://studentnest-housing.netlify.app",
 ]
 
-# Email settings — used for password reset emails
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'support.studentnest@gmail.com'
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+# Email settings — Gmail REST API (works on PythonAnywhere free tier)
+# SMTP is blocked on PA free accounts, so we use the Gmail API over HTTPS instead
+GMAIL_CLIENT_ID = os.environ.get('GMAIL_CLIENT_ID', '')
+GMAIL_CLIENT_SECRET = os.environ.get('GMAIL_CLIENT_SECRET', '')
+GMAIL_REFRESH_TOKEN = os.environ.get('GMAIL_REFRESH_TOKEN', '')
 DEFAULT_FROM_EMAIL = 'StudentNest <support.studentnest@gmail.com>'
 
 # Domain for password reset links
