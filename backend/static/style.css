@@ -2021,6 +2021,22 @@
 .login-form-forgot:hover {
   color: var(--color-accent);
 }
+
+/* Forgot Password Panel — slides in when user clicks "Forgot?" */
+.forgot-password-panel {
+  animation: forgotPanelSlideIn 0.35s ease-out;
+}
+
+@keyframes forgotPanelSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
  
 .login-form-input:focus {
   outline: none;

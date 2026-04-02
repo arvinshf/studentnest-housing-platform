@@ -147,7 +147,7 @@
                               <label for="password" class="login-form-label">
                                 Password
                               </label>
-                              <a href="#">
+                              <a href="#" id="forgotPasswordLink">
                                 <div class="login-form-forgot">
                                   <span>Forgot?</span>
                                 </div>
@@ -278,6 +278,80 @@
                           <p></p>
                         </div>
                       </div>
+
+                      <!-- Forgot Password Panel (hidden by default) -->
+                      <div class="login-form-card forgot-password-panel" id="forgotPasswordPanel" style="display: none;">
+                        <div class="login-form-card-header">
+                          <h2 class="section-title">Reset Password</h2>
+                          <p class="section-subtitle">
+                            Enter your university email and we'll send you a link to reset your password
+                          </p>
+                        </div>
+                        <form id="forgotPasswordForm" class="login-form-element">
+                          <div id="forgotMsg" style="display:none; margin: 12px 0; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.18); background: rgba(0,0,0,0.15); color: rgba(255,255,255,0.92); font-weight: 700;"></div>
+                          <div class="login-form-group">
+                            <label for="forgotEmail" class="login-form-label">
+                              University Email
+                            </label>
+                            <div class="login-form-input-container">
+                              <div class="login-form-input-icon">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="20"
+                                  height="20"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                                </svg>
+                              </div>
+                              <input
+                                type="email"
+                                id="forgotEmail"
+                                name="forgotEmail"
+                                placeholder="student@westminster.ac.uk"
+                                required="true"
+                                class="login-form-input"
+                              />
+                            </div>
+                          </div>
+                          <button
+                            type="submit"
+                            class="login-form-submit-btn btn btn-primary"
+                          >
+                            <span class="login-form-btn-text">Send Reset Link</span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="20"
+                              height="20"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                            >
+                              <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                              <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                            </svg>
+                          </button>
+                        </form>
+                        <div class="login-form-footer">
+                          <p class="section-content">
+                            <span>Remember your password?</span>
+                          </p>
+                          <div class="btn-link">
+                            <a href="#" id="backToLoginLink">
+                              <span>Back to Login</span>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -358,6 +432,51 @@
                           input.style.borderColor = "var(--color-primary)"
                         })
                       })
+
+                      // Forgot Password Panel Toggle
+                      const forgotLink = document.getElementById("forgotPasswordLink")
+                      const backToLogin = document.getElementById("backToLoginLink")
+                      const loginCard = document.querySelector(".login-form-card-wrapper .login-form-card:not(.forgot-password-panel)")
+                      const forgotPanel = document.getElementById("forgotPasswordPanel")
+
+                      if (forgotLink && forgotPanel && loginCard) {
+                        forgotLink.addEventListener("click", (e) => {
+                          e.preventDefault()
+                          loginCard.style.display = "none"
+                          forgotPanel.style.display = ""
+                        })
+                      }
+
+                      if (backToLogin && forgotPanel && loginCard) {
+                        backToLogin.addEventListener("click", (e) => {
+                          e.preventDefault()
+                          forgotPanel.style.display = "none"
+                          loginCard.style.display = ""
+                        })
+                      }
+
+                      // Forgot Password Form Submit (just the UI for now)
+                      const forgotForm = document.getElementById("forgotPasswordForm")
+                      const forgotMsg = document.getElementById("forgotMsg")
+
+                      if (forgotForm && forgotMsg) {
+                        forgotForm.addEventListener("submit", (e) => {
+                          e.preventDefault()
+                          const email = document.getElementById("forgotEmail").value.trim()
+
+                          if (!email) {
+                            forgotMsg.textContent = "Please enter your email address."
+                            forgotMsg.style.display = "block"
+                            forgotMsg.style.borderColor = "#e74c3c"
+                            return
+                          }
+
+                          // Show a confirmation message for now
+                          forgotMsg.textContent = "If an account exists with that email, a reset link will be sent shortly."
+                          forgotMsg.style.display = "block"
+                          forgotMsg.style.borderColor = "var(--color-primary)"
+                        })
+                      }
                     })()
                   });
                 </script>
