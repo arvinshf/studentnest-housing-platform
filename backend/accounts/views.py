@@ -8,6 +8,8 @@ from django.core.mail import send_mail
 from django.conf import settings as django_settings
 from .models import Student, Room, Message, Favorite, Report, PasswordResetToken
 from .serializers import StudentSignupSerializer, StudentLoginSerializer, StudentSerializer, RoomSerializer, RoomCreateSerializer, MessageSerializer, MessageCreateSerializer
+import logging
+logger = logging.getLogger(__name__)
 
 
 @api_view(['POST'])
@@ -811,11 +813,17 @@ def request_password_reset(request):
     except Student.DoesNotExist:
         return Response({'message': success_msg}, status=status.HTTP_200_OK)
     
-    # Invalidate any old unused tokens for this student
-    PasswordResetToken.objects.filter(student=student, used=False).update(used=True)
-    
-    # Create a fresh reset token
-    token = PasswordResetToken.objects.create(student=student)
+    try:
+        # Invalidate any old unused tokens for this student
+        PasswordResetToken.objects.filter(student=student, used=False).update(used=True)
+        
+        # Create a fresh reset token
+        token = PasswordResetToken.objects.create(student=student)
+    except Exception as e:
+        logger.error(f"[Password Reset] DB error creating token: {type(e).__name__}: {e}")
+        return Response({
+            'message': 'Something went wrong. Please try again later.'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     # Build the reset link
     domain = django_settings.SITE_DOMAIN
@@ -839,8 +847,9 @@ def request_password_reset(request):
             fail_silently=False,
         )
     except Exception as e:
+        logger.error(f"[Password Reset] Email send failed: {type(e).__name__}: {e}")
         return Response({
-            'message': 'Failed to send email. Please try again later.'
+            'message': f'Email could not be sent ({type(e).__name__}). This may be a server restriction.'
         }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     return Response({'message': success_msg}, status=status.HTTP_200_OK)
