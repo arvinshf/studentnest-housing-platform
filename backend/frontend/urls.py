@@ -9,5 +9,6 @@ urlpatterns = [
     path('portal.html', views.portal, name='portal'),
     path('post-room.html', views.post_room, name='post_room'),
     path('room-details.html', views.room_details, name='room_details'),
+    path('reset-password.html', views.reset_password, name='reset_password'),
     path('404.html', views.not_found, name='not_found'),
 ]

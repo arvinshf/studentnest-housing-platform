@@ -4,7 +4,9 @@ from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt, ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.utils import timezone
-from .models import Student, Room, Message, Favorite, Report
+from django.core.mail import send_mail
+from django.conf import settings as django_settings
+from .models import Student, Room, Message, Favorite, Report, PasswordResetToken
 from .serializers import StudentSignupSerializer, StudentLoginSerializer, StudentSerializer, RoomSerializer, RoomCreateSerializer, MessageSerializer, MessageCreateSerializer
 
 
@@ -786,4 +788,102 @@ def check_favorite(request, room_id):
         return Response({
             'is_favorited': False
         }, status=status.HTTP_200_OK)
+
+
+# ============ PASSWORD RESET VIEWS ============
+
+@api_view(['POST'])
+@csrf_exempt
+def request_password_reset(request):
+    """Send a password reset email if the account exists"""
+    email = request.data.get('email', '').strip().lower()
+    
+    if not email:
+        return Response({
+            'message': 'Please provide your email address.'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Always return success to prevent email enumeration
+    success_msg = 'If an account exists with that email, a reset link has been sent.'
+    
+    try:
+        student = Student.objects.get(email=email)
+    except Student.DoesNotExist:
+        return Response({'message': success_msg}, status=status.HTTP_200_OK)
+    
+    # Invalidate any old unused tokens for this student
+    PasswordResetToken.objects.filter(student=student, used=False).update(used=True)
+    
+    # Create a fresh reset token
+    token = PasswordResetToken.objects.create(student=student)
+    
+    # Build the reset link
+    domain = django_settings.SITE_DOMAIN
+    reset_url = f"https://{domain}/reset-password.html?token={token.token}"
+    
+    # Send the email
+    try:
+        send_mail(
+            subject='StudentNest — Reset Your Password',
+            message=(
+                f"Hi {student.name},\n\n"
+                f"We received a request to reset your password.\n\n"
+                f"Click the link below to create a new password:\n"
+                f"{reset_url}\n\n"
+                f"This link expires in 1 hour.\n\n"
+                f"If you didn't request this, you can safely ignore this email.\n\n"
+                f"— The StudentNest Team"
+            ),
+            from_email=django_settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[student.email],
+            fail_silently=False,
+        )
+    except Exception as e:
+        return Response({
+            'message': 'Failed to send email. Please try again later.'
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    return Response({'message': success_msg}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@csrf_exempt
+def reset_password(request):
+    """Reset password using a valid token"""
+    token_str = request.data.get('token', '').strip()
+    new_password = request.data.get('password', '')
+    
+    if not token_str or not new_password:
+        return Response({
+            'message': 'Token and new password are required.'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    if len(new_password) < 8:
+        return Response({
+            'message': 'Password must be at least 8 characters.'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        token = PasswordResetToken.objects.get(token=token_str, used=False)
+    except PasswordResetToken.DoesNotExist:
+        return Response({
+            'message': 'This reset link is invalid or has already been used.'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    if token.is_expired():
+        return Response({
+            'message': 'This reset link has expired. Please request a new one.'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    # Update the password and mark token as used
+    student = token.student
+    student.set_password(new_password)
+    student.save(update_fields=['password_hash'])
+    
+    token.used = True
+    token.save(update_fields=['used'])
+    
+    return Response({
+        'message': 'Your password has been reset successfully! You can now log in.'
+    }, status=status.HTTP_200_OK)
 

@@ -18,5 +18,8 @@ def post_room(request):
 def room_details(request):
     return render(request, 'room-details.html')
 
+def reset_password(request):
+    return render(request, 'reset-password.html')
+
 def not_found(request):
     return render(request, '404.html')

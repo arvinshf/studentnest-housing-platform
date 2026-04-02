@@ -32,4 +32,8 @@ urlpatterns = [
     # Reports
     path('reports/create/', views.create_report, name='create_report'),
     path('reports/my/', views.get_my_reports, name='get_my_reports'),
+    
+    # Password Reset
+    path('password-reset/request/', views.request_password_reset, name='request_password_reset'),
+    path('password-reset/confirm/', views.reset_password, name='reset_password'),
 ]

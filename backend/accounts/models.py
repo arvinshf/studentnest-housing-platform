@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password, check_password
 from django.utils import timezone
+import uuid
 
 
 class Student(models.Model):
@@ -242,3 +243,23 @@ class Report(models.Model):
         if notes:
             self.admin_notes = notes
         self.save()
+
+
+class PasswordResetToken(models.Model):
+    """Token for password reset requests — expires after 1 hour"""
+    
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='reset_tokens')
+    token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    used = models.BooleanField(default=False)
+    
+    class Meta:
+        db_table = 'password_reset_tokens'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Reset token for {self.student.email}"
+    
+    def is_expired(self):
+        """Token expires after 1 hour"""
+        return (timezone.now() - self.created_at).total_seconds() > 3600

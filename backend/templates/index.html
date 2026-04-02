@@ -455,12 +455,12 @@
                         })
                       }
 
-                      // Forgot Password Form Submit (just the UI for now)
+                      // Forgot Password Form Submit — calls the reset API
                       const forgotForm = document.getElementById("forgotPasswordForm")
                       const forgotMsg = document.getElementById("forgotMsg")
 
                       if (forgotForm && forgotMsg) {
-                        forgotForm.addEventListener("submit", (e) => {
+                        forgotForm.addEventListener("submit", async (e) => {
                           e.preventDefault()
                           const email = document.getElementById("forgotEmail").value.trim()
 
@@ -471,10 +471,30 @@
                             return
                           }
 
-                          // Show a confirmation message for now
-                          forgotMsg.textContent = "If an account exists with that email, a reset link will be sent shortly."
-                          forgotMsg.style.display = "block"
-                          forgotMsg.style.borderColor = "var(--color-primary)"
+                          // Disable button while sending
+                          const btn = forgotForm.querySelector("button[type='submit']")
+                          btn.disabled = true
+                          btn.querySelector(".login-form-btn-text").textContent = "Sending..."
+
+                          try {
+                            const res = await fetch("/api/password-reset/request/", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ email: email })
+                            })
+
+                            const data = await res.json()
+                            forgotMsg.textContent = data.message || "If an account exists with that email, a reset link has been sent."
+                            forgotMsg.style.display = "block"
+                            forgotMsg.style.borderColor = res.ok ? "var(--color-primary)" : "#e74c3c"
+                          } catch (err) {
+                            forgotMsg.textContent = "Network error. Please try again."
+                            forgotMsg.style.display = "block"
+                            forgotMsg.style.borderColor = "#e74c3c"
+                          }
+
+                          btn.disabled = false
+                          btn.querySelector(".login-form-btn-text").textContent = "Send Reset Link"
                         })
                       }
                     })()

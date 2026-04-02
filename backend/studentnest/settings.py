@@ -139,6 +139,18 @@ CSRF_TRUSTED_ORIGINS = [
     "https://studentnest-housing.netlify.app",
 ]
 
+# Email settings — used for password reset emails
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'support.studentnest@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = 'StudentNest <support.studentnest@gmail.com>'
+
+# Domain for password reset links
+SITE_DOMAIN = os.environ.get('SITE_DOMAIN', 'arwin001.pythonanywhere.com')
+
 # REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [],  # Disabled - using manual session auth
