@@ -21,14 +21,13 @@ Usage:
   python get_gmail_token.py
 """
 
-import http.server
 import sys
 import urllib.parse
 import webbrowser
 
 import requests
 
-REDIRECT_URI = 'http://localhost:8090'
+REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 SCOPE = 'https://www.googleapis.com/auth/gmail.send'
 
 
@@ -46,35 +45,26 @@ def main():
         'access_type=offline&'
         'prompt=consent'
     )
-    print('\nOpening your browser to authorize Gmail access...')
-    webbrowser.open(auth_url)
+    print('\nOpening Chrome for authorization...')
+    print('After you click Allow, Google will show you an authorization code.')
+    print('Copy that code and paste it back here.\n')
+    import subprocess
+    chrome_path = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
+    try:
+        subprocess.Popen([chrome_path, auth_url])
+    except FileNotFoundError:
+        print('Chrome not found, opening default browser instead')
+        webbrowser.open(auth_url)
 
-    # tiny local server to catch the redirect with the auth code
-    class Handler(http.server.BaseHTTPRequestHandler):
-        code = None
+    auth_code = input('Paste the authorization code here: ').strip()
 
-        def do_GET(self):
-            query = urllib.parse.urlparse(self.path).query
-            params = urllib.parse.parse_qs(query)
-            Handler.code = params.get('code', [None])[0]
-            self.send_response(200)
-            self.end_headers()
-            self.wfile.write(b'Done! You can close this tab.')
-
-        def log_message(self, *args):
-            pass  # silence logs
-
-    server = http.server.HTTPServer(('localhost', 8090), Handler)
-    print('Waiting for authorization...')
-    server.handle_request()
-
-    if not Handler.code:
-        print('ERROR: No authorization code received.')
+    if not auth_code:
+        print('ERROR: No authorization code entered.')
         sys.exit(1)
 
     # swap the auth code for tokens
     resp = requests.post('https://oauth2.googleapis.com/token', data={
-        'code': Handler.code,
+        'code': auth_code,
         'client_id': client_id,
         'client_secret': client_secret,
         'redirect_uri': REDIRECT_URI,
