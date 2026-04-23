@@ -970,11 +970,25 @@ async function initializeMap(searchQuery, locationName) {
     
     map = L.map('map').setView([lat, lon], 15);
     
-    // Add OpenStreetMap tile layer
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      maxZoom: 19
-    }).addTo(map);
+    // Add map tile layer. Carto is used as primary to avoid OSM referrer blocking in some environments.
+    const primaryTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+      maxZoom: 19,
+      subdomains: 'abcd'
+    });
+
+    primaryTiles.on('tileerror', () => {
+      // Fallback to OSM HOT tiles if the primary provider fails.
+      if (!map || map._studentnestTilesFallbackApplied) return;
+      map._studentnestTilesFallbackApplied = true;
+
+      L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
+        maxZoom: 19
+      }).addTo(map);
+    });
+
+    primaryTiles.addTo(map);
     
     // Custom icon for marker
     const customIcon = L.divIcon({
