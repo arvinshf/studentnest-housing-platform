@@ -892,32 +892,76 @@ document.head.appendChild(styleSheet);
 let map = null;
 let marker = null;
 
+function normalizeUKPostcode(value) {
+  if (!value) return '';
+  const compact = String(value).trim().toUpperCase().replace(/\s+/g, '');
+  // Standard UK postcode formatting: split before final 3 chars (e.g., NW12FA -> NW1 2FA)
+  if (compact.length > 3) {
+    return `${compact.slice(0, -3)} ${compact.slice(-3)}`;
+  }
+  return compact;
+}
+
+function createGeocodeQueries(searchQuery, locationName) {
+  const postcode = normalizeUKPostcode(searchQuery);
+  const location = (locationName || '').trim();
+  const queries = [];
+
+  // Most accurate query first: combine location context with postcode.
+  if (postcode && location) queries.push(`${location}, ${postcode}, United Kingdom`);
+  if (postcode) queries.push(`${postcode}, United Kingdom`);
+  if (location) queries.push(`${location}, United Kingdom`);
+  if (searchQuery) queries.push(String(searchQuery).trim());
+
+  return [...new Set(queries.filter(Boolean))];
+}
+
+async function geocodeWithFallback(searchQuery, locationName) {
+  const queries = createGeocodeQueries(searchQuery, locationName);
+  let lastError = null;
+
+  for (const query of queries) {
+    try {
+      const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=5&addressdetails=1`;
+      const response = await fetch(geocodeUrl, {
+        headers: {
+          'User-Agent': 'StudentNest/1.0'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error(`Geocoding failed for query: ${query}`);
+      }
+
+      const results = await response.json();
+      if (Array.isArray(results) && results.length > 0) {
+        return {
+          query,
+          result: results[0],
+          results
+        };
+      }
+    } catch (error) {
+      lastError = error;
+      console.warn('Geocode attempt failed:', query, error.message);
+    }
+  }
+
+  if (lastError) throw lastError;
+  throw new Error('Location not found');
+}
+
 async function initializeMap(searchQuery, locationName) {
   console.log('Initializing map for:', searchQuery);
   
   try {
-    // Use Nominatim API for geocoding (free, no API key needed)
-    const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}&countrycodes=gb&limit=1`;
-    
-    const response = await fetch(geocodeUrl, {
-      headers: {
-        'User-Agent': 'StudentNest/1.0' // Required by Nominatim
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error('Geocoding failed');
-    }
-    
-    const data = await response.json();
-    console.log('Geocoding result:', data);
-    
-    if (data.length === 0) {
-      throw new Error('Location not found');
-    }
-    
-    const lat = parseFloat(data[0].lat);
-    const lon = parseFloat(data[0].lon);
+    // Use Nominatim API for geocoding (free, no API key needed) with fallback queries.
+    const geocode = await geocodeWithFallback(searchQuery, locationName);
+    console.log('Geocoding result:', geocode);
+
+    const bestResult = geocode.result;
+    const lat = parseFloat(bestResult.lat);
+    const lon = parseFloat(bestResult.lon);
     
     // Initialize map
     if (map) {
@@ -964,7 +1008,7 @@ async function initializeMap(searchQuery, locationName) {
       <div style="text-align: center; padding: 8px;">
         <strong style="font-size: 14px; color: #212529;">${locationName}</strong>
         <br>
-        <span style="font-size: 12px; color: #6c757d;">${data[0].display_name}</span>
+        <span style="font-size: 12px; color: #6c757d;">${bestResult.display_name}</span>
       </div>
     `).openPopup();
     
