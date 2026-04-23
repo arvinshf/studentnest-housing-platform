@@ -6,6 +6,16 @@ const API_BASE_URL = '/api';  // Relative path for same-domain
 let currentImageIndex = 0;
 let currentRoom = null;
 
+const UNIVERSITY_LOCATIONS = [
+  { name: 'University College London', lat: 51.5246, lon: -0.1340 },
+  { name: 'King\'s College London (Strand)', lat: 51.5115, lon: -0.1160 },
+  { name: 'Queen Mary University of London', lat: 51.5246, lon: -0.0407 },
+  { name: 'London School of Economics', lat: 51.5145, lon: -0.1166 },
+  { name: 'University of Westminster', lat: 51.5202, lon: -0.1749 },
+  { name: 'City, University of London', lat: 51.5278, lon: -0.1022 },
+  { name: 'Imperial College London', lat: 51.4988, lon: -0.1749 }
+];
+
 // Get room ID from URL parameter
 function getRoomIdFromURL() {
   const params = new URLSearchParams(window.location.search);
@@ -26,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setupMessageModal();
   setupReportModal();
   checkAuthentication();
+  setupUniversitySelector();
   
   console.log('🚀 All setup functions called');
 });
@@ -892,6 +903,38 @@ document.head.appendChild(styleSheet);
 let map = null;
 let marker = null;
 
+function setupUniversitySelector() {
+  const select = document.getElementById('universitySelect');
+  if (!select) return;
+
+  if (!select.dataset.populated) {
+    UNIVERSITY_LOCATIONS.forEach((uni, index) => {
+      const option = document.createElement('option');
+      option.value = String(index);
+      option.textContent = uni.name;
+      select.appendChild(option);
+    });
+    select.dataset.populated = '1';
+  }
+
+  if (!select.dataset.bound) {
+    select.addEventListener('change', (e) => {
+      const value = e.target.value;
+      if (value === '' || !map) return;
+
+      const uni = UNIVERSITY_LOCATIONS[Number(value)];
+      if (!uni) return;
+
+      map.flyTo([uni.lat, uni.lon], 14, { duration: 1.1 });
+      L.popup({ closeButton: true })
+        .setLatLng([uni.lat, uni.lon])
+        .setContent(`<strong>${uni.name}</strong>`)
+        .openOn(map);
+    });
+    select.dataset.bound = '1';
+  }
+}
+
 function normalizeUKPostcode(value) {
   if (!value) return '';
   const compact = String(value).trim().toUpperCase().replace(/\s+/g, '');
@@ -969,6 +1012,7 @@ async function initializeMap(searchQuery, locationName) {
     }
     
     map = L.map('map').setView([lat, lon], 15);
+    setupUniversitySelector();
     
     // Add map tile layer. Carto is used as primary to avoid OSM referrer blocking in some environments.
     const primaryTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
