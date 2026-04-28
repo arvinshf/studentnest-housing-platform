@@ -1,19 +1,24 @@
+/* outermost footer wrapper — display:contents removes this element from the box model so its children render as direct children of the parent */
 .footer-container1 {
-  display: contents;
+  display: contents; /* transparent in layout — no extra div box is added */
 }
  
+/* hidden footer slot — used as a conditional variant that JS or a media query can reveal */
 .footer-container2 {
-  display: none;
+  display: none; /* hidden by default */
 }
  
+/* secondary contents-level wrapper — also transparent in the layout tree */
 .footer-container3 {
-  display: contents;
+  display: contents; /* no box rendered — children flow directly into the parent */
 }
  
+/* second hidden slot — another conditional variant not shown by default */
 .footer-container4 {
-  display: none;
+  display: none; /* hidden by default */
 }
  
+/* final footer wrapper — also transparent so it doesn't add an extra layout layer */
 .footer-container5 {
-  display: contents;
+  display: contents; /* no box rendered */
 }

@@ -1,133 +1,157 @@
+/* navigation wrapper stub from the design builder — display:contents removes it from the box model */
 .navigation-wrapper {
-  display: contents;
+  display: contents; /* transparent wrapper — children render as direct children of the parent */
 }
  
+/* nav container stub — also contents-level so it adds no extra box */
 .navigation-container1 {
-  display: contents;
+  display: contents; /* no box rendered */
 }
  
+/* hidden nav variant — conditional slot not shown by default */
 .navigation-container2 {
-  display: none;
+  display: none; /* hidden by default */
 }
  
+/* second transparent nav wrapper */
 .navigation-container3 {
-  display: contents;
+  display: contents; /* no box rendered */
 }
  
+/* second hidden nav slot */
 .navigation-container4 {
-  display: none;
+  display: none; /* hidden by default */
 }
  
+/* final nav wrapper stub — transparent in the layout */
 .navigation-container5 {
-  display: contents;
+  display: contents; /* no box rendered */
 }
  
 
 
+/* root layout block for the signup page — stretches to at least the full viewport height */
 .signup-container10 {
-  width: 100%;
-  display: block;
-  min-height: 100vh;
+  width: 100%; /* fill the full page width */
+  display: block; /* standard block layout — children stack naturally */
+  min-height: 100vh; /* ensure the page fills the full screen even with little content */
 }
  
+/* horizontal flex row used for step-number + label pairs in the signup progress indicator */
 .signup-thq-flex-row-elm1 {
-  gap: var(--spacing-md);
+  gap: var(--spacing-md); /* comfortable gap between the number badge and the step label */
   display: flex;
-  align-items: center;
+  align-items: center; /* vertically align the number and text */
 }
  
+/* the large step number (e.g. '01') shown in the progress indicator */
 .signup-thq-step-num-elm {
-  opacity: 0.5;
-  font-family: var(--font-family-heading);
-  font-weight: 800;
+  opacity: 0.5; /* dimmed so it reads as decorative rather than primary information */
+  font-family: var(--font-family-heading); /* use the display/heading typeface for a bold look */
+  font-weight: 800; /* heavy weight to give the number visual mass */
 }
  
+/* generic full-width column layout containers used across the signup multi-step form */
 .signup-container11 {
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* stack child elements top-to-bottom */
 }
  
+/* step 2 container — same full-width column layout */
 .signup-container12 {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
  
+/* step 3 container */
 .signup-container13 {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
  
+/* step 4 container */
 .signup-container14 {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
  
+/* step 5 container */
 .signup-container15 {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
  
+/* dashed border on the file-upload drag-and-drop zone — communicates to the user that files can be dropped here */
 .signup-thq-signup-upload-section-elm {
-  border: 2px dashed rgba(120, 120, 120, 0.4);
+  border: 2px dashed rgba(120, 120, 120, 0.4); /* semi-transparent dashed border is the standard visual cue for a drop zone */
 }
  
+/* bold text label inside the upload section — the primary call-to-action (e.g. 'Upload your ID') */
 .signup-text23 {
-  font-weight: 700;
+  font-weight: 700; /* bold to draw attention to the instruction */
 }
  
+/* dashed border on the timeline/roadmap placeholder in the design editor */
 .signup-thq-signup-timeline-section-elm {
-  border: 2px dashed rgba(120, 120, 120, 0.4);
+  border: 2px dashed rgba(120, 120, 120, 0.4); /* same design-tool guide border as the upload zone */
 }
  
+/* hidden conditional container — first of a pair; hidden by default */
 .signup-container16 {
   display: none;
 }
  
+/* visible conditional container — the counterpart to container16 */
 .signup-container17 {
-  display: contents;
+  display: contents; /* transparent wrapper; children render directly into the parent */
 }
  
+/* another hidden slot — second pair of conditional containers */
 .signup-container18 {
   display: none;
 }
  
+/* visible counterpart to container18 */
 .signup-container19 {
   display: contents;
 }
  
+/* the floating 'Built with...' badge pinned to the bottom-right corner of the page */
 .signup-container20 {
-  right: 50px;
-  border: 1px solid #ffffff5c;
-  bottom: 30px;
+  right: 50px; /* offset from the right edge of the viewport */
+  border: 1px solid #ffffff5c; /* semi-transparent white border blends with dark backgrounds */
+  bottom: 30px; /* offset from the bottom edge */
   display: flex;
-  z-index: 22;
-  position: fixed;
-  box-shadow: 5px 5px 10px 0px rgba(31, 31, 31, 0.4);
+  z-index: 22; /* sits above most page content so it's always visible */
+  position: fixed; /* stays in place even when the user scrolls */
+  box-shadow: 5px 5px 10px 0px rgba(31, 31, 31, 0.4); /* subtle drop shadow to lift it off the page */
   min-height: auto;
   align-items: center;
   padding-top: 8px;
   padding-left: 12px;
-  border-radius: 8px;
+  border-radius: 8px; /* rounded corners to soften the badge */
   padding-right: 12px;
   padding-bottom: 8px;
-  backdrop-filter: blur(6px);
-  background-color: rgba(41, 41, 41, 0.41);
+  backdrop-filter: blur(6px); /* frosted-glass effect so the badge reads clearly over any background */
+  background-color: rgba(41, 41, 41, 0.41); /* dark semi-transparent background */
 }
  
+/* the small logo/icon inside the floating badge */
 .signup-icon27 {
-  width: 24px;
-  margin-right: 4px;
+  width: 24px; /* icon size — small enough not to dominate the badge */
+  margin-right: 4px; /* tiny gap between the icon and the text label */
 }
  
+/* the text label inside the floating badge (e.g. 'Built with Teleport') */
 .signup-text27 {
-  color: white;
-  font-size: 13px;
+  color: white; /* white text so it reads clearly against the dark badge background */
+  font-size: 13px; /* small enough to be secondary but still legible */
   font-style: normal;
-  font-weight: 500;
-  line-height: 24px;
+  font-weight: 500; /* medium weight — readable without being too heavy */
+  line-height: 24px; /* matches the icon height so text and icon sit on the same baseline */
 }

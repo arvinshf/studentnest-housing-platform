@@ -1,92 +1,106 @@
+/* outermost login form wrapper stub from the design builder — transparent in the layout */
 .login-form-wrapper {
-  display: contents;
+  display: contents; /* no box rendered — children flow as direct children of the parent */
 }
  
+/* inner login form container stub — also contents-level */
 .login-form-container1 {
-  display: contents;
+  display: contents; /* transparent wrapper */
 }
  
+/* dashed design-editor placeholder for the stats region inside the login form */
 .login-form-thq-login-form-stats-elm {
-  border: 2px dashed rgba(120, 120, 120, 0.4);
+  border: 2px dashed rgba(120, 120, 120, 0.4); /* semi-transparent guide border visible in the builder */
 }
  
+/* custom checkbox tick box — positioned absolutely over the hidden native checkbox input */
 .login-form-thq-login-form-checkmark-elm {
-  top: 0;
+  top: 0; /* anchored to the top-left corner of the checkbox wrapper */
   left: 0;
-  width: 20px;
+  width: 20px; /* standard checkbox square size */
   border: 1px solid var(--color-border);
   height: 20px;
-  position: absolute;
-  transition: all 0.2s ease;
-  border-radius: 4px;
-  background-color: var(--color-surface);
+  position: absolute; /* layered on top of the invisible native input */
+  transition: all 0.2s ease; /* smooth colour transition when the box is ticked */
+  border-radius: 4px; /* slight rounding */
+  background-color: var(--color-surface); /* matches the page background in the unchecked state */
 }
  
+/* label text beside the checkbox (e.g. 'Remember me') */
 .login-form-thq-login-form-checkbox-text-elm {
-  color: var(--color-on-surface-secondary);
+  color: var(--color-on-surface-secondary); /* muted to stay secondary to the main form labels */
   font-size: var(--font-size-sm);
 }
  
+/* animated light-streak that sweeps across the submit button on hover */
 .login-form-thq-login-form-btn-glitch-elm {
   top: 0;
-  left: -100%;
+  left: -100%; /* starts off-screen to the left so it's invisible until the hover animation fires */
   width: 100%;
   height: 100%;
-  position: absolute;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-on-primary) 20%, transparent), transparent);
+  position: absolute; /* layered on top of the button text */
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-on-primary) 20%, transparent), transparent); /* fades in/out to create a travelling gleam */
   transition: 0.5s;
 }
  
+/* hidden login form variant slot */
 .login-form-container2 {
   display: none;
 }
  
+/* second transparent contents wrapper */
 .login-form-container3 {
   display: contents;
 }
  
+/* second hidden slot */
 .login-form-container4 {
   display: none;
 }
  
+/* final login form wrapper stub */
 .login-form-container5 {
   display: contents;
 }
 
+/* root layout block for the home/index page — stretches to fill the full screen height */
 .home-container1 {
-  width: 100%;
-  display: block;
-  min-height: 100vh;
+  width: 100%; /* fill the full page width */
+  display: block; /* standard block layout */
+  min-height: 100vh; /* fills the full viewport even with sparse content */
 }
  
+/* the floating 'Built with...' badge fixed to the bottom-right corner of the home/index page */
 .home-container2 {
-  right: 50px;
-  border: 1px solid #ffffff5c;
-  bottom: 30px;
+  right: 50px; /* offset from the right edge of the viewport */
+  border: 1px solid #ffffff5c; /* semi-transparent white border that blends with dark backgrounds */
+  bottom: 30px; /* offset from the bottom edge */
   display: flex;
-  z-index: 22;
-  position: fixed;
-  box-shadow: 5px 5px 10px 0px rgba(31, 31, 31, 0.4);
+  z-index: 22; /* sits above most page content so it's always visible */
+  position: fixed; /* stays put even when the user scrolls */
+  box-shadow: 5px 5px 10px 0px rgba(31, 31, 31, 0.4); /* subtle drop shadow lifts the badge off the page */
   min-height: auto;
   align-items: center;
   padding-top: 8px;
   padding-left: 12px;
-  border-radius: 8px;
+  border-radius: 8px; /* rounded corners to soften the badge */
   padding-right: 12px;
   padding-bottom: 8px;
-  backdrop-filter: blur(6px);
-  background-color: rgba(41, 41, 41, 0.41);
+  backdrop-filter: blur(6px); /* frosted-glass blur so the badge reads on any background */
+  background-color: rgba(41, 41, 41, 0.41); /* dark semi-transparent fill */
 }
  
+/* the icon element inside the floating badge */
 .home-icon1 {
-  width: 24px;
-  margin-right: 4px;
+  width: 24px; /* small icon size to keep the badge compact */
+  margin-right: 4px; /* slight gap between icon and label text */
 }
  
+/* the text label inside the floating badge */
 .home-text {
-  color: white;
-  font-size: 13px;
+  color: white; /* white text for legibility against the dark badge background */
+  font-size: 13px; /* small enough to be secondary but still legible */
   font-style: normal;
-  font-weight: 500;
-  line-height: 24px;
+  font-weight: 500; /* medium weight — readable without being too bold */
+  line-height: 24px; /* matches the icon height so text and icon align on the same baseline */
 }

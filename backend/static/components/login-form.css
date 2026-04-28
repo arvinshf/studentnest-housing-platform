@@ -1,50 +1,59 @@
+/* outermost login form wrapper — display:contents removes it from the layout so children flow directly into the parent */
 .login-form-container1 {
-  display: contents;
+  display: contents; /* transparent — no extra box added */
 }
  
+/* dashed placeholder outline for the stats section — visible in the design editor to mark the region */
 .login-form-thq-login-form-stats-elm {
-  border: 2px dashed rgba(120, 120, 120, 0.4);
+  border: 2px dashed rgba(120, 120, 120, 0.4); /* semi-transparent dashed border used as a design-tool guide */
 }
  
+/* custom checkbox tick box — positioned absolutely over the hidden native checkbox input */
 .login-form-thq-login-form-checkmark-elm {
-  top: 0;
+  top: 0; /* anchored to the top-left of the checkbox container */
   left: 0;
-  width: 20px;
-  border: 1px solid var(--color-border);
+  width: 20px; /* square shape matching a standard checkbox size */
+  border: 1px solid var(--color-border); /* subtle border in the unchecked state */
   height: 20px;
-  position: absolute;
-  transition: all 0.2s ease;
-  border-radius: 4px;
-  background-color: var(--color-surface);
+  position: absolute; /* layered on top of the invisible native input */
+  transition: all 0.2s ease; /* smooth colour and border change when the checkbox is ticked */
+  border-radius: 4px; /* slight rounding to soften the corners */
+  background-color: var(--color-surface); /* matches the page background in the default unchecked state */
 }
  
+/* the label text next to the checkbox (e.g. 'Remember me') */
 .login-form-thq-login-form-checkbox-text-elm {
-  color: var(--color-on-surface-secondary);
-  font-size: var(--font-size-sm);
+  color: var(--color-on-surface-secondary); /* muted colour so it doesn't compete with the main heading */
+  font-size: var(--font-size-sm); /* slightly smaller than body text to keep it visually secondary */
 }
  
+/* the animated light streak that sweeps across the submit button on hover — creates a glitch/gleam effect */
 .login-form-thq-login-form-btn-glitch-elm {
   top: 0;
-  left: -100%;
+  left: -100%; /* starts fully off-screen to the left so it's invisible by default */
   width: 100%;
   height: 100%;
-  position: absolute;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-on-primary) 20%, transparent), transparent);
-  transition: 0.5s;
+  position: absolute; /* layered on top of the button label */
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-on-primary) 20%, transparent), transparent); /* fade in/out creates a travelling gleam */
+  transition: 0.5s; /* slow enough to be noticeable, fast enough to feel snappy */
 }
  
+/* hidden login form variant slot — not shown by default */
 .login-form-container2 {
-  display: none;
+  display: none; /* hidden by default */
 }
  
+/* second contents-level login form wrapper — transparent in the layout */
 .login-form-container3 {
-  display: contents;
+  display: contents; /* no extra box rendered */
 }
  
+/* second hidden login form slot */
 .login-form-container4 {
-  display: none;
+  display: none; /* hidden by default */
 }
  
+/* final login form wrapper — also transparent in the layout */
 .login-form-container5 {
-  display: contents;
+  display: contents; /* no extra box rendered */
 }

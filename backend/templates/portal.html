@@ -1,13 +1,27 @@
 {% load static %}
 <!DOCTYPE html>
+<!-- ====================================================
+     portal.html — Student Dashboard
+     Authenticated users land here after login. The page
+     shows a welcome hero (WebGL neuro-shader background),
+     section tabs (Favorites / My Rooms / My Reports),
+     a full-thread messaging panel, quick-action cards,
+     and a recent-activity feed.
+
+     All data is fetched live from the backend REST API;
+     the static HTML only provides the shell and empty
+     state placeholders populated by the inline scripts.
+     ==================================================== -->
 <html lang="en">
 <head>
   <title>Dashboard - StudentNest</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta charset="utf-8" />
+  <!-- Global design system + Inter/Orbitron web fonts -->
   <link rel="stylesheet" href="/static/style.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&display=swap" />
+  <!-- Dashboard-specific CSS — all portal styles in one inline block (nav, tabs, cards, messages) -->
   <style>
     * {
       margin: 0;
@@ -1031,7 +1045,7 @@
   </style>
 </head>
 <body>
-  <!-- Navigation -->
+  <!-- Glassmorphism nav bar: logo, tab nav links, unread badge, and logout button -->
   <nav class="dashboard-nav">
     <div class="dashboard-nav-container">
       <a href="home.html" class="dashboard-logo">StudentNest</a>
@@ -1053,9 +1067,9 @@
     </div>
   </nav>
 
-  <!-- Main Dashboard -->
+  <!-- Main content wrapper (max-width 1400px, centred with side padding) -->
   <div class="dashboard-container">
-    <!-- Welcome Section -->
+    <!-- Welcome hero: neuro-shader WebGL canvas (absolutely positioned) + user greeting card -->
     <div class="dashboard-welcome">
       <div style="position:relative;min-height:60vh;display:flex;align-items:center;justify-content:center;overflow:hidden;">
         <canvas id="neuro" style="position:absolute;top:0;left:0;width:100vw;height:70vh;z-index:0;pointer-events:none;opacity:0.95;"></canvas>
@@ -1110,7 +1124,7 @@
       </div>
     </div>
 
-    <!-- Section Tabs -->
+    <!-- Tab bar: switches between Favorites, My Rooms, and My Reports sections -->
     <div class="dashboard-tabs" style="display: flex; gap: 12px; margin: 24px 0; border-bottom: 2px solid rgba(255, 255, 255, 0.1); padding-bottom: 0; overflow-x: auto;">
       <button class="dashboard-tab active" onclick="showSection('favorites')" style="padding: 12px 20px; background: none; border: none; color: rgba(255, 255, 255, 0.7); font-size: 16px; font-weight: 500; cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; white-space: nowrap;">
         Favorites
@@ -1123,7 +1137,7 @@
       </button>
     </div>
 
-    <!-- Favorite Rooms Section -->
+    <!-- Favorites section: heart-marked rooms fetched from /api/favorites/ (default visible tab) -->
     <div class="dashboard-section" id="favoritesSection">
       <h2 class="dashboard-section-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1145,7 +1159,7 @@
       </div>
     </div>
 
-    <!-- My Rooms Section -->
+    <!-- My Rooms section: rooms posted by the logged-in user, fetched via /api/rooms/ + owner filter -->
     <div class="dashboard-section" id="myRoomsSection" style="display: none;">
       <h2 class="dashboard-section-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1168,7 +1182,7 @@
       </div>
     </div>
 
-    <!-- My Reports Section -->
+    <!-- Reports section: user's submitted complaints, loaded from /api/reports/my/ -->
     <div class="dashboard-section" id="reportsSection" style="display: none;">
       <h2 class="dashboard-section-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1192,7 +1206,7 @@
       </div>
     </div>
 
-    <!-- Messages Section -->
+    <!-- Messages section: two-panel chat (conversation list on left, full thread on right) -->
     <div class="dashboard-section" id="messages-section">
       <h2 class="dashboard-section-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1237,7 +1251,7 @@
       </div>
     </div>
 
-    <!-- Quick Actions -->
+    <!-- Quick-action cards grid: Find Rooms, My Profile, Messages, List a Room -->
     <div class="dashboard-actions">
       <a href="home.html#find-room" class="dashboard-action-card">
         <div class="dashboard-action-icon">
@@ -1282,7 +1296,7 @@
       </a>
     </div>
 
-    <!-- Recent Activity -->
+    <!-- Hard-coded recent activity feed (demo data; not yet driven from the API) -->
     <div class="dashboard-section">
       <h2 class="dashboard-section-title">Recent Activity</h2>
       <div class="dashboard-activity-list">
@@ -1339,6 +1353,7 @@
       </div>
     </div>
   </div>
+  <!-- WebGL neuro-shader background animation for the welcome hero -->
   <script>
     const canvasEl = document.getElementById('neuro');
     const pointer = { x: 0, y: 0, tX: 0, tY: 0 };
@@ -1472,7 +1487,9 @@
     setupWebGL();
   </script>
 
+  <!-- auth-backend.js: provides login/session checks used by the portal scripts -->
   <script src="/static/auth-backend.js"></script>
+  <!-- Portal runtime: loads rooms, favorites, reports, and full conversation threads -->
   <script>
     // Display user name if logged in
     const student = JSON.parse(localStorage.getItem('student') || '{}');

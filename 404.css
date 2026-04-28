@@ -1,39 +1,44 @@
+/* outer page wrapper — centres the 404 error content both horizontally and vertically on the screen */
 .not-found-container1 {
-  width: 100%;
-  display: flex;
-  overflow: auto;
-  min-height: 100vh;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
+  width: 100%; /* fill the full browser width */
+  display: flex; /* enable flexbox so children can be centred easily */
+  overflow: auto; /* allow scrolling on very small screens to prevent clipping */
+  min-height: 100vh; /* ensure the wrapper fills at least the full viewport height */
+  align-items: center; /* vertically centre the stacked content */
+  flex-direction: column; /* stack children top-to-bottom */
+  justify-content: center; /* push children to the middle of the column */
 }
  
+/* inner positioning wrapper that holds the big 404 number and any decorative icon */
 .not-found-container2 {
-  display: flex;
-  position: relative;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
+  display: flex; /* flex so number and icon can be stacked */
+  position: relative; /* allows absolutely-positioned children to anchor here */
+  align-items: center; /* horizontally centre the children */
+  flex-direction: column; /* stack children top-to-bottom */
+  justify-content: center; /* vertically centre the children */
 }
  
+/* the giant '404' headline number — deliberately oversized for maximum visual impact */
 .not-found-text2 {
-  color: rgb(38, 38, 38);
-  font-size: 252px;
-  margin-top: -20px;
-  font-weight: 900;
-  margin-bottom: -20px;
-  letter-spacing: -20px;
+  color: rgb(38, 38, 38); /* near-black so it reads clearly on a light background */
+  font-size: 252px; /* intentionally huge to dominate the page */
+  margin-top: -20px; /* pull up slightly to close the gap with any element above */
+  font-weight: 900; /* heaviest available weight for maximum visual presence */
+  margin-bottom: -20px; /* reduce gap below so the sub-heading sits close beneath the number */
+  letter-spacing: -20px; /* tight kerning crunches the three digits together for a stylistic effect */
 }
  
+/* constrains the width of the sub-heading paragraph and back-home button that sit below the 404 number */
 .not-found-container3 {
-  width: 421px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
+  width: 421px; /* fixed width prevents the message from stretching too wide on large screens */
+  display: flex; /* flex so the paragraph and button stack neatly */
+  align-items: center; /* horizontally centre the text and button */
+  flex-direction: column; /* stack children top-to-bottom */
+  justify-content: center; /* vertically centre the children */
 }
  
+/* the short explanatory sentence shown beneath the 404 number */
 .not-found-text3 {
-  text-align: center;
-  font-weight: 400;
+  text-align: center; /* centre-align the error message copy */
+  font-weight: 400; /* normal weight — intentionally lighter than the bold 404 headline */
 }

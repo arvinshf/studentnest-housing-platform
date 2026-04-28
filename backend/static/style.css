@@ -1,3 +1,17 @@
+/* ================================================================
+   Global Design System — style.css
+   Contains:
+     • CSS custom properties (design tokens) for the dark sci-fi theme
+     • Teleport (THQ) design-builder utility classes
+     • Navigation, footer, signup, and login-form component styles
+     • Responsive media queries
+   The dark surface colour (#05060a) and cyan/purple accent palette
+   are the signature visual language of the StudentNest brand.
+   ================================================================ */
+
+/* --- Design Tokens: spacing, colour, typography, radius, shadow ---
+   All values are defined here as custom properties so they can be
+   referenced consistently throughout every component stylesheet.    */
 :root {
   --spacing-lg: 1rem;
   --spacing-md: 0.75rem;
@@ -89,6 +103,9 @@
   --dl-layout-space-oneandhalfunits: 24px;
 }
  
+/* --- Base component primitives from the Teleport design builder ---
+   These are the default styled elements (button, input, textarea)
+   that components inherit from before component-specific overrides apply. */
 .button {
   color: var(--dl-color-theme-neutral-dark);
   display: inline-block;
@@ -99,48 +116,45 @@
   background-color: var(--dl-color-theme-neutral-light);
 }
  
+/* default text input styling */
 .input {
-  color: var(--dl-color-theme-neutral-dark);
-  cursor: auto;
-  padding: 0.5rem 1rem;
   border-color: var(--dl-color-theme-neutral-dark);
   border-width: 1px;
   border-radius: 4px;
   background-color: var(--dl-color-theme-neutral-light);
 }
  
+/* default multi-line textarea styling */
 .textarea {
-  color: var(--dl-color-theme-neutral-dark);
-  cursor: auto;
-  padding: 0.5rem;
   border-color: var(--dl-color-theme-neutral-dark);
   border-width: 1px;
   border-radius: 4px;
   background-color: var(--dl-color-theme-neutral-light);
 }
  
+/* unordered/ordered list reset with left indent */
 .list {
-  width: 100%;
-  margin: 1em 0px 1em 0px;
   display: block;
   padding: 0px 0px 0px 1.5rem;
   list-style-type: none;
   list-style-position: outside;
 }
  
+/* list item — keeps the default list bullet behaviour */
 .list-item {
-  display: list-item;
-}
  
+/* utility used by the Teleport builder to override display:none and transform hidden elements */
 .teleport-show {
-  display: flex !important;
   transform: none !important;
 }
  
+/* --- Teleport (THQ) design-system utility classes ---
+   These implement the design-builder's grid, flex, card, image,
+   button, input, and animation utilities.
+   Class names follow the pattern thq-<purpose>-<variant>.         */
+
+/* styled text input following the Teleport design system */
 .thq-input {
-  color: var(--dl-color-theme-neutral-dark);
-  cursor: auto;
-  outline: none;
   padding: 0.5rem 1rem;
   align-self: stretch;
   text-align: center;
@@ -154,10 +168,8 @@
   outline: 1px solid var(--dl-color-theme-primary1);
 }
  
+/* solid filled button — primary action style */
 .thq-button-filled {
-  gap: var(--dl-layout-space-halfunit);
-  fill: var(--dl-color-theme-secondary1);
-  color: var(--dl-color-theme-secondary1);
   cursor: pointer;
   display: flex;
   transition: 0.3s;
@@ -182,11 +194,8 @@
   background-color: var(--dl-color-theme-primary2);
 }
  
+/* outlined button — secondary action style with a visible border */
 .thq-button-outline {
-  gap: var(--dl-layout-space-halfunit);
-  fill: var(--dl-color-theme-primary1);
-  color: var(--dl-color-theme-primary1);
-  border: 1px solid;
   cursor: pointer;
   display: flex;
   transition: 0.3s;
@@ -209,10 +218,8 @@
   background-color: var(--dl-color-theme-primary2);
 }
  
+/* flat/ghost button — no background or border; used for low-priority actions */
 .thq-button-flat {
-  gap: var(--dl-layout-space-halfunit);
-  fill: var(--dl-color-theme-primary1);
-  color: var(--dl-color-theme-primary1);
   cursor: pointer;
   display: flex;
   transition: 0.3s;
@@ -236,162 +243,120 @@
   background-color: var(--dl-color-theme-primary2);
 }
  
+/* --- Teleport typography scale --- */
+/* H1 — large page title */
 .thq-heading-1 {
-  font-size: 48px;
   font-family: STIX Two Text;
   font-weight: 700;
   line-height: 1.5;
 }
  
+/* H2 — section heading */
 .thq-heading-2 {
-  font-size: 35px;
   font-family: STIX Two Text;
   font-weight: 600;
   line-height: 1.5;
 }
  
+/* H3 — sub-section heading */
 .thq-heading-3 {
-  font-size: 26px;
   font-family: STIX Two Text;
   font-weight: 600;
   line-height: 1.5;
 }
  
+/* large body text */
 .thq-body-large {
-  font-size: 18px;
-  font-family: Noto Sans;
   line-height: 1.5;
 }
  
+/* standard body text */
 .thq-body-small {
-  font-size: 16px;
-  font-family: Noto Sans;
   line-height: 1.5;
 }
  
+/* circular team member avatar */
 .thq-team-image-round {
-  width: 80px;
-  height: 80px;
   object-fit: cover;
   border-radius: 50%;
 }
  
+/* --- Teleport layout utility classes --- */
+/* full-width section with generous vertical padding */
 .thq-section-padding {
-  width: 100%;
-  display: flex;
-  padding: var(--dl-layout-space-fiveunits);
   position: relative;
   align-items: center;
   flex-direction: column;
 }
  
+/* constrains section content to the max-width design token */
 .thq-section-max-width {
-  width: 100%;
-  max-width: var(--dl-layout-size-maxwidth);
-}
  
+/* 1:1 square image with rounded corners */
 .thq-img-ratio-1-1 {
-  width: 100%;
-  object-fit: cover;
-  aspect-ratio: 1/1;
   border-radius: var(--dl-layout-radius-imageradius);
 }
  
+/* 16:9 widescreen image */
 .thq-img-ratio-16-9 {
-  width: 100%;
-  object-fit: cover;
-  aspect-ratio: 16/9;
   border-radius: var(--dl-layout-radius-imageradius);
 }
  
+/* 4:3 landscape image */
 .thq-img-ratio-4-3 {
-  width: 100%;
-  object-fit: cover;
-  aspect-ratio: 4/3;
   border-radius: var(--dl-layout-radius-imageradius);
 }
  
+/* 4:6 portrait image */
 .thq-img-ratio-4-6 {
-  width: 100%;
-  object-fit: cover;
-  aspect-ratio: 4/6;
   border-radius: var(--dl-layout-radius-imageradius);
 }
  
+/* fully circular image (profile photos, avatar thumbnails) */
 .thq-img-round {
-  width: 100%;
-  border-radius: var(--dl-layout-radius-round);
-}
  
+/* vertical flex container with overflow hidden */
 .thq-flex-column {
-  gap: var(--dl-layout-space-twounits);
-  display: flex;
-  overflow: hidden;
   position: relative;
   align-items: center;
   flex-direction: column;
 }
  
+/* horizontal flex container with overflow hidden */
 .thq-flex-row {
-  gap: var(--dl-layout-space-twounits);
-  display: flex;
-  overflow: hidden;
-  position: relative;
-  align-items: center;
-}
  
+/* six-column responsive grid */
 .thq-grid-6 {
-  display: grid;
-  grid-gap: var(--dl-layout-space-twounits);
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-}
  
+/* five-column responsive grid */
 .thq-grid-5 {
-  display: grid;
-  grid-gap: var(--dl-layout-space-twounits);
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-}
  
+/* card with consistent padding and rounded corners */
 .thq-card {
-  gap: var(--dl-layout-space-oneandhalfunits);
-  display: flex;
-  padding: var(--dl-layout-space-twounits);
   align-items: stretch;
   border-radius: var(--dl-layout-radius-cardradius);
   flex-direction: column;
 }
  
+/* subtle box-shadow utility for cards */
 .thq-box-shadow {
-  box-shadow: 0px 0px 5px -2px var(--dl-color-theme-neutral-dark);
-}
  
+/* three-column grid */
 .thq-grid-3 {
-  display: grid;
-  grid-gap: var(--dl-layout-space-twounits);
-  grid-template-columns: 1fr 1fr 1fr;
-}
  
+/* four-column grid */
 .thq-grid-4 {
-  display: grid;
-  grid-gap: var(--dl-layout-space-twounits);
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-}
  
+/* two-column full-width grid */
 .thq-grid-2 {
-  width: 100%;
-  display: grid;
-  grid-gap: var(--dl-layout-space-twounits);
-  grid-template-columns: 1fr 1fr;
-}
  
+/* accessible checkbox that matches the design-system size token */
 .thq-checkbox {
-  width: var(--dl-layout-size-xsmall);
-  height: var(--dl-layout-size-xsmall);
-}
  
+/* custom-styled select dropdown with an embedded SVG chevron arrow replacing the browser default */
 .thq-select {
   cursor: pointer;
-  appearance: none;
+  appearance: none; /* remove the browser default dropdown arrow so we can use our own SVG */
   padding-top: var(--dl-layout-space-halfunit);
   padding-left: var(--dl-layout-space-unit);
   border-radius: var(--dl-layout-radius-inputradius);
@@ -403,20 +368,16 @@
   background-position: right 8px center;
 }
  
+/* 1 px horizontal divider line */
 .thq-divider-horizontal {
-  width: 100%;
-  height: 1px;
   background-color: var(--dl-color-theme-neutral-dark);
 }
  
+/* small icon size (24 × 24 px) */
 .thq-icon-small {
-  width: 24px;
-  height: 24px;
-}
  
+/* circular icon-only button */
 .thq-button-icon {
-  fill: var(--dl-color-theme-secondary1);
-  padding: 3px;
   transition: 0.3s;
   border-radius: var(--dl-layout-radius-round);
 }
@@ -425,20 +386,14 @@
   fill: var(--dl-color-theme-secondary2);
 }
  
+/* medium icon (matches the --dl-layout-size-small token) */
 .thq-icon-medium {
-  width: var(--dl-layout-size-small);
-  height: var(--dl-layout-size-small);
-}
  
+/* extra-small icon (matches --dl-layout-size-xsmall) */
 .thq-icon-x-small {
-  width: var(--dl-layout-size-xsmall);
-  height: var(--dl-layout-size-xsmall);
-}
  
+/* animated gradient text link that shifts colour on hover */
 .thq-link {
-  cursor: pointer;
-  display: inline-block;
-  overflow: hidden;
   background: linear-gradient(to right, var(--dl-color-theme-primary1) 50%, var(--dl-color-theme-neutral-dark) 50%);
   transition: background-position 300ms ease;
   font-weight: 600;
@@ -452,14 +407,17 @@
   background-position: 0 100%;
 }
  
+/* auto-fit grid with 300 px minimum column width */
 .thq-grid-auto-300 {
-  display: grid;
-  grid-gap: var(--dl-layout-space-oneandhalfunits);
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
  
+/* --- Infinite scroll animation utilities ---
+   These wrap repeated card/logo groups and scroll them
+   continuously so the content appears to loop forever.     */
+
+/* vertically scrolling group — plays in reverse (bottom to top) */
 .thq-animated-group-vertical-reverse {
-  gap: var(--dl-layout-space-unit);
   width: 100%;
   display: flex;
   animation: scroll-y 20s linear infinite;
@@ -469,84 +427,60 @@
   animation-direction: reverse;
 }
  
+/* horizontally scrolling group — plays in reverse (right to left) */
 .thq-animated-group-horizontal-reverse {
-  gap: var(--dl-layout-space-unit);
-  display: flex;
-  animation: scroll-x 20s linear infinite;
-  min-width: 100%;
   align-items: center;
   flex-shrink: 0;
   justify-content: space-around;
   animation-direction: reverse;
 }
  
+/* vertically scrolling group — plays forwards (top to bottom) */
 .thq-animated-group-vertical {
-  gap: var(--dl-layout-space-unit);
-  width: 100%;
-  display: flex;
-  animation: scroll-y 20s linear infinite;
   align-items: flex-start;
   flex-direction: column;
   justify-content: space-around;
 }
  
+/* horizontally scrolling group — plays forwards (left to right) */
 .thq-animated-group-horizontal {
-  gap: var(--dl-layout-space-unit);
-  display: flex;
-  animation: scroll-x 20s linear infinite;
-  min-width: 100%;
   align-items: center;
   flex-shrink: 0;
   justify-content: space-around;
 }
  
+/* overflow:hidden container for a vertical animated scroll group */
 .thq-animated-group-container-vertical {
-  gap: var(--dl-layout-space-unit);
-  display: flex;
-  overflow: hidden;
-  flex-direction: column;
-}
  
+/* overflow:hidden container for a horizontal animated scroll group */
 .thq-animated-group-container-horizontal {
-  gap: var(--dl-layout-space-unit);
-  display: flex;
-  overflow: hidden;
-}
  
+/* fades out the top and bottom edges of a vertical scroll container */
 .thq-mask-image-vertical {
-  mask-image: linear-gradient(to bottom, transparent, black 1%, black 99%, transparent);
-}
  
+/* fades out the left and right edges of a horizontal scroll container */
 .thq-mask-image-horizontal {
-  mask-image: linear-gradient(to right, transparent, black 1%, black 99%, transparent);
-}
  
+/* images inside this class scale up slightly on hover */
 .thq-img-scale {
-  transition: 0.3s;
-}
  
 .thq-img-scale:hover {
   scale: 1.05;
 }
  
+/* animated card background layer 1 (the wider, accent-coloured back card) */
 .thq-animated-card-bg-1 {
-  width: 100%;
-  height: 100%;
-  transition: transform 0.3s;
   border-radius: var(--dl-layout-radius-cardradius);
   background-color: var(--dl-color-theme-accent1);
 }
  
+/* animated card background layer 2 (the narrower, accent2-coloured mid card) */
 .thq-animated-card-bg-2 {
-  transition: transform 0.3s;
-  border-radius: var(--dl-layout-radius-cardradius);
   background-color: var(--dl-color-theme-accent2);
 }
  
+/* button with a wipe animation — a dark overlay sweeps across from left to right on hover */
 .thq-button-animated {
-  outline: none;
-  z-index: 1;
-  overflow: hidden;
   position: relative;
   border-width: 2px;
 }
@@ -595,6 +529,14 @@
   transform: scaleX(1);
 }
  
+/* ----------------------------------------------------------------
+   Custom button utility classes
+   These extend the THQ buttons with a consistent set of semantic
+   variants (primary, secondary, accent, outline, link) and sizes
+   (sm, lg, xl) used throughout the hand-crafted page components.
+   ---------------------------------------------------------------- */
+
+/* base button reset — shared by all .btn-* variants */
 .btn {
   gap: var(--spacing-xs);
   border: 1px solid transparent;
@@ -616,30 +558,35 @@
   text-decoration: none;
 }
  
+/* solid primary colour CTA button */
 .btn-primary {
   color: var(--color-on-primary);
   border-color: var(--color-primary);
   background-color: var(--color-primary);
 }
  
+/* teal secondary action button */
 .btn-secondary {
   color: var(--color-on-secondary);
   border-color: var(--color-secondary);
   background-color: var(--color-secondary);
 }
  
+/* vibrant accent (purple/magenta) button */
 .btn-accent {
   color: var(--color-on-accent);
   border-color: var(--color-accent);
   background-color: var(--color-accent);
 }
  
+/* transparent button with a coloured border */
 .btn-outline {
   color: var(--color-primary);
   border: 1px solid var(--color-primary);
   background-color: var(--color-surface);
 }
  
+/* text-only hyperlink-style button (no background) */
 .btn-link {
   color: var(--color-primary);
   box-shadow: none;
@@ -648,20 +595,24 @@
   background-color: transparent;
 }
  
+/* compact small-size button */
 .btn-sm {
   padding: var(--spacing-sm) var(--spacing-md);
 }
  
+/* larger-than-default button */
 .btn-lg {
   padding: var(--spacing-lg) var(--spacing-xl);
 }
  
+/* extra-large hero CTA button */
 .btn-xl {
   padding: var(--spacing-xl) var(--spacing-2xl);
 }
  
+/* --- Section-level typography utilities --- */
+/* prominent section heading */
 .section-title {
-  font-size: var(--font-size-3xl);
   font-style: var(--font-style-heading);
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-heading);
@@ -670,25 +621,22 @@
   text-transform: var(--text-transform-heading);
 }
  
+/* muted sub-heading below a section title */
 .section-subtitle {
-  opacity: 0.85;
-  font-size: var(--font-size-lg);
-  font-style: var(--font-style-subheading);
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-heading);
   line-height: var(--line-height-heading);
 }
  
+/* body copy inside a section */
 .section-content {
-  font-size: var(--font-size-base);
-  font-family: var(--font-family-body);
   font-weight: var(--font-weight-body);
   line-height: var(--line-height-body);
   letter-spacing: var(--letter-spacing-body);
 }
  
+/* very large hero headline (fluid size via design token) */
 .hero-title {
-  font-size: var(--font-size-4xl);
   font-style: var(--font-style-heading);
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-heading);
@@ -697,11 +645,8 @@
   text-transform: var(--text-transform-heading);
 }
  
+/* hero sub-headline below the main hero title */
 .hero-subtitle {
-  opacity: 0.85;
-  font-size: var(--font-size-lg);
-  font-style: var(--font-style-subheading);
-  font-family: var(--font-family-body);
   font-weight: var(--font-weight-body);
   line-height: var(--line-height-body);
 }
@@ -743,76 +688,55 @@
   text-decoration: underline;
 }
  
+/* ----------------------------------------------------------------
+   Navigation component styles
+   The navigation bar is sticky so it stays visible while scrolling.
+   It uses a dark glassmorphism surface and includes a full-screen
+   mobile slide-in overlay with animated links for small screens.
+   ---------------------------------------------------------------- */
+
+/* outermost nav wrapper — sticky, full-width, with a bottom border */
 .navigation-wrapper {
-  top: 0;
-  width: 100%;
-  padding: var(--spacing-md) 0;
-  z-index: 1000;
   position: sticky;
   background: var(--color-surface);
   transition: background 0.3s ease;
   border-bottom: 1px solid var(--color-border);
 }
  
+/* constrained inner container that centres and pads the nav content */
 .navigation-container {
-  gap: var(--spacing-2xl);
-  margin: 0 auto;
-  display: flex;
-  padding: 0 var(--spacing-xl);
   max-width: var(--content-max-width);
   align-items: center;
   justify-content: space-between;
 }
  
+/* logo + brand name grouped on the left; flex-shrink:0 prevents it from squishing */
 .navigation-brand {
-  flex-shrink: 0;
-}
  
+/* grows to fill remaining space, pushes actions to the right */
 .navigation-desktop-menu {
-  flex: 1;
-  display: flex;
-  justify-content: flex-start;
-}
  
+/* CTA buttons on the far right of the desktop nav */
 .navigation-actions {
-  gap: var(--spacing-lg);
-  display: flex;
-  align-items: center;
-}
  
+/* wraps the anchor tag that contains the logo image/text */
 .navigation-logo-link {
-  display: flex;
-  align-items: center;
-  text-decoration: none;
-}
  
+/* horizontal desktop nav links list — floats left, no bullet points */
 .navigation-links-list {
-  gap: var(--spacing-xl);
-  margin: 0;
-  display: flex;
-  padding: 0;
-  list-style: none;
-}
  
+/* side-by-side login / sign-up buttons group */
 .navigation-auth-group {
-  gap: var(--spacing-md);
-  display: flex;
-}
  
+/* hamburger button — hidden on desktop, visible on mobile */
 .navigation-mobile-toggle {
-  color: var(--color-on-surface);
-  border: none;
-  cursor: pointer;
-  display: none;
   padding: var(--spacing-sm);
   background: transparent;
   transition: color 0.3s ease;
 }
  
+/* gradient brand logo text that uses -webkit-text-fill for the background-clip trick */
 .navigation-logo-text {
-  color: var(--color-primary);
-  font-size: var(--font-size-xl);
-  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
   transition: filter 0.3s ease;
   letter-spacing: 0.1em;
   -webkit-background-clip: text;
@@ -821,17 +745,11 @@
  
 
  
+/* auth button with a bounce-spring entrance animation on hover */
 .navigation-auth-btn {
-  overflow: hidden;
-  position: relative;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
  
+/* individual nav link with uppercase small caps and a hover colour transition */
 .navigation-link {
-  color: var(--color-on-surface);
-  padding: var(--spacing-sm) 0;
-  position: relative;
-  font-size: var(--font-size-sm);
   transition: color 0.3s ease;
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-medium);
@@ -841,18 +759,11 @@
   text-decoration: none;
 }
  
+/* flex wrapper inside nav auth buttons that centres the icon and label */
 .navigation-btn-inner {
-  gap: var(--spacing-sm);
-  display: flex;
-  align-items: center;
-}
  
+/* full-screen mobile overlay — slides in from the right via translateX */
 .navigation-mobile-overlay {
-  inset: 0;
-  display: flex;
-  z-index: 1100;
-  position: fixed;
-  transform: translateX(100%);
   background: var(--color-surface);
   min-height: 100vh;
   overflow-y: auto;
@@ -860,61 +771,33 @@
   flex-direction: column;
 }
  
+/* sticky overlay header containing the brand logo and close button */
 .navigation-overlay-header {
-  top: 0;
-  display: flex;
-  padding: var(--spacing-xl);
-  z-index: 1110;
-  position: sticky;
   background: var(--color-surface);
   align-items: center;
   border-bottom: 1px solid var(--color-border);
   justify-content: space-between;
 }
  
+/* scrollable content area inside the mobile overlay */
 .navigation-overlay-content {
-  gap: var(--spacing-3xl);
-  flex: 1;
-  display: flex;
-  padding: var(--spacing-2xl) var(--spacing-xl);
-  flex-direction: column;
-}
  
+/* X button that closes the mobile overlay */
 .navigation-mobile-close {
-  color: var(--color-on-surface);
-  border: none;
-  cursor: pointer;
-  padding: var(--spacing-sm);
-  background: transparent;
-}
  
+/* vertical list of full-width mobile nav links */
 .navigation-overlay-list {
-  gap: var(--spacing-xl);
-  margin: 0;
-  display: flex;
-  padding: 0;
-  list-style: none;
-  flex-direction: column;
-}
  
+/* footer area inside the mobile overlay — pushed to the bottom by margin-top:auto */
 .navigation-overlay-footer {
-  gap: var(--spacing-md);
-  display: flex;
-  margin-top: auto;
-  flex-direction: column;
-  padding-bottom: var(--spacing-3xl);
-}
  
 
  
+/* full-width CTA button inside the mobile overlay footer */
 .navigation-overlay-btn {
-  width: 100%;
-}
  
+/* giant uppercase link text in the mobile overlay */
 .navigation-overlay-link {
-  color: var(--color-on-surface);
-  font-size: var(--font-size-2xl);
-  transition: color 0.3s ease, padding-left 0.3s ease;
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-heading);
   text-transform: uppercase;
@@ -962,80 +845,44 @@
   padding-left: var(--spacing-md);
 }
  
+/* ----------------------------------------------------------------
+   Footer component styles
+   The footer uses a dark elevated surface with an optional
+   background image, a wave SVG divider at the top, and animated
+   social icon buttons. The four-column grid collapses on mobile.
+   ---------------------------------------------------------------- */
+
+/* outermost footer wrapper — overflow:hidden clips the wave divider */
 .footer-wrapper {
-  color: var(--color-on-surface);
-  width: 100%;
-  overflow: hidden;
-  position: relative;
   padding-bottom: var(--spacing-2xl);
   background-color: var(--color-surface-elevated);
 }
  
+/* absolute-positioned SVG wave divider that visually connects the section above to the footer */
 .footer-wave-divider {
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 5;
-  overflow: hidden;
-  position: absolute;
-  transform: translateY(-99%);
   line-height: 0;
 }
  
+/* decorative background image/video layer that sits behind the content */
 .footer-background-media {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  position: absolute;
-  pointer-events: none;
-}
  
+/* constrained footer content area — sits above the background layers (z-index:3) */
 .footer-content-container {
-  width: 100%;
-  margin: 0 auto;
-  padding: var(--spacing-4xl) var(--spacing-xl) var(--spacing-xl);
-  z-index: 3;
-  position: relative;
-  max-width: var(--content-max-width);
-}
  
+/* greyscale background image that scales slightly on footer hover */
 .footer-bg-image {
-  width: 100%;
-  filter: grayscale(1);
-  height: 100%;
-  opacity: 0.08;
   object-fit: cover;
   transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s ease;
 }
  
+/* dark radial gradient overlay that fades the background image toward the edges */
 .footer-overlay {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  background: radial-gradient(circle at center, transparent 0%, var(--color-surface-elevated) 100%);
-}
  
+/* four-column footer grid: brand (2fr), links, links, newsletter (1.5fr) */
 .footer-grid {
-  gap: var(--spacing-4xl);
-  display: grid;
-  margin-bottom: var(--spacing-4xl);
-  grid-template-columns: 2fr 1fr 1fr 1.5fr;
-}
  
+/* bottom bar with copyright text and social icon row */
 .footer-bottom-bar {
-  gap: var(--spacing-xl);
-  display: flex;
-  flex-wrap: wrap;
-  border-top: 1px solid var(--color-border);
-  margin-top: var(--spacing-4xl);
-  align-items: center;
-  padding-top: var(--spacing-2xl);
-  justify-content: space-between;
-}
  
 
  
@@ -1043,76 +890,47 @@
  
 
  
+/* small copyright notice text in the footer bottom bar */
 .footer-copyright {
-  color: var(--color-on-surface-secondary);
-  font-size: var(--font-size-xs);
-}
  
+/* 'Built with Django' tech badge pill in the bottom bar */
 .footer-tech-badge {
-  gap: var(--spacing-sm);
-  border: 1px solid var(--color-border);
-  display: flex;
-  padding: var(--spacing-xs) var(--spacing-md);
-  background: color-mix(in srgb, var(--color-surface) 60%, transparent);
   align-items: center;
   border-radius: var(--border-radius-full);
 }
  
 
  
+/* short tagline paragraph in the brand column */
 .footer-brand-desc {
-  color: var(--color-on-surface-secondary);
-  max-width: 380px;
-  margin-bottom: var(--spacing-2xl);
-}
  
+/* horizontal row of social media icon buttons */
 .footer-social-links {
-  gap: var(--spacing-md);
-  display: flex;
-}
  
+/* column heading with an accent-coloured underline bar (::after pseudo-element) */
 .footer-column-title {
-  color: var(--color-on-surface);
-  display: inline-block;
-  position: relative;
-  margin-bottom: var(--spacing-2xl);
-}
  
+/* vertical list of footer nav links */
 .footer-nav-list {
-  gap: var(--spacing-md);
-  display: flex;
-  flex-direction: column;
-}
  
+/* newsletter sign-up description paragraph */
 .footer-newsletter-text {
-  color: var(--color-on-surface-secondary);
-  margin-bottom: var(--spacing-xl);
-}
  
+/* position:relative wrapper so the submit button can be placed inside the input field */
 .footer-newsletter-form {
-  position: relative;
-}
  
+/* animated pulse dot next to the 'live listings' badge */
 .footer-badge-dot {
-  width: 8px;
-  height: 8px;
-  animation: pulse-glow 2s infinite;
   background: var(--color-accent);
   box-shadow: 0 0 8px var(--color-accent);
   border-radius: 50%;
 }
  
+/* tiny text label next to the footer badge dot */
 .footer-badge-text {
-  color: var(--color-on-surface-secondary);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: 0.05em;
-}
  
+/* brand logo text link in the footer column */
 .footer-logo-text {
-  color: var(--color-primary);
-  display: inline-block;
-  font-size: var(--font-size-2xl);
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-heading);
   margin-bottom: var(--spacing-xl);
@@ -1121,11 +939,8 @@
   text-decoration: none;
 }
  
+/* circular social media button — bounces up and rotates on hover */
 .footer-social-icon {
-  color: var(--color-on-surface);
-  width: 44px;
-  border: 1px solid var(--color-border);
-  height: 44px;
   display: flex;
   background: color-mix(in srgb, var(--color-surface) 40%, transparent);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -1134,36 +949,26 @@
   justify-content: center;
 }
  
+/* individual footer nav link — slides right on hover */
 .footer-nav-link {
-  color: var(--color-on-surface-secondary);
-  width: fit-content;
-  font-size: var(--font-size-sm);
   transition: all 0.3s ease;
   font-family: var(--font-family-body);
   text-decoration: none;
 }
  
+/* stacked email input + submit button group */
 .footer-input-group {
-  gap: var(--spacing-md);
-  display: flex;
-  flex-direction: column;
-}
  
+/* styled newsletter email input */
 .footer-newsletter-input {
-  color: var(--color-on-surface);
-  border: 1px solid var(--color-border);
-  padding: var(--spacing-lg);
   background: var(--color-surface);
   transition: all 0.3s ease;
   font-family: var(--font-family-body);
   border-radius: var(--border-radius-control);
 }
  
+/* newsletter submit button with an animated wipe overlay */
 .footer-submit-btn {
-  overflow: hidden;
-  position: relative;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
  
 .footer-wave-divider  svg {
   width: calc(100% + 1.3px);
@@ -1211,62 +1016,36 @@
   letter-spacing: 0.1em;
 }
  
+/* ----------------------------------------------------------------
+   Signup page — hero section and multi-step form styles
+   The hero uses a diagonal clip-path cut at the bottom and a
+   looping background video. The form is a tabbed stepper layout
+   with a left sidebar nav and a right content panel.
+   ---------------------------------------------------------------- */
+
+/* full-bleed hero section with a diagonal bottom clip */
 .signup-hero {
-  display: flex;
-  overflow: hidden;
-  position: relative;
-  clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
   background: var(--color-surface);
   min-height: 80vh;
   align-items: center;
 }
  
+/* absolutely positioned container that fills the hero with the background video */
 .signup-hero-media {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  position: absolute;
-}
  
+/* two-column grid inside the hero — text left (1.2fr), status card right (0.8fr) */
 .signup-hero-content {
-  gap: var(--spacing-4xl);
-  width: 100%;
-  margin: 0 auto;
-  display: grid;
-  padding: 0 var(--spacing-xl);
-  z-index: 3;
-  position: relative;
-  max-width: var(--content-max-width);
-  align-items: center;
-  grid-template-columns: 1.2fr 0.8fr;
-}
  
+/* the looping hero background video — scales slightly on section hover */
 .signup-hero-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
  
+/* diagonal gradient overlay that keeps the text readable over the video */
 .signup-hero-overlay {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  position: absolute;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--color-surface) 80%, transparent) 0%, color-mix(in srgb, var(--color-primary) 20%, transparent) 100%);
-}
  
 
  
+/* frosted-glass status card on the right side of the hero */
 .signup-hero-status {
-  gap: var(--spacing-md);
-  border: 1px solid var(--color-outline);
-  display: flex;
-  padding: var(--spacing-3xl);
   background: var(--color-scrim);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
   text-align: center;
@@ -1278,19 +1057,11 @@
  
 
  
+/* circular SVG ring that shows step completion progress */
 .signup-progress-ring {
-  width: 120px;
-  height: 120px;
-  position: relative;
-}
  
+/* step number label centred inside the progress ring */
 .signup-progress-text {
-  top: 50%;
-  left: 50%;
-  color: var(--color-surface);
-  position: absolute;
-  font-size: var(--font-size-xl);
-  transform: translate(-50%, -50%);
   font-family: var(--font-family-heading);
 }
  
@@ -1300,60 +1071,28 @@
   align-items: center;
 }
  
+/* plain light-grey background track circle for the SVG ring */
 .signup-ring-bg {
-  fill: none;
-  stroke: var(--color-border);
-  stroke-width: 8;
-}
  
+/* accent-coloured animated fill arc — stroke-dashoffset is driven by JS */
 .signup-ring-fill {
-  fill: none;
-  stroke: var(--color-accent);
-  transition: stroke-dashoffset 1s ease;
-  stroke-width: 8;
-  stroke-linecap: round;
-}
  
 
  
+/* page-level container that centres and pads the multi-step form card */
 .signup-container {
-  margin: 0 auto;
-  padding: var(--spacing-4xl) var(--spacing-xl);
-  max-width: var(--content-max-width);
-}
  
+/* two-column card: left sidebar nav (280px) + right form panel (1fr) */
 .signup-tabs-wrapper {
-  gap: var(--spacing-3xl);
-  border: 1px solid var(--color-border);
-  display: grid;
-  overflow: hidden;
-  background: var(--color-surface-elevated);
-  border-radius: var(--border-radius-card);
-  grid-template-columns: 280px 1fr;
-}
  
+/* left-side tab navigation column */
 .signup-tabs-nav {
-  gap: var(--spacing-sm);
-  display: flex;
-  padding: var(--spacing-xl);
-  background: color-mix(in srgb, var(--color-surface) 40%, transparent);
-  flex-direction: column;
-}
  
+/* right-side form content panel — shows the active step */
 .signup-tabs-content {
-  gap: var(--spacing-2xl);
-  display: flex;
-  padding: var(--spacing-3xl);
-  flex-direction: column;
-}
  
+/* individual tab button in the left sidebar — highlights on active step */
 .signup-tab-trigger {
-  gap: var(--spacing-md);
-  color: var(--color-on-surface-secondary);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  padding: var(--spacing-lg);
   background: transparent;
   text-align: left;
   transition: all 0.3s ease;
@@ -1363,32 +1102,21 @@
  
 
  
+/* a single step panel — hidden by default, fade-in animation when displayed */
 .signup-step-panel {
-  display: none;
-  animation: fadeIn 0.5s ease forwards;
-}
  
 
  
+/* faded step number (e.g. '01') inside each tab button */
 .step-num {
-  opacity: 0.5;
-  font-family: var(--font-family-heading);
-  font-weight: 800;
-}
  
 
  
+/* vertical label + input stacked group */
 .input-group {
-  gap: var(--spacing-sm);
-  display: flex;
-  flex-direction: column;
-}
  
+/* hidden validation error message shown by JS on invalid input */
 .error-msg {
-  color: #e74c3c;
-  display: none;
-  font-size: var(--font-size-xs);
-}
  
 
  
@@ -1740,77 +1468,43 @@
   border-color: var(--color-accent);
 }
  
+/* ----------------------------------------------------------------
+   Login / Index page styles
+   The login section uses a full-screen split layout with a
+   background image on the left and a frosted-glass card on the
+   right. The card tilts slightly on hover via a 3D CSS transform.
+   ---------------------------------------------------------------- */
+
+/* full-height section container that centres the login card */
 .login-form-section {
-  display: flex;
-  overflow: hidden;
-  position: relative;
-  background: var(--color-surface);
-  min-height: 100vh;
-  align-items: center;
-}
  
+/* position:relative wrapper needed so clip-path on the bg layer can be animated */
 .login-form-diagonal-wrapper {
-  width: 100%;
-  display: flex;
-  position: relative;
-  min-height: 100vh;
-  align-items: center;
-}
  
+/* clipped background layer that reveals the image with a diagonal edge */
 .login-form-bg-layer {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  overflow: hidden;
-  position: absolute;
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
   transition: clip-path 0.8s cubic-bezier(0.23, 1, 0.32, 1);
 }
  
+/* constrained content container inside the login section */
 .login-form-container {
-  width: 100%;
-  margin: 0 auto;
-  padding: var(--spacing-4xl) var(--spacing-xl);
-  z-index: 3;
-  position: relative;
-  max-width: var(--content-max-width);
-}
  
+/* background image — darkened and greyscaled; zooms in to full colour on hover */
 .login-form-bg-img {
-  width: 100%;
-  filter: grayscale(40%) brightness(0.6);
-  height: 100%;
-  object-fit: cover;
   transition: transform 1.2s cubic-bezier(0.23, 1, 0.32, 1), filter 0.8s ease;
 }
  
+/* diagonal gradient overlay keeps text contrast over the bg image */
 .login-form-overlay {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  position: absolute;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--color-surface) 90%, transparent) 0%, color-mix(in srgb, var(--color-primary) 20%, transparent) 100%);
-}
  
+/* horizontal split: brand content on the left, login card on the right */
 .login-form-split {
-  gap: var(--spacing-4xl);
-  display: flex;
-  align-items: center;
-}
  
+/* brand content column — fills remaining horizontal space */
 .login-form-brand-content {
-  flex: 1;
-  color: var(--color-on-surface);
-}
  
+/* fixed-width card wrapper with perspective set for the 3D hover tilt */
 .login-form-card-wrapper {
-  flex: 0 0 450px;
-  perspective: 1200px;
-}
  
 .login-form-logo-wrapper {
   margin-bottom: var(--spacing-2xl);
@@ -1821,11 +1515,8 @@
   display: flex;
 }
  
+/* the frosted-glass login card — transform-style:preserve-3d enables the tilt hover */
 .login-form-card {
-  border: 1px solid color-mix(in srgb, var(--color-outline) 30%, transparent);
-  padding: var(--spacing-3xl);
-  background: color-mix(in srgb, var(--color-surface-elevated) 85%, transparent);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
   transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
   border-radius: var(--border-radius-xl);
   backdrop-filter: blur(16px);
@@ -1833,10 +1524,8 @@
   -webkit-backdrop-filter: blur(16px);
 }
  
+/* brand logo text inside the login card with a left accent border */
 .login-form-logo-text {
-  color: var(--color-primary);
-  font-size: var(--font-size-2xl);
-  border-left: 4px solid var(--color-accent);
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-heading);
   padding-left: var(--spacing-md);
@@ -1844,153 +1533,84 @@
   text-transform: uppercase;
 }
  
+/* individual statistic item (e.g. '2,000+ students') in the brand column */
 .login-form-stat-item {
-  display: flex;
-  flex-direction: column;
-}
  
+/* card title + subtitle block */
 .login-form-card-header {
-  margin-bottom: var(--spacing-2xl);
-}
  
+/* vertical flex container holding all the form inputs */
 .login-form-element {
-  gap: var(--spacing-xl);
-  display: flex;
-  flex-direction: column;
-}
  
+/* card footer with sign-up link — sits below the submit button */
 .login-form-footer {
-  border-top: 1px solid var(--color-border);
-  margin-top: var(--spacing-2xl);
-  text-align: center;
-  padding-top: var(--spacing-xl);
-}
  
+/* large accent-coloured number in a statistic pair */
 .login-form-stat-number {
-  color: var(--color-accent);
-  font-size: var(--font-size-2xl);
-  font-family: var(--font-family-heading);
-}
  
+/* small all-caps label below the stat number */
 .login-form-stat-label {
-  opacity: 0.7;
-  font-size: var(--font-size-sm);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
  
+/* stacked label + input-container group */
 .login-form-group {
-  gap: var(--spacing-sm);
-  display: flex;
-  flex-direction: column;
-}
  
 
  
+/* full-width submit button with a glitch shimmer effect on hover */
 .login-form-submit-btn {
-  width: 100%;
-  height: 54px;
-  overflow: hidden;
-  position: relative;
   margin-top: var(--spacing-md);
   transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 }
  
+/* small muted field label */
 .login-form-label {
-  color: var(--color-on-surface-secondary);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-}
  
+/* relative wrapper that lets the left icon and right password-toggle sit inside the input */
 .login-form-input-container {
-  display: flex;
-  position: relative;
-  align-items: center;
-}
  
+/* row containing the field label on the left and the 'Forgot?' link on the right */
 .login-form-label-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
  
+/* custom checkbox label — the actual <input> is hidden and replaced by .login-form-checkmark */
 .login-form-checkbox-container {
-  cursor: pointer;
-  display: flex;
-  position: relative;
-  align-items: center;
-  user-select: none;
-  padding-left: 30px;
-}
  
 
  
+/* shimmer sweep that moves across the button on hover to create a glitch-light effect */
 .login-form-btn-glitch {
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--color-on-primary) 20%, transparent), transparent);
   transition: 0.5s;
 }
  
+/* absolutely positioned icon that sits inside the left padding of the text input */
 .login-form-input-icon {
-  left: var(--spacing-md);
-  color: var(--color-on-surface-secondary);
-  position: absolute;
-  transition: color 0.3s ease;
-  pointer-events: none;
-}
  
+/* styled text input with extra left padding to accommodate the icon */
 .login-form-input {
-  color: var(--color-on-surface);
-  width: 100%;
-  border: 1px solid var(--color-border);
-  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-3xl);
   background: color-mix(in srgb, var(--color-surface) 60%, transparent);
   transition: all 0.3s ease;
   font-family: var(--font-family-body);
   border-radius: var(--border-radius-control);
 }
  
+/* 'Forgot password?' link in the label row */
 .login-form-forgot {
-  color: var(--color-primary);
-  font-size: var(--font-size-xs);
-  transition: color 0.2s ease;
-  text-decoration: none;
-}
  
+/* eye icon button that toggles password visibility */
 .login-form-password-toggle {
-  color: var(--color-on-surface-secondary);
-  right: var(--spacing-md);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  padding: var(--spacing-xs);
-  position: absolute;
-  background: none;
   transition: color 0.2s ease;
   align-items: center;
   justify-content: center;
 }
  
+/* custom-drawn checkbox square that replaces the native checkbox */
 .login-form-checkmark {
-  top: 0;
-  left: 0;
-  width: 20px;
-  border: 1px solid var(--color-border);
-  height: 20px;
-  position: absolute;
   transition: all 0.2s ease;
   border-radius: 4px;
   background-color: var(--color-surface);
 }
  
+/* 'Remember me' label text next to the custom checkbox */
 .login-form-checkbox-text {
-  color: var(--color-on-surface-secondary);
-  font-size: var(--font-size-sm);
-}
  
 .login-form-diagonal-wrapper:hover .login-form-bg-img {
   filter: grayscale(0%) brightness(0.7);
@@ -2100,31 +1720,34 @@
   left: 100%;
 }
  
+/* --- Global typography utility classes (used site-wide) --- */
+/* standard body content text — Inter at 16px */
 .Content {
-  font-size: 16px;
-  font-family: Inter;
   font-weight: 400;
   line-height: 1.15;
   text-transform: none;
   text-decoration: none;
 }
  
+/* Inter body font with comfortable reading line-height */
 .BodyFont {
-  font-size: 1rem;
-  font-family: Inter;
   font-weight: 400;
   line-height: 1.6;
   letter-spacing: 0.02em;
 }
  
+/* Orbitron sci-fi heading font used for page titles and brand name */
 .Headings {
-  font-size: 2em;
-  font-family: Orbitron;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: 0.02em;
 }
  
+/* ================================================================
+   Responsive Media Queries
+   ================================================================ */
+
+/* --- Tablet (991px and below): collapse grids, reduce nav spacing --- */
 @media(max-width: 991px) {
   .thq-grid-4 {
     grid-template-columns: 1fr 1fr 1fr;
@@ -2191,6 +1814,7 @@
   }
 }
  
+/* --- Mobile (767px and below): single-column layouts, hide desktop nav --- */
 @media(max-width: 767px) {
   .thq-section-padding {
     padding: var(--dl-layout-space-threeunits);
@@ -2271,6 +1895,7 @@
   }
 }
  
+/* --- Small mobile (479px and below): compact padding, smaller text --- */
 @media(max-width: 479px) {
   .thq-section-padding {
     padding: var(--dl-layout-space-oneandhalfunits);

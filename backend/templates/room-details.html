@@ -1,18 +1,34 @@
 {% load static %}
 <!DOCTYPE html>
+<!-- ====================================================
+     room-details.html — Individual Room Listing page
+     Displays full details for a single room fetched from
+     the API (/api/rooms/:id/). Layout:
+       - Sticky nav (same as home.html)
+       - Breadcrumb navigation
+       - Two-column grid: main content (left) + sticky sidebar (right)
+         Main: image gallery, description, features, room info, Leaflet map
+         Sidebar: price, Contact Landlord / Save / Report buttons, landlord card
+       - Contact Landlord modal (form)
+       - Report Issue modal (form)
+     All dynamic content is injected by room-details.js.
+     ==================================================== -->
 <html lang="en">
 <head>
   <title>Room Details - StudentNest</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta charset="utf-8" />
+  <!-- Global design system + shared nav/footer styles + home-page nav CSS -->
   <link rel="stylesheet" href="/static/style.css" />
   <link rel="stylesheet" href="/static/home.css" />
+  <!-- Web fonts: Inter (body), Orbitron (headings) -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&display=swap" />
-  <!-- Leaflet CSS -->
+  <!-- Leaflet: open-source interactive map library used for the location map -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  <!-- Leaflet JS -->
+  <!-- Leaflet JS must load before room-details.js which calls L.map() -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Room-details page CSS: layout, gallery, feature tags, map, sidebar, modals -->
   <style>
     .room-detail-container {
       max-width: 1400px;
@@ -760,7 +776,7 @@
   </style>
 </head>
 <body>
-  <!-- Navigation -->
+  <!-- Shared navigation bar (logo, Find a Room, Advertise, How it Works links, Login/Sign Up) -->
   <nav class="home-nav">
     <div class="home-nav-container">
       <div class="home-nav-brand">
@@ -794,8 +810,9 @@
     </div>
   </nav>
 
-  <!-- Room Detail Content -->
+  <!-- Page content: max-width container holds breadcrumb + two-column layout -->
   <div class="room-detail-container">
+    <!-- Breadcrumb: Home > Search Results > Room Details -->
     <div class="room-detail-breadcrumb">
       <a href="home.html">Home</a>
       <span>/</span>
@@ -804,10 +821,11 @@
       <span id="breadcrumbTitle">Room Details</span>
     </div>
 
+    <!-- Two-column layout: main content (1fr) + sticky sidebar (380px) -->
     <div class="room-detail-layout">
-      <!-- Main Content -->
+      <!-- Main Content: image gallery, description, features, info grid, Leaflet map -->
       <div class="room-detail-main">
-        <!-- Header -->
+        <!-- Header panel: room title, meta badges (location, date, Featured), image gallery -->
         <div class="room-detail-panel">
           <div class="room-detail-header">
             <h1 id="roomTitle">Loading...</h1>
@@ -868,7 +886,7 @@
           <div class="room-features-grid" id="roomFeatures"></div>
         </div>
 
-        <!-- Room Details -->
+        <!-- Room Details panel: metadata grid (room type, property type, bills included, etc.) -->
         <div class="room-detail-panel">
           <h2 class="room-panel-title">Room Details</h2>
           <div class="room-info-grid" id="roomDetails"></div>
@@ -908,7 +926,7 @@
         </div>
       </div>
 
-      <!-- Sidebar -->
+      <!-- Sticky sidebar: price, action buttons, landlord card, safety tip -->
       <aside class="room-sidebar">
         <div class="room-sidebar-panel">
           <div class="room-price-large" id="sidebarPrice">£650<span>/month</span></div>
@@ -973,7 +991,7 @@
     </div>
   </div>
 
-  <!-- Message Modal -->
+  <!-- Contact Landlord modal: shown when user clicks 'Contact Landlord' in the sidebar -->
   <div id="messageModal" class="message-modal">
     <div class="message-modal-content">
       <div class="message-modal-header">
@@ -1018,7 +1036,7 @@
     </div>
   </div>
 
-  <!-- Report Room Modal -->
+  <!-- Report Issue modal: shown when user clicks 'Report Issue' in the sidebar -->
   <div class="message-modal-overlay" id="reportModalOverlay">
     <div class="message-modal-container" style="max-width: 550px;">
       <div class="message-modal-header">
@@ -1074,6 +1092,7 @@
     </div>
   </div>
 
+  <!-- room-details.js: fetches room data, builds gallery, renders Leaflet map, handles modals -->
   <script src="/static/room-details.js?v=101"></script>
 </body>
 </html>

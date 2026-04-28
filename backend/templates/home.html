@@ -1,20 +1,34 @@
 {% load static %}
 <!DOCTYPE html>
+<!-- ====================================================
+     home.html — Public Landing page
+     This is the SpareRoom-inspired public-facing home page.
+     It contains: sticky nav, hero with search card, quick
+     stats, featured room cards, 'How It Works' steps,
+     advertise CTA, and a dark footer.
+     No login required to view this page.
+     ==================================================== -->
 <html lang="en">
 <head>
   <title>StudentNest - Find Your Perfect Student Accommodation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta charset="utf-8" />
   <meta name="description" content="Find rooms, flatmates, and student accommodation near your university. Search thousands of verified student properties." />
+  <!-- Global design system + home-page stylesheets -->
   <link rel="stylesheet" href="/static/style.css" />
   <link rel="stylesheet" href="/static/home.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800;900&display=swap" />
 </head>
+<!-- Lottie player web component for the animated background behind the featured rooms section -->
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
-  <!-- Navigation -->
+  <!-- ============================================================
+       Navigation bar
+       Sticky bar with logo, desktop links, icon/outline/primary
+       action buttons, and a hamburger toggle for mobile.
+       ============================================================ -->
   <nav class="home-nav">
     <div class="home-nav-container">
       <div class="home-nav-brand">
@@ -46,7 +60,11 @@
     </div>
   </nav>
 
-  <!-- Mobile Menu Overlay -->
+  <!-- ============================================================
+       Mobile slide-in menu overlay
+       Hidden by default; slides in from the left when the
+       hamburger button is tapped on narrow viewports.
+       ============================================================ -->
   <div class="home-mobile-menu" id="mobileMenu">
     <div class="home-mobile-menu-header">
       <span class="home-logo-text">StudentNest</span>
@@ -69,17 +87,25 @@
     </div>
   </div>
 
-  <!-- Hero Section -->
+  <!-- ============================================================
+       Hero section
+       Full-viewport background image with an overlay gradient,
+       animated bubble-text headline, subtitle, and a search card
+       (location / max price / move-in date fields).
+       ============================================================ -->
   <section class="home-hero">
-    <div class="home-hero-bg" style="background-image: url('{% static "pict-2.jpg" %}'); background-size: cover; background-position: center;">
+      <!-- Hero background: full-cover image loaded via Django's static tag -->
+      <div class="home-hero-bg" style="background-image: url('{% static "pict-2.jpg" %}'); background-size: cover; background-position: center;">
       <div class="home-hero-overlay"></div>
     </div>
-    <div class="home-hero-content">
-      <h1 class="home-hero-title" id="bubble-title" style="color: #ffffff; text-shadow: 0 4px 32px rgba(0,0,0,0.32), 0 2px 0 #fff; font-weight: 900;"></h1>
+      <!-- Hero text content: animated title (filled by home.js bubble-text effect) + subtitle -->
+      <div class="home-hero-content">
+        <!-- h1 is intentionally empty; home.js injects per-character spans for the bubble animation -->
+        <h1 class="home-hero-title" id="bubble-title" style="color: #ffffff; text-shadow: 0 4px 32px rgba(0,0,0,0.32), 0 2px 0 #fff; font-weight: 900;"></h1>
       <p class="home-hero-subtitle">Search thousands of verified student accommodations near your university</p>
       
-      <!-- Search Box -->
-      <div class="home-search-card">
+        <!-- Search card: tab bar + three-field form (location, max price, date) + submit button -->
+        <div class="home-search-card">
         <div class="home-search-tabs">
           <button class="home-search-tab active" data-tab="room">Find a Room</button>
         </div>
@@ -127,7 +153,11 @@
     </div>
   </section>
 
-  <!-- Quick Stats -->
+  <!-- ============================================================
+       Quick stats strip
+       Four key social-proof numbers (listings, universities,
+       rating, support hours) displayed as a horizontal grid.
+       ============================================================ -->
   <section class="home-stats-section">
     <div class="home-container">
       <div class="home-stats-grid">
@@ -151,8 +181,15 @@
     </div>
   </section>
 
-  <!-- Featured Rooms -->
-  <!-- Lottie Animation Background for Featured Rooms -->
+  <!-- ============================================================
+       Featured Rooms section
+       A Lottie animation plays behind the cards as a decorative
+       layer. Three hard-coded sample room cards show what real
+       listings look like; in production these will be server-
+       rendered. Each card has a badge variant (Featured / Verified
+       / New), price, title, location distance, features, and CTA.
+       ============================================================ -->
+  <!-- Lottie animation background — absolutely positioned behind the room cards (z-index:0) -->
   <div style="position: relative; width: 100%; min-height: 400px; z-index: 0;">
     <lottie-player
       src="{% static 'hero-section-background-animation.json' %}"
@@ -282,7 +319,12 @@
     </div>
   </section>
 
-  <!-- How It Works -->
+  <!-- ============================================================
+       How It Works section
+       Three-step explainer cards: Search & Filter → Connect &
+       Chat → Move In. Each card has a gradient icon circle and
+       a large faded step number in the corner.
+       ============================================================ -->
   <section class="home-how-section" id="how-it-works">
     <div class="home-container">
       <div class="home-section-header">
@@ -329,7 +371,11 @@
     </div>
   </section>
 
-  <!-- Advertise Section -->
+  <!-- ============================================================
+       Advertise / Landlord CTA section
+       Two-column card with text + bullet benefits on the left and
+       a photo of a property on the right. Links to post-room.html.
+       ============================================================ -->
   <section class="home-advertise-section" id="advertise">
     <div class="home-container">
       <div class="home-advertise-card">
@@ -365,7 +411,12 @@
     </div>
   </section>
 
-  <!-- Footer -->
+  <!-- ============================================================
+       Footer
+       Dark four-column footer: brand column, Quick Links,
+       Support, and Legal. Bottom bar has copyright, social
+       links, and a link to the project microsite.
+       ============================================================ -->
   <footer class="home-footer">
     <div class="home-container">
       <div class="home-footer-grid">
@@ -408,8 +459,9 @@
     </div>
   </footer>
 
+<!-- home.js initialises: bubble-text animation, mobile menu, search form, room card interactions -->
   <script src="/static/home.js"></script>
-<script>
+<!-- Bubble-text hero animation (inline fallback for older browsers that don't run home.js) -->
 window.addEventListener('DOMContentLoaded', function() {
   var bubbleText = "Find Your Perfect Student Room";
   var titleEl = document.getElementById('bubble-title');

@@ -1,98 +1,110 @@
-/* Home Page Styles - Spareroom-inspired Design */
+/* ======================================================
+   Home Page Styles — SpareRoom-inspired room listings layout
+   Uses a light, card-based design with a fixed top nav
+   ====================================================== */
 
-/* Color Variables */
+/* --- Colour palette and reusable spacing/shadow tokens --- */
 :root {
-  --primary-color: #007bff;
-  --primary-dark: #0056b3;
-  --secondary-color: #6c757d;
-  --accent-color: #28a745;
-  --danger-color: #dc3545;
-  --warning-color: #ffc107;
-  --light-bg: #f8f9fa;
+  --primary-color: #007bff; /* the main action colour used on buttons and highlights */
+  --primary-dark: #0056b3; /* darker shade for hover states on primary elements */
+  --secondary-color: #6c757d; /* muted grey used for labels and less prominent text */
+  --accent-color: #28a745; /* green accent for success states and verified badges */
+  --danger-color: #dc3545; /* red for error states and destructive actions */
+  --warning-color: #ffc107; /* amber for new-listing badges and warnings */
+  --light-bg: #f8f9fa; /* very light grey used as section backgrounds */
   --white: #ffffff;
-  --text-primary: #212529;
-  --text-secondary: #6c757d;
-  --border-color: #dee2e6;
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.16);
+  --text-primary: #212529; /* near-black for body copy */
+  --text-secondary: #6c757d; /* medium grey for secondary labels and meta info */
+  --border-color: #dee2e6; /* light grey border used on cards and inputs */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.08); /* barely visible shadow for resting cards */
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.12); /* medium shadow for elevated cards */
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.16); /* deep shadow for hovered/active cards */
 }
 
+/* global reset — remove browser default margin and padding, and use border-box sizing throughout */
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  box-sizing: border-box; /* padding and borders are included in element widths so layout maths is predictable */
 }
 
+/* base body styles — set the default typeface, colour, and prevent horizontal scrolling */
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; /* Inter first, then system fonts as fallback */
+  color: var(--text-primary); /* near-black body text */
   background: var(--white);
-  overflow-x: hidden;
+  overflow-x: hidden; /* prevent horizontal scroll caused by full-width sections */
 }
 
+/* content wrapper that constrains width to 1200 px and centres horizontally */
 .home-container {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+  margin: 0 auto; /* auto left/right margins centre the container */
+  padding: 0 20px; /* side padding so content doesn't touch screen edges on small viewports */
 }
 
-/* Navigation */
+/* --- Fixed top navigation bar --- */
 .home-nav {
-  position: fixed;
+  position: fixed; /* sticks to the top of the viewport as the user scrolls */
   top: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-color);
-  z-index: 1000;
-  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.95); /* nearly opaque white with a slight transparency */
+  backdrop-filter: blur(12px); /* frosted-glass blur behind the nav so content beneath is readable */
+  border-bottom: 1px solid var(--border-color); /* subtle bottom border separates the nav from page content */
+  z-index: 1000; /* must sit above all other page content */
+  transition: all 0.3s ease; /* smooth transition when the .scrolled class is added by JS */
 }
 
+/* slightly more opaque background added by JS after the user scrolls down */
 .home-nav.scrolled {
   background: rgba(255, 255, 255, 0.98);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-sm); /* add a shadow to visually separate the nav from content below */
 }
 
+/* inner nav container — wider than the page content to allow the nav to span most of the screen */
 .home-nav-container {
-  max-width: 1400px;
+  max-width: 1400px; /* wider than the content max-width so the nav stretches more generously */
   margin: 0 auto;
   padding: 0 20px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: 70px;
+  justify-content: space-between; /* pushes brand left, links centre, and actions right */
+  height: 70px; /* fixed nav height so the hero padding-top can account for it exactly */
 }
 
+/* brand/logo wrapper on the left of the nav */
 .home-nav-brand {
   display: flex;
   align-items: center;
 }
 
+/* the 'StudentNest' logo text with gradient colouring */
 .home-logo-text {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Orbitron', sans-serif; /* distinctive display font for brand recognition */
   font-size: 24px;
   font-weight: 800;
-  background: linear-gradient(135deg, var(--primary-color), #667eea);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background: linear-gradient(135deg, var(--primary-color), #667eea); /* blue-to-purple gradient */
+  -webkit-background-clip: text; /* clips the gradient to the text shape (WebKit prefix required) */
+  -webkit-text-fill-color: transparent; /* makes the text transparent so the gradient shows through */
   background-clip: text;
 }
 
+/* horizontal list of desktop navigation links */
 .home-nav-links {
   display: flex;
-  gap: 32px;
+  gap: 32px; /* generous spacing between nav items */
   align-items: center;
 }
 
+/* individual nav link — plain text style with a hover underline */
 .home-nav-link {
   color: var(--text-primary);
   text-decoration: none;
   font-weight: 500;
   font-size: 15px;
   transition: color 0.2s ease;
-  position: relative;
+  position: relative; /* needed so the ::after underline pseudo-element can be positioned */
 }
 
 .home-nav-link:hover,
@@ -100,23 +112,26 @@ body {
   color: var(--primary-color);
 }
 
+/* the accent underline that appears under the active nav link */
 .home-nav-link.active::after {
   content: '';
   position: absolute;
-  bottom: -24px;
+  bottom: -24px; /* 24 px below the link text so it sits flush with the nav bottom border */
   left: 0;
   right: 0;
-  height: 3px;
+  height: 3px; /* slightly thicker than a normal border for emphasis */
   background: var(--primary-color);
-  border-radius: 2px 2px 0 0;
+  border-radius: 2px 2px 0 0; /* rounds only the top corners so it looks like a tab indicator */
 }
 
+/* right-side group of nav action buttons (icon, outline, primary) */
 .home-nav-actions {
   display: flex;
   gap: 12px;
   align-items: center;
 }
 
+/* square icon-only button (e.g. saved rooms heart icon) */
 .home-nav-btn-icon {
   display: flex;
   align-items: center;
@@ -133,9 +148,10 @@ body {
 .home-nav-btn-icon:hover {
   border-color: var(--primary-color);
   color: var(--primary-color);
-  transform: translateY(-2px);
+  transform: translateY(-2px); /* slight lift on hover for tactile feedback */
 }
 
+/* outlined secondary nav button (e.g. 'Log in') */
 .home-nav-btn-outline {
   padding: 10px 24px;
   border: 2px solid var(--border-color);
@@ -153,6 +169,7 @@ body {
   transform: translateY(-2px);
 }
 
+/* solid primary nav button (e.g. 'Sign up') */
 .home-nav-btn-primary {
   padding: 10px 24px;
   background: var(--primary-color);
@@ -162,17 +179,18 @@ body {
   font-weight: 600;
   font-size: 14px;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25); /* coloured shadow matches the button colour */
 }
 
 .home-nav-btn-primary:hover {
   background: var(--primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.35);
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.35); /* deeper shadow on hover */
 }
 
+/* hamburger toggle button — hidden on desktop, shown on mobile */
 .home-nav-mobile-toggle {
-  display: none;
+  display: none; /* JS adds/removes this; media query shows it on small screens */
   background: none;
   border: none;
   cursor: pointer;
@@ -180,24 +198,26 @@ body {
   padding: 8px;
 }
 
-/* Mobile Menu */
+/* --- Off-canvas mobile navigation drawer --- */
 .home-mobile-menu {
-  position: fixed;
+  position: fixed; /* covers the full screen height when open */
   top: 0;
-  right: -100%;
+  right: -100%; /* start fully off-screen to the right so it's invisible by default */
   width: 320px;
   height: 100vh;
   background: white;
-  z-index: 2000;
-  transition: right 0.3s ease;
-  box-shadow: -4px 0 20px rgba(0,0,0,0.1);
-  overflow-y: auto;
+  z-index: 2000; /* above the nav bar itself */
+  transition: right 0.3s ease; /* slide-in animation */
+  box-shadow: -4px 0 20px rgba(0,0,0,0.1); /* shadow on the left edge as if the drawer is floating */
+  overflow-y: auto; /* scroll if the menu content is taller than the screen */
 }
 
+/* JS adds this class to slide the drawer into view */
 .home-mobile-menu.active {
-  right: 0;
+  right: 0; /* slide in from the right */
 }
 
+/* header row inside the mobile drawer — brand name + close button */
 .home-mobile-menu-header {
   display: flex;
   justify-content: space-between;
@@ -206,6 +226,7 @@ body {
   border-bottom: 1px solid var(--border-color);
 }
 
+/* the X close button inside the mobile drawer */
 .home-mobile-menu-close {
   background: none;
   border: none;
@@ -214,6 +235,7 @@ body {
   padding: 8px;
 }
 
+/* scrollable list of nav links inside the drawer */
 .home-mobile-menu-content {
   padding: 20px;
   display: flex;
@@ -221,108 +243,118 @@ body {
   gap: 16px;
 }
 
+/* individual link inside the mobile menu */
 .home-mobile-link {
   color: var(--text-primary);
   text-decoration: none;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 16px; /* slightly larger than desktop nav links for easier tapping */
   padding: 12px;
   border-radius: 8px;
   transition: background 0.2s ease;
 }
 
 .home-mobile-link:hover {
-  background: var(--light-bg);
+  background: var(--light-bg); /* subtle background highlight on hover/tap */
 }
 
+/* container for the login/signup buttons at the bottom of the mobile menu */
 .home-mobile-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-top: 20px;
   padding-top: 20px;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid var(--border-color); /* visually separates action buttons from nav links */
 }
 
-/* Hero Section */
+/* --- Full-viewport hero section with background video/animation --- */
 .home-hero {
-  position: relative;
-  min-height: 700px;
+  position: relative; /* establishes a stacking context so z-indexed children work correctly */
+  min-height: 700px; /* tall enough to make a visual impact even on smaller screens */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 140px;
+  padding-top: 140px; /* extra top padding accounts for the 70 px fixed nav plus breathing room */
   padding-bottom: 80px;
-  overflow: hidden;
+  overflow: hidden; /* prevent the video/animation from spilling outside the hero bounds */
 }
 
+/* full-bleed background layer that holds the video or animation */
 .home-hero-bg {
-  position: absolute;
+  position: absolute; /* fills the full hero area behind all other children */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: 0; /* pushed behind all other content in the hero */
 }
 
+/* the background video element */
 .home-hero-video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* fill the container without distorting the aspect ratio */
 }
 
+/* semi-transparent overlay placed on top of the video — currently transparent but available for tinting */
 .home-hero-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: transparent;
+  background: transparent; /* no tint by default — adjust here if the video needs darkening */
 }
 
+/* foreground content container — the headline, subtitle, and search card */
 .home-hero-content {
   position: relative;
-  z-index: 2;
+  z-index: 2; /* above the background video and overlay */
   text-align: center;
-  max-width: 900px;
+  max-width: 900px; /* constrain width so text doesn't become uncomfortably wide */
   margin: 0 auto;
   padding: 0 20px;
 }
 
+/* the main hero headline (e.g. 'Find Your Perfect Student Room') */
 .home-hero-title {
-  font-size: clamp(36px, 5vw, 56px);
+  font-size: clamp(36px, 5vw, 56px); /* fluid type: minimum 36px, scales with viewport up to 56px */
   font-weight: 800;
   color: black;
   margin-bottom: 16px;
-  line-height: 1.2;
-  text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  line-height: 1.2; /* tighter line height for large display text */
+  text-shadow: 0 4px 20px rgba(0,0,0,0.2); /* subtle shadow lifts the text off the background */
 }
 
+/* the shorter description line beneath the hero headline */
 .home-hero-subtitle {
-  font-size: clamp(18px, 2vw, 22px);
+  font-size: clamp(18px, 2vw, 22px); /* fluid type between 18 and 22 px */
   color: black;
-  margin-bottom: 48px;
+  margin-bottom: 48px; /* generous space before the search card */
   line-height: 1.6;
 }
 
-/* Search Card */
+/* --- Floating search card inside the hero --- */
 .home-search-card {
   background: white;
-  border-radius: 20px;
+  border-radius: 20px; /* generously rounded corners for a modern, friendly look */
   padding: 32px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.25); /* deep shadow makes the card appear to float above the hero */
   max-width: 900px;
   margin: 0 auto;
 }
 
+/* tab row at the top of the search card (e.g. 'Rooms' | 'Flatmates') */
 .home-search-tabs {
   display: flex;
   gap: 12px;
   margin-bottom: 28px;
   padding-bottom: 20px;
-  border-bottom: 2px solid var(--light-bg);
+  border-bottom: 2px solid var(--light-bg); /* subtle divider between tabs and form */
 }
 
+/* individual tab button */
 .home-search-tab {
   padding: 10px 24px;
   background: transparent;
@@ -335,23 +367,27 @@ body {
   transition: all 0.2s ease;
 }
 
+/* highlighted state for the currently selected tab */
 .home-search-tab.active {
   background: var(--primary-color);
-  color: black;
+  color: black; /* black text on the blue background for legibility */
 }
 
+/* the form itself — stacks the field rows and the submit button */
 .home-search-form {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
+/* a row of search fields arranged in a responsive grid */
 .home-search-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* each field takes at least 200 px; fills available width */
   gap: 20px;
 }
 
+/* label above each search input */
 .home-search-field label {
   display: block;
   font-weight: 600;
@@ -360,18 +396,20 @@ body {
   color: var(--text-primary);
 }
 
+/* wrapper that positions an icon or currency symbol inside the input */
 .home-search-input-wrapper {
-  position: relative;
+  position: relative; /* so the absolutely-positioned icon stays inside the input */
   display: flex;
   align-items: center;
 }
 
+/* icon and price symbol are both positioned absolutely on the left of the input */
 .home-search-input-wrapper svg,
 .home-search-input-wrapper .home-price-symbol {
   position: absolute;
-  left: 14px;
+  left: 14px; /* aligns the icon with the input's left padding */
   color: var(--text-secondary);
-  pointer-events: none;
+  pointer-events: none; /* icon is decorative — clicks pass through to the input */
 }
 
 .home-search-input-wrapper .home-price-symbol {
@@ -379,9 +417,10 @@ body {
   font-size: 16px;
 }
 
+/* the text/number input field inside the wrapper */
 .home-search-input-wrapper input {
   width: 100%;
-  padding: 14px 14px 14px 46px;
+  padding: 14px 14px 14px 46px; /* 46 px left padding makes room for the icon */
   border: 2px solid var(--border-color);
   border-radius: 12px;
   font-size: 15px;
@@ -392,9 +431,10 @@ body {
 .home-search-input-wrapper input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1); /* glow ring on focus */
 }
 
+/* the 'Search' submit button at the bottom of the search card */
 .home-search-btn {
   display: flex;
   align-items: center;
@@ -409,27 +449,29 @@ body {
   font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.3); /* coloured glow shadow */
 }
 
 .home-search-btn:hover {
   background: var(--primary-dark);
-  transform: translateY(-2px);
+  transform: translateY(-2px); /* slight lift on hover */
   box-shadow: 0 8px 24px rgba(0, 123, 255, 0.4);
 }
 
-/* Stats Section */
+/* --- Stats strip (e.g. '2,000+ rooms listed', '10,000+ students') --- */
 .home-stats-section {
   padding: 80px 0;
-  background: var(--light-bg);
+  background: var(--light-bg); /* light grey background differentiates the strip from adjacent white sections */
 }
 
+/* auto-fit grid — each stat card is at least 240 px wide */
 .home-stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 32px;
 }
 
+/* individual stat card */
 .home-stat-card {
   text-align: center;
   padding: 32px 20px;
@@ -440,35 +482,38 @@ body {
 }
 
 .home-stat-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-4px); /* lift card slightly on hover */
 }
 
+/* the large number headline inside the stat card (e.g. '2,000+') */
 .home-stat-number {
   font-size: 48px;
   font-weight: 800;
   color: var(--primary-color);
   margin-bottom: 8px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Orbitron', sans-serif; /* display font for the number to match the brand style */
 }
 
+/* the descriptive label beneath the number */
 .home-stat-label {
   font-size: 16px;
   color: var(--text-secondary);
   font-weight: 500;
 }
 
-/* Featured Section */
+/* --- Featured room listings grid --- */
 .home-featured-section {
   padding: 100px 0;
 }
 
+/* centred heading block used above the rooms grid */
 .home-section-header {
   text-align: center;
   margin-bottom: 60px;
 }
 
 .home-section-title {
-  font-size: clamp(32px, 4vw, 42px);
+  font-size: clamp(32px, 4vw, 42px); /* fluid type between 32 and 42 px */
   font-weight: 800;
   margin-bottom: 16px;
   color: var(--text-primary);
@@ -479,29 +524,32 @@ body {
   color: var(--text-secondary);
 }
 
+/* responsive card grid — cards are at least 340 px wide, filling the row */
 .home-rooms-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); /* auto-fill creates as many columns as fit */
   gap: 32px;
   margin-bottom: 48px;
 }
 
+/* individual room listing card */
 .home-room-card {
   background: white;
   border-radius: 16px;
-  overflow: hidden;
+  overflow: hidden; /* clips the image so it doesn't bleed outside the rounded corners */
   box-shadow: var(--shadow-md);
   transition: all 0.3s ease;
   border: 1px solid var(--border-color);
 }
 
 .home-room-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-8px); /* lift the card on hover for tactile feedback */
   box-shadow: var(--shadow-lg);
 }
 
+/* the image thumbnail area at the top of each card */
 .home-room-image {
-  position: relative;
+  position: relative; /* so the badge can be positioned inside the image area */
   height: 240px;
   overflow: hidden;
 }
@@ -509,54 +557,61 @@ body {
 .home-room-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: cover; /* fill the thumbnail without distorting the photo */
   transition: transform 0.3s ease;
 }
 
+/* subtle zoom on the photo when the card is hovered */
 .home-room-card:hover .home-room-image img {
   transform: scale(1.05);
 }
 
+/* pill badge overlaid on the image (e.g. 'Featured', 'Verified', 'New') */
 .home-room-badge {
   position: absolute;
   top: 16px;
   right: 16px;
   padding: 6px 16px;
-  background: var(--primary-color);
+  background: var(--primary-color); /* blue for 'Featured' by default */
   color: white;
-  border-radius: 20px;
+  border-radius: 20px; /* pill shape */
   font-size: 12px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
+/* green 'Verified' badge variant */
 .home-room-badge.verified {
   background: var(--accent-color);
 }
 
+/* amber 'New' badge variant — dark text since the background is light */
 .home-room-badge.new {
   background: var(--warning-color);
   color: var(--text-primary);
 }
 
+/* text content area beneath the image */
 .home-room-content {
   padding: 24px;
 }
 
+/* the weekly/monthly price displayed prominently */
 .home-room-price {
   font-size: 32px;
   font-weight: 800;
   color: var(--primary-color);
   margin-bottom: 12px;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Orbitron', sans-serif; /* display font for the price number */
 }
 
+/* the '/week' or '/month' unit label next to the price */
 .home-room-price span {
   font-size: 16px;
   font-weight: 500;
   color: var(--text-secondary);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif; /* switch back to body font for the unit text */
 }
 
 .home-room-title {
@@ -567,6 +622,7 @@ body {
   line-height: 1.4;
 }
 
+/* location line (e.g. 'Bloomsbury, London') */
 .home-room-location {
   display: flex;
   align-items: center;
@@ -576,13 +632,15 @@ body {
   margin-bottom: 16px;
 }
 
+/* row of small feature chips (e.g. 'WiFi', 'Bills included') */
 .home-room-features {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* chips wrap to a new line rather than overflowing */
   gap: 12px;
   margin-bottom: 20px;
 }
 
+/* individual feature chip */
 .home-room-feature {
   display: flex;
   align-items: center;
@@ -595,8 +653,9 @@ body {
   font-weight: 500;
 }
 
+/* the 'View Room' CTA button at the bottom of each card */
 .home-room-btn {
-  width: 100%;
+  width: 100%; /* full-width button fills the card */
   padding: 14px;
   background: var(--primary-color);
   color: white;
@@ -613,10 +672,12 @@ body {
   transform: translateY(-2px);
 }
 
+/* 'View all rooms' link below the grid */
 .home-section-cta {
   text-align: center;
 }
 
+/* large call-to-action button used on sections that need a prominent link */
 .home-btn-large {
   display: inline-block;
   padding: 18px 48px;
@@ -636,24 +697,26 @@ body {
   box-shadow: 0 8px 24px rgba(0, 123, 255, 0.4);
 }
 
-/* How It Works */
+/* --- 'How It Works' three-step explainer section --- */
 .home-how-section {
   padding: 100px 0;
-  background: var(--light-bg);
+  background: var(--light-bg); /* light grey to alternate with the white sections above and below */
 }
 
+/* three-column step card grid */
 .home-steps-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* responsive — one column per step on mobile, three on desktop */
   gap: 40px;
 }
 
+/* individual step card */
 .home-step-card {
   background: white;
   padding: 40px 32px;
   border-radius: 20px;
   box-shadow: var(--shadow-md);
-  position: relative;
+  position: relative; /* so the decorative step number can be positioned inside */
   text-align: center;
   transition: transform 0.3s ease;
 }
@@ -662,11 +725,12 @@ body {
   transform: translateY(-8px);
 }
 
+/* circular icon holder at the top of each step card */
 .home-step-icon {
   width: 80px;
   height: 80px;
   margin: 0 auto 20px;
-  background: linear-gradient(135deg, var(--primary-color), #667eea);
+  background: linear-gradient(135deg, var(--primary-color), #667eea); /* blue-to-purple gradient matches the brand */
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -674,13 +738,14 @@ body {
   color: white;
 }
 
+/* large faded step number in the top-right corner (e.g. '01') */
 .home-step-number {
   position: absolute;
   top: 20px;
   right: 20px;
   font-size: 48px;
   font-weight: 900;
-  color: rgba(0, 123, 255, 0.1);
+  color: rgba(0, 123, 255, 0.1); /* very faint so it's decorative rather than distracting */
   font-family: 'Orbitron', sans-serif;
 }
 
@@ -697,17 +762,18 @@ body {
   line-height: 1.6;
 }
 
-/* Advertise Section */
+/* --- 'Advertise Your Room' landlord CTA section --- */
 .home-advertise-section {
   padding: 100px 0;
 }
 
+/* two-column card with text on the left and an image on the right */
 .home-advertise-card {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr; /* equal-width columns on desktop */
   gap: 60px;
   align-items: center;
-  background: linear-gradient(135deg, #667eea 0%, var(--primary-color) 100%);
+  background: linear-gradient(135deg, #667eea 0%, var(--primary-color) 100%); /* gradient from purple to blue */
   border-radius: 24px;
   padding: 60px;
   color: white;
@@ -722,10 +788,11 @@ body {
 .home-advertise-text {
   font-size: 18px;
   margin-bottom: 28px;
-  opacity: 0.95;
+  opacity: 0.95; /* very slightly transparent so the text feels part of the background */
   line-height: 1.6;
 }
 
+/* benefit bullet list inside the advertise card */
 .home-advertise-list {
   list-style: none;
   margin-bottom: 32px;
@@ -742,11 +809,12 @@ body {
   font-weight: 500;
 }
 
+/* the 'Post your room' white button inside the gradient card */
 .home-advertise-btn {
   display: inline-block;
   padding: 16px 40px;
   background: white;
-  color: var(--primary-color);
+  color: var(--primary-color); /* primary blue text on the white button */
   border-radius: 14px;
   text-decoration: none;
   font-weight: 700;
@@ -760,10 +828,11 @@ body {
   box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
+/* image panel on the right side of the advertise card */
 .home-advertise-image {
   border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  overflow: hidden; /* clip the image to the rounded corners */
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3); /* deep shadow makes the image panel appear to float */
 }
 
 .home-advertise-image img {
@@ -772,34 +841,38 @@ body {
   object-fit: cover;
 }
 
-/* Footer */
+/* --- Dark footer with links and copyright line --- */
 .home-footer {
-  background: #1a1a2e;
-  color: rgba(255, 255, 255, 0.85);
-  padding: 80px 0 32px;
+  background: #1a1a2e; /* very dark blue-black footer background */
+  color: rgba(255, 255, 255, 0.85); /* slightly transparent white body text */
+  padding: 80px 0 32px; /* generous top padding, less at the bottom for the copyright line */
 }
 
+/* four-column footer grid: brand column (2fr) + three link columns (1fr each) */
 .home-footer-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr; /* brand column is twice as wide as the link columns */
   gap: 48px;
   margin-bottom: 48px;
 }
 
+/* the logo text inside the footer — override the gradient so it renders as plain white */
 .home-footer-col .home-logo-text {
   color: white;
-  -webkit-text-fill-color: white;
+  -webkit-text-fill-color: white; /* override the gradient text fill used in the nav */
   background: none;
   margin-bottom: 16px;
   display: block;
 }
 
+/* short brand description paragraph in the footer brand column */
 .home-footer-text {
   font-size: 14px;
-  line-height: 1.8;
-  opacity: 0.7;
+  line-height: 1.8; /* generous line height for readability in a narrow column */
+  opacity: 0.7; /* dimmed slightly so it's secondary to the link columns */
 }
 
+/* column headings (e.g. 'Company', 'Links') */
 .home-footer-title {
   font-size: 16px;
   font-weight: 700;
@@ -807,8 +880,9 @@ body {
   color: white;
 }
 
+/* individual footer nav link */
 .home-footer-link {
-  display: block;
+  display: block; /* each link is on its own line */
   color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   font-size: 14px;
@@ -817,18 +891,20 @@ body {
 }
 
 .home-footer-link:hover {
-  color: white;
+  color: white; /* full opacity on hover */
 }
 
+/* bottom bar with copyright notice and social links */
 .home-footer-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-top: 32px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1); /* very subtle divider separates from the main footer content */
   font-size: 14px;
 }
 
+/* horizontal list of social media links */
 .home-footer-social {
   display: flex;
   gap: 24px;
@@ -845,79 +921,83 @@ body {
   color: white;
 }
 
-/* Responsive Design */
+/* ===== Responsive Breakpoints ===== */
+
+/* --- Tablet: hide desktop nav links and show hamburger toggle --- */
 @media (max-width: 1024px) {
   .home-nav-links {
-    display: none;
+    display: none; /* desktop nav links are replaced by the mobile drawer */
   }
   
   .home-nav-mobile-toggle {
-    display: block;
+    display: block; /* show the hamburger icon */
   }
   
   .home-advertise-card {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* stack text and image vertically on tablet */
     padding: 40px;
   }
   
   .home-footer-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 1fr); /* two-column footer on tablet */
   }
 }
 
+/* --- Mobile: single-column layout, compact nav buttons --- */
 @media (max-width: 768px) {
   .home-nav-actions {
-    gap: 8px;
+    gap: 8px; /* tighter gap between nav action buttons on mobile */
   }
   
   .home-nav-btn-outline,
   .home-nav-btn-primary {
-    padding: 8px 16px;
+    padding: 8px 16px; /* smaller button padding to fit on narrow screens */
     font-size: 13px;
   }
   
   .home-search-card {
-    padding: 24px 20px;
+    padding: 24px 20px; /* reduce search card padding on mobile */
   }
   
   .home-search-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* stack search fields in a single column */
   }
   
   .home-rooms-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* one card per row on mobile */
   }
   
   .home-steps-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* stack step cards vertically */
   }
   
   .home-footer-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* single-column footer on mobile */
   }
   
   .home-footer-bottom {
-    flex-direction: column;
+    flex-direction: column; /* stack copyright and social links vertically */
     gap: 16px;
     text-align: center;
   }
 }
 
+/* --- Small mobile: extra adjustments for very narrow screens --- */
 @media (max-width: 480px) {
   .home-hero {
-    padding-top: 120px;
+    padding-top: 120px; /* reduce top padding slightly on very small phones */
   }
   
   .home-search-tabs {
-    flex-direction: column;
+    flex-direction: column; /* stack search tab buttons vertically on very narrow screens */
   }
   
   .home-nav-btn-icon {
-    width: 36px;
+    width: 36px; /* slightly smaller icon button on very small screens */
     height: 36px;
   }
   
   .home-advertise-card {
-    padding: 28px 20px;
+    padding: 28px 20px; /* minimal padding inside the advertise card */
   }
 }

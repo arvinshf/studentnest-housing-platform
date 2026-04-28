@@ -1,33 +1,36 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Test Signup</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/static/style.css" />
-    <link rel="stylesheet" href="/static/signup.css" />
-</head>
-<body>
-    <h1>Test Signup Page</h1>
-    <p>If this page doesn't glitch, the issue is in the main signup.html file.</p>
-    
-    <form id="testForm">
-        <input type="text" placeholder="Name" id="test-name" required />
-        <button type="submit">Test Submit</button>
-    </form>
-    
-    <div id="message"></div>
+{% load static %} <!-- Django template tag — tells Django we want to use the {% static %} helper to reference static files like CSS -->
 
-    <script>
-        console.log("Test page loaded");
-        
-        document.getElementById('testForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            console.log("Form submitted");
-            document.getElementById('message').textContent = "Form works! No glitching.";
+<!DOCTYPE html> <!-- Tells the browser this is a standard HTML5 document, not an older HTML version -->
+<html lang="en"> <!-- Opens the HTML document and sets the language to English for accessibility and screen readers -->
+<head> <!-- The head section holds metadata — stuff the browser needs but the user doesn't see directly -->
+    <title>Test Signup</title> <!-- What shows up in the browser tab — kept simple since this is just a test page -->
+    <meta charset="utf-8" /> <!-- Tells the browser to use UTF-8 encoding so characters like £ or é render correctly -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Makes the page behave properly on mobile — without this it would zoom out on phones -->
+    <link rel="stylesheet" href="/static/style.css" /> <!-- Loads the global stylesheet that applies base styles across the whole site -->
+    <link rel="stylesheet" href="/static/signup.css" /> <!-- Loads the signup-specific styles so this test page looks consistent with the real signup page -->
+</head>
+<body> <!-- Everything inside here is what the user actually sees on the screen -->
+
+    <h1>Test Signup Page</h1> <!-- Big heading at the top — makes it obvious this is a test page and not the real thing -->
+    <p>If this page doesn't glitch, the issue is in the main signup.html file.</p> <!-- Helpful note for debugging — if the form works here but not on the main page, the problem is in signup.html specifically -->
+
+    <form id="testForm"> <!-- A stripped-down form with the id "testForm" — we use the id later in the JS to attach the submit listener -->
+        <input type="text" placeholder="Name" id="test-name" required /> <!-- A single text input so we can verify form submission fires correctly — required means the browser won't submit if it's empty -->
+        <button type="submit">Test Submit</button> <!-- The submit button — clicking this triggers the form's submit event -->
+    </form>
+
+    <div id="message"></div> <!-- An empty container that starts invisible — we'll write a success message into it when the form submits -->
+
+    <script> <!-- Opens an inline script block — all the JavaScript for this page lives here -->
+        console.log("Test page loaded"); <!-- Logs to the browser console the moment the script runs — useful to confirm the page loaded without JavaScript errors -->
+
+        document.getElementById('testForm').addEventListener('submit', function(e) { <!-- Finds the form by its id and listens for the submit event — the function runs every time the user submits -->
+            e.preventDefault(); <!-- Stops the browser from doing its default behaviour (refreshing the page) — we want to handle the submission ourselves -->
+            console.log("Form submitted"); <!-- Logs to the console so we can confirm the event listener actually fired -->
+            document.getElementById('message').textContent = "Form works! No glitching."; <!-- Writes a success message into the message div — if you see this text, the form is working fine -->
         });
-    </script>
-</body>
-</html>
+    </script> <!-- Closes the inline script block -->
+
+</body> <!-- Closes the body — nothing should be written below this -->
+</html> <!-- Closes the HTML document -->
 

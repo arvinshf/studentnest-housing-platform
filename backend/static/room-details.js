@@ -1,11 +1,14 @@
-// Room Details Page JavaScript
+// Room Details Page Logic
+// this file handles everything on the individual room page — gallery, map, messaging, favorites, reports
 
-const API_BASE_URL = '/api';  // Relative path for same-domain
+const API_BASE_URL = '/api'; // relative base URL — works on any host without hardcoding a domain
 
-// Current image index for gallery
+// tracks which gallery image is currently displayed (0-based index)
 let currentImageIndex = 0;
-let currentRoom = null;
+let currentRoom = null; // the room object loaded from the API, used throughout this file
 
+// hard-coded lat/lon for major London universities
+// the selector overlay lets students quickly pan the map to any of these locations
 const UNIVERSITY_LOCATIONS = [
   { name: 'University College London', lat: 51.5246, lon: -0.1340 },
   { name: 'King\'s College London (Strand)', lat: 51.5115, lon: -0.1160 },
@@ -16,39 +19,39 @@ const UNIVERSITY_LOCATIONS = [
   { name: 'Imperial College London', lat: 51.4988, lon: -0.1749 }
 ];
 
-// Get room ID from URL parameter
+// reads the ?id= query parameter from the URL to know which room to load
 function getRoomIdFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  return parseInt(params.get('id')) || 1;
+  const params = new URLSearchParams(window.location.search); // parse the query string
+  return parseInt(params.get('id')) || 1; // default to 1 if no ID is provided
 }
 
-// Initialize page
+// main entry point — runs once the DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🚀 PAGE LOADED - Room Details');
-  console.log('🚀 API_BASE_URL:', API_BASE_URL);
-  console.log('🚀 Current URL:', window.location.href);
-  console.log('🚀 Cookies:', document.cookie);
+  console.log('PAGE LOADED - Room Details');
+  console.log('API_BASE_URL:', API_BASE_URL);
+  console.log('Current URL:', window.location.href);
+  console.log('Cookies:', document.cookie);
   
-  const roomId = getRoomIdFromURL();
-  loadRoomDetails(roomId);
-  setupGalleryNavigation();
-  setupSaveButton();
-  setupMessageModal();
-  setupReportModal();
-  checkAuthentication();
-  setupUniversitySelector();
+  const roomId = getRoomIdFromURL(); // get the room ID from the URL
+  loadRoomDetails(roomId); // fetch and render the room data
+  setupGalleryNavigation(); // attach prev/next button handlers for the image gallery
+  setupSaveButton(); // attach the save/unsave click handler
+  setupMessageModal(); // attach open/close/submit handlers for the contact landlord modal
+  setupReportModal(); // attach open/close/submit handlers for the report modal
+  checkAuthentication(); // check if the user is logged in and update the nav bar
+  setupUniversitySelector(); // populate the university dropdown overlay on the map
   
-  console.log('🚀 All setup functions called');
+  console.log('All setup functions called');
 });
 
-// Load room details
+// fetches a single room from the Django API and renders the entire page
 async function loadRoomDetails(roomId) {
   console.log('Loading room details for ID:', roomId);
   
   try {
     const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/`, {
       method: 'GET',
-      credentials: 'include',
+      credentials: 'include', // send session cookie so owner-specific actions work
       headers: {
         'Content-Type': 'application/json'
       }
@@ -57,15 +60,16 @@ async function loadRoomDetails(roomId) {
     console.log('API Response status:', response.status);
     
     if (!response.ok) {
+      // room not found or server error — show the error state
       console.error('Failed to fetch room:', response.status);
       showError();
       return;
     }
     
-    const roomData = await response.json();
+    const roomData = await response.json(); // parse the room JSON from Django
     console.log('Room data received:', roomData);
     
-    // Build features array from boolean fields
+    // build a human-readable features list from the boolean amenity fields
     const features = [];
     if (roomData.wifi) features.push({ icon: 'WiFi', name: 'WiFi' });
     if (roomData.washing_machine) features.push({ icon: 'Wash', name: 'Washing Machine' });
@@ -78,21 +82,21 @@ async function loadRoomDetails(roomId) {
     if (roomData.security_system) features.push({ icon: 'Security', name: 'Security System' });
     if (roomData.bike_storage) features.push({ icon: 'Bike', name: 'Bike Storage' });
     
-    // Map furnished choices to display text
+    // maps the API choice keys to the display labels shown on the page
     const furnishedMap = {
       'fully': 'Fully Furnished',
       'part': 'Part Furnished',
       'unfurnished': 'Unfurnished'
     };
     
-    // Map bills choices to display text
+    // maps the bills choice keys to display text
     const billsMap = {
       'included': 'Included',
       'not_included': 'Not Included',
       'partial': 'Partially Included'
     };
     
-    // Map room type choices to display text
+    // maps the room type keys to display text
     const roomTypeMap = {
       'single': 'Single Room',
       'double': 'Double Room',
@@ -101,27 +105,28 @@ async function loadRoomDetails(roomId) {
       'shared': 'Shared Room'
     };
     
-    // Transform API data to match expected format
+    // transform the raw API data into the shape the UI functions expect
     currentRoom = {
       id: roomData.id,
       title: roomData.title,
       location: roomData.location,
-      distance: roomData.distance_to_transport || 'N/A',
+      distance: roomData.distance_to_transport || 'N/A', // fallback if no transport distance set
       price: roomData.price,
       available: roomData.available_from,
-      type: roomTypeMap[roomData.room_type] || roomData.room_type,
+      type: roomTypeMap[roomData.room_type] || roomData.room_type, // use the readable label if found
       furnished: furnishedMap[roomData.furnished] || roomData.furnished,
       bills: billsMap[roomData.bills] || roomData.bills,
       deposit: `£${roomData.deposit}`,
       minStay: roomData.min_stay_months ? `${roomData.min_stay_months} months` : 'Flexible',
       maxStay: roomData.max_stay_months ? `${roomData.max_stay_months} months` : 'Flexible',
-      images: roomData.images || [],
+      images: roomData.images || [], // array of image URLs
       description: roomData.description,
       features: features,
       landlord: {
         name: roomData.owner_name || 'Unknown',
         type: 'Private Landlord',
         initials: (roomData.owner_name || 'UK').split(' ').map(n => n[0]).join(''),
+        // initials built from first letter of each word: 'John Smith' → 'JS'
         verified: true,
         responseRate: 95,
         responseTime: '2 hours'
@@ -132,40 +137,41 @@ async function loadRoomDetails(roomId) {
     console.log('Transformed room data:', currentRoom);
     
     if (!currentRoom) {
-      showError();
+      showError(); // should never happen since we just assigned it, but safe guard
       return;
     }
 
-    // Update page title
+    // update the browser tab title
     document.title = `${currentRoom.title} - StudentNest`;
     
-    // Breadcrumb
+    // update the breadcrumb navigation link text
     document.getElementById('breadcrumbTitle').textContent = currentRoom.title;
     
-    // Header
+    // update the main header section
     document.getElementById('roomTitle').textContent = currentRoom.title;
     document.getElementById('roomLocation').textContent = currentRoom.location;
     document.getElementById('roomAvailable').textContent = `Available ${formatDate(currentRoom.available)}`;
     
-    // Badge
+    // show or hide the badge depending on room status
     const badgeEl = document.getElementById('roomBadge');
     if (currentRoom.badge) {
       badgeEl.textContent = currentRoom.badge.charAt(0).toUpperCase() + currentRoom.badge.slice(1);
+      // capitalise the first letter: 'featured' → 'Featured'
       badgeEl.style.display = 'inline-flex';
-      if (currentRoom.badge === 'featured') badgeEl.style.background = '#007bff';
-      if (currentRoom.badge === 'verified') badgeEl.style.background = '#28a745';
-      if (currentRoom.badge === 'new') badgeEl.style.background = '#ffc107';
+      if (currentRoom.badge === 'featured') badgeEl.style.background = '#007bff'; // blue for featured
+      if (currentRoom.badge === 'verified') badgeEl.style.background = '#28a745'; // green for verified
+      if (currentRoom.badge === 'new') badgeEl.style.background = '#ffc107'; // yellow for new
     } else {
-      badgeEl.style.display = 'none';
+      badgeEl.style.display = 'none'; // no badge — hide the element
     }
     
-    // Gallery
+    // render the image gallery
     loadGallery(currentRoom.images);
     
-    // Description
+    // set the room description text
     document.getElementById('roomDescription').textContent = currentRoom.description;
     
-    // Features (empty for now, can be populated later)
+    // render the features grid — or show a fallback message if no features were listed
     const featuresHTML = currentRoom.features.length > 0 ? currentRoom.features.map(feature => `
       <div class="room-feature-item">
         <div class="room-feature-icon">${feature.icon}</div>
@@ -174,7 +180,7 @@ async function loadRoomDetails(roomId) {
     `).join('') : '<p>No features listed</p>';
     document.getElementById('roomFeatures').innerHTML = featuresHTML;
     
-    // Room Details
+    // render the key info grid (type, furnished, bills, deposit, stay lengths)
     const detailsHTML = `
       <div class="room-info-item">
         <div class="room-info-label">Room Type</div>
@@ -203,44 +209,43 @@ async function loadRoomDetails(roomId) {
     `;
     document.getElementById('roomDetails').innerHTML = detailsHTML;
     
-    // Location
+    // show the full location string including transport distance
     document.getElementById('locationText').textContent = `${currentRoom.location}${currentRoom.distance ? ' - ' + currentRoom.distance : ''}`;
     
-    // Initialize map with postcode
+    // initialise the Leaflet map — prefer postcode for accuracy, fall back to location name
     if (roomData.postcode) {
-      document.getElementById('postcodeDisplay').style.display = 'block';
+      document.getElementById('postcodeDisplay').style.display = 'block'; // show the postcode label
       document.getElementById('postcodeText').textContent = roomData.postcode;
       initializeMap(roomData.postcode, currentRoom.location);
     } else if (currentRoom.location) {
-      // Fallback to location if no postcode
-      initializeMap(currentRoom.location, currentRoom.location);
+      initializeMap(currentRoom.location, currentRoom.location); // use the location name as fallback
     }
     
-    // Sidebar Price
+    // update the sidebar price display
     document.getElementById('sidebarPrice').innerHTML = `£${currentRoom.price}<span>/month</span>`;
     
-    // Landlord
+    // populate the landlord card
     const landlord = currentRoom.landlord;
-    document.getElementById('landlordAvatar').textContent = landlord.initials;
+    document.getElementById('landlordAvatar').textContent = landlord.initials; // initials in the circle
     document.getElementById('landlordName').textContent = landlord.name;
     document.getElementById('landlordType').textContent = landlord.type;
     
-    // Update save button state
+    // highlight the save button if this room is already in the user's favorites
     updateSaveButtonState();
     
   } catch (error) {
     console.error('Error loading room:', error);
-    showError();
+    showError(); // replace the main content area with the error state
   }
 }
 
-// Load gallery
+// renders the image gallery — sets the main image and builds the thumbnail strip
 function loadGallery(images) {
-  currentImageIndex = 0;
-  document.getElementById('mainImage').src = images[0];
-  document.getElementById('imageCounter').textContent = `1 / ${images.length}`;
+  currentImageIndex = 0; // always start on the first image
+  document.getElementById('mainImage').src = images[0]; // show the first image in the large view
+  document.getElementById('imageCounter').textContent = `1 / ${images.length}`; // e.g. '1 / 4'
   
-  // Create thumbnails
+  // build the thumbnail strip — show at most 4 thumbnails
   const thumbsHTML = images.slice(0, 4).map((img, index) => `
     <div class="room-gallery-thumb ${index === 0 ? 'active' : ''}" data-index="${index}">
       <img src="${img}" alt="Room ${index + 1}" />
@@ -248,19 +253,20 @@ function loadGallery(images) {
   `).join('');
   document.getElementById('galleryThumbs').innerHTML = thumbsHTML;
   
-  // Add click handlers to thumbnails
+  // clicking a thumbnail switches the main image to that photo
   document.querySelectorAll('.room-gallery-thumb').forEach(thumb => {
     thumb.addEventListener('click', () => {
       const index = parseInt(thumb.dataset.index);
-      showImage(index);
+      showImage(index); // switch to the clicked thumbnail's image
     });
   });
 }
 
-// Setup gallery navigation
+// attaches click handlers to the prev/next arrow buttons
 function setupGalleryNavigation() {
   document.getElementById('prevImage').addEventListener('click', () => {
     if (currentRoom && currentRoom.images.length > 0) {
+      // wrap around: going left from index 0 jumps to the last image
       currentImageIndex = (currentImageIndex - 1 + currentRoom.images.length) % currentRoom.images.length;
       showImage(currentImageIndex);
     }
@@ -268,75 +274,73 @@ function setupGalleryNavigation() {
   
   document.getElementById('nextImage').addEventListener('click', () => {
     if (currentRoom && currentRoom.images.length > 0) {
+      // wrap around: going right from the last image jumps back to index 0
       currentImageIndex = (currentImageIndex + 1) % currentRoom.images.length;
       showImage(currentImageIndex);
     }
   });
 }
 
-// Show specific image
+// switches the gallery to a specific image by index
 function showImage(index) {
   if (!currentRoom) return;
   
-  currentImageIndex = index;
-  document.getElementById('mainImage').src = currentRoom.images[index];
+  currentImageIndex = index; // update the global tracker
+  document.getElementById('mainImage').src = currentRoom.images[index]; // update the main image
   document.getElementById('imageCounter').textContent = `${index + 1} / ${currentRoom.images.length}`;
   
-  // Update active thumbnail
+  // update the active state on the thumbnails
   document.querySelectorAll('.room-gallery-thumb').forEach((thumb, i) => {
-    thumb.classList.toggle('active', i === index);
+    thumb.classList.toggle('active', i === index); // active class adds the blue border
   });
 }
 
-// Setup save button
+// attaches the save/unsave click handler to the Save Room button in the sidebar
 function setupSaveButton() {
   document.getElementById('saveRoomBtn').addEventListener('click', () => {
-    toggleSaveRoom(currentRoom.id);
+    toggleSaveRoom(currentRoom.id); // pass the current room's ID to the toggle function
   });
 }
 
-// Toggle save room
+// adds or removes the current room from the logged-in user's favorites
+// also syncs the change to localStorage as a local fallback cache
 async function toggleSaveRoom(roomId) {
   console.log('TROUBLESHOOT - toggleSaveRoom called with roomId:', roomId);
   
   let savedRooms = JSON.parse(localStorage.getItem('savedRooms') || '[]');
-  const index = savedRooms.indexOf(roomId);
+  // load the local cache of saved room IDs
+  const index = savedRooms.indexOf(roomId); // -1 means not yet saved
   
   console.log('TROUBLESHOOT - Current saved rooms:', savedRooms);
   console.log('TROUBLESHOOT - Room index in saved:', index);
   
   if (index === -1) {
-    // Add to favorites
-    savedRooms.push(roomId);
+    // --- add to favorites ---
+    savedRooms.push(roomId); // add to local cache optimistically
     
     console.log('TROUBLESHOOT - Adding to favorites');
     console.log(`TROUBLESHOOT - API URL: ${API_BASE_URL}/favorites/add/`);
-    console.log('TROUBLESHOOT - Method: POST');
-    console.log('TROUBLESHOOT - Credentials: include');
-    console.log('TROUBLESHOOT - Body:', { room_id: roomId });
     
-    // Call backend API to add to favorites
     try {
       const response = await fetch(`${API_BASE_URL}/favorites/add/`, {
         method: 'POST',
-        credentials: 'include',
+        credentials: 'include', // send session cookie to identify the user
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ room_id: roomId })
+        body: JSON.stringify({ room_id: roomId }) // tell the API which room to favorite
       });
       
       console.log('TROUBLESHOOT - Response status:', response.status);
-      console.log('TROUBLESHOOT - Response statusText:', response.statusText);
       console.log('TROUBLESHOOT - Response ok:', response.ok);
-      console.log('TROUBLESHOOT - Response headers:', [...response.headers.entries()]);
       
-      const responseText = await response.text();
+      const responseText = await response.text(); // read as text first for debugging
       console.log('TROUBLESHOOT - Response body:', responseText);
       
       if (response.ok) {
         showNotification('Room saved to your favorites!', 'success');
       } else {
+        // API returned an error — show it and fall back to local-only save
         try {
           const data = JSON.parse(responseText);
           console.error('Failed to add favorite - JSON response:', data);
@@ -347,34 +351,24 @@ async function toggleSaveRoom(roomId) {
         showNotification('Room saved locally', 'info');
       }
     } catch (error) {
+      // network error — fall back to localStorage-only
       console.error('EXCEPTION adding favorite:', error);
-      console.error('Error name:', error.name);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
       alert(`EXCEPTION ADDING FAVORITE:\n${error.name}: ${error.message}`);
       showNotification('Room saved locally', 'info');
     }
   } else {
-    // Remove from favorites
-    savedRooms.splice(index, 1);
+    // --- remove from favorites ---
+    savedRooms.splice(index, 1); // remove from local cache
     
     const deleteUrl = `${API_BASE_URL}/favorites/${roomId}/remove/`;
     console.log('TROUBLESHOOT - Removing from favorites');
     console.log('TROUBLESHOOT - API URL:', deleteUrl);
-    console.log('TROUBLESHOOT - Method: DELETE');
-    console.log('TROUBLESHOOT - Credentials: include');
     
-    // Call backend API to remove from favorites
     try {
       const response = await fetch(deleteUrl, {
         method: 'DELETE',
-        credentials: 'include'
+        credentials: 'include' // send session cookie to identify the user
       });
-      
-      console.log('TROUBLESHOOT - Response status:', response.status);
-      console.log('TROUBLESHOOT - Response statusText:', response.statusText);
-      console.log('TROUBLESHOOT - Response ok:', response.ok);
-      console.log('TROUBLESHOOT - Response headers:', [...response.headers.entries()]);
       
       const responseText = await response.text();
       console.log('TROUBLESHOOT - Response body:', responseText);
@@ -382,146 +376,149 @@ async function toggleSaveRoom(roomId) {
       if (response.ok) {
         showNotification('Room removed from favorites', 'info');
       } else {
+        // API returned an error — still reflect the change locally
         console.error('Failed to remove favorite');
         alert(`ERROR REMOVING FAVORITE:\nStatus: ${response.status}\nResponse: ${responseText}`);
         showNotification('Room removed locally', 'info');
       }
     } catch (error) {
+      // network error — still reflect the change locally
       console.error('EXCEPTION removing favorite:', error);
-      console.error('Error name:', error.name);
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
       alert(`EXCEPTION REMOVING FAVORITE:\n${error.name}: ${error.message}`);
       showNotification('Room removed locally', 'info');
     }
   }
   
-  localStorage.setItem('savedRooms', JSON.stringify(savedRooms));
-  updateSaveButtonState();
+  localStorage.setItem('savedRooms', JSON.stringify(savedRooms)); // persist the local cache
+  updateSaveButtonState(); // update the button to reflect the new state
 }
 
-// Update save button state
+// updates the Save Room button appearance based on whether the room is in the user's favorites
+// checks the API first, then falls back to localStorage
 async function updateSaveButtonState() {
   if (!currentRoom) return;
   
   const btn = document.getElementById('saveRoomBtn');
   let isSaved = false;
   
-  // Check backend for favorite status
+  // ask the API whether this room is in the user's favorites
   try {
     const response = await fetch(`${API_BASE_URL}/favorites/${currentRoom.id}/check/`, {
-      credentials: 'include'
+      credentials: 'include' // send session cookie
     });
     
     if (response.ok) {
       const data = await response.json();
-      isSaved = data.is_favorited;
+      isSaved = data.is_favorited; // true/false from the API
       
-      // Sync localStorage with backend
+      // keep localStorage in sync with the backend
       let savedRooms = JSON.parse(localStorage.getItem('savedRooms') || '[]');
       if (isSaved && !savedRooms.includes(currentRoom.id)) {
-        savedRooms.push(currentRoom.id);
+        savedRooms.push(currentRoom.id); // add to local cache if not already there
         localStorage.setItem('savedRooms', JSON.stringify(savedRooms));
       } else if (!isSaved && savedRooms.includes(currentRoom.id)) {
-        savedRooms = savedRooms.filter(id => id !== currentRoom.id);
+        savedRooms = savedRooms.filter(id => id !== currentRoom.id); // remove from local cache
         localStorage.setItem('savedRooms', JSON.stringify(savedRooms));
       }
     } else {
-      // Fallback to localStorage if API fails
+      // API failed — fall back to localStorage
       const savedRooms = JSON.parse(localStorage.getItem('savedRooms') || '[]');
       isSaved = savedRooms.includes(currentRoom.id);
     }
   } catch (error) {
     console.error('Error checking favorite status:', error);
-    // Fallback to localStorage if API fails
+    // network error — fall back to localStorage
     const savedRooms = JSON.parse(localStorage.getItem('savedRooms') || '[]');
     isSaved = savedRooms.includes(currentRoom.id);
   }
   
   if (isSaved) {
+    // filled heart + blue background = saved
     btn.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path>
       </svg>
       Saved
     `;
-    btn.style.background = '#007bff';
+    btn.style.background = '#007bff'; // blue filled button
     btn.style.color = 'white';
   } else {
+    // empty heart + white background = not saved
     btn.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"></path>
       </svg>
       Save Room
     `;
-    btn.style.background = 'white';
+    btn.style.background = 'white'; // white outlined button
     btn.style.color = '#007bff';
   }
 }
 
-// Check authentication
+// global variable to hold the currently logged-in student — used to gate actions like messaging
 let currentUser = null;
 
+// checks whether the visitor has an active Django session and updates the UI accordingly
 async function checkAuthentication() {
   try {
-    console.log('🔍 DEBUG: Starting authentication check...');
-    console.log('🔍 DEBUG: API_BASE_URL =', API_BASE_URL);
-    console.log('🔍 DEBUG: Full URL =', `${API_BASE_URL}/check-session/`);
+    console.log('DEBUG: Starting authentication check...');
+    console.log('DEBUG: API_BASE_URL =', API_BASE_URL);
     
     const response = await fetch(`${API_BASE_URL}/check-session/`, {
       method: 'GET',
-      credentials: 'include'
+      credentials: 'include' // send the session cookie
     });
     
-    console.log('🔍 DEBUG: Response status:', response.status);
-    console.log('🔍 DEBUG: Response ok:', response.ok);
+    console.log('DEBUG: Response status:', response.status);
     
     if (response.ok) {
       const data = await response.json();
-      console.log('🔍 DEBUG: Response data:', JSON.stringify(data, null, 2));
+      console.log('DEBUG: Response data:', JSON.stringify(data, null, 2));
       
-      // Handle both authenticated and isAuthenticated properties
+      // handle both 'authenticated' and 'isAuthenticated' property names for compatibility
       if (data.authenticated || data.isAuthenticated) {
-        console.log('🔍 DEBUG: User IS authenticated');
-        console.log('🔍 DEBUG: Student data:', data.student);
-        currentUser = data.student;
-        updateNavForLoggedInUser(data.student);
+        console.log('DEBUG: User IS authenticated');
+        currentUser = data.student; // store the student data globally
+        updateNavForLoggedInUser(data.student); // update the nav bar
       } else {
-        console.log('❌ DEBUG: User NOT authenticated (data.authenticated and data.isAuthenticated are both false)');
+        console.log('DEBUG: User NOT authenticated');
+        // user is not logged in — that's fine, just don't show personalised UI
       }
     } else {
-      console.log('❌ DEBUG: Response not OK, status:', response.status);
+      console.log('DEBUG: Response not OK, status:', response.status);
     }
   } catch (error) {
-    console.log('❌ DEBUG: Auth check error:', error);
+    console.log('DEBUG: Auth check error:', error);
+    // not logged in or network error — just leave the default nav
   }
 }
 
-// Update nav for logged in user
+// swaps the nav bar Login/Signup buttons for a greeting + Logout button
 function updateNavForLoggedInUser(student) {
-  console.log('🔧 DEBUG: updateNavForLoggedInUser called with:', student);
+  console.log('DEBUG: updateNavForLoggedInUser called with:', student);
   
   const navActions = document.querySelector('.home-nav-actions');
   if (!navActions) {
-    console.error('Nav actions not found');
+    console.error('Nav actions not found'); // shouldn't happen, but safe guard
     return;
   }
   
-  const loginBtn = navActions.querySelector('.home-nav-btn-outline');
-  const signupBtn = navActions.querySelector('.home-nav-btn-primary');
+  const loginBtn = navActions.querySelector('.home-nav-btn-outline'); // the Login button
+  const signupBtn = navActions.querySelector('.home-nav-btn-primary'); // the Sign Up button
   
   if (loginBtn && signupBtn) {
-    loginBtn.remove();
-    signupBtn.textContent = 'Logout';
+    loginBtn.remove(); // remove the Login button
+    signupBtn.textContent = 'Logout'; // repurpose the Sign Up button as Logout
     signupBtn.onclick = async (e) => {
       e.preventDefault();
       await logout();
     };
     
-    // Handle both fullName and name properties
+    // handle both fullName and name properties depending on API response shape
     const userName = student.fullName || student.name || 'User';
-    const firstName = userName.split(' ')[0];
+    const firstName = userName.split(' ')[0]; // first name only for a friendly greeting
     
+    // insert a personalised greeting to the left of the Logout button
     const welcomeSpan = document.createElement('span');
     welcomeSpan.textContent = `Hi, ${firstName}`;
     welcomeSpan.style.cssText = 'color: #212529; font-weight: 600; font-size: 15px;';
@@ -531,21 +528,21 @@ function updateNavForLoggedInUser(student) {
   }
 }
 
-// Logout
+// calls the Django logout API then redirects to the home page
 async function logout() {
   try {
     await fetch(`${API_BASE_URL}/logout/`, {
       method: 'POST',
-      credentials: 'include'
+      credentials: 'include' // send session cookie so Django can invalidate the session
     });
-    localStorage.removeItem('student');
-    window.location.href = 'home.html';
+    localStorage.removeItem('student'); // clear any locally stored student data
+    window.location.href = 'home.html'; // redirect to the listings page
   } catch (error) {
     console.error('Logout failed:', error);
   }
 }
 
-// Show error
+// replaces the main content area with a friendly error message when a room can't be loaded
 function showError() {
   document.querySelector('.room-detail-main').innerHTML = `
     <div class="room-detail-panel" style="text-align: center; padding: 60px 32px;">
@@ -563,19 +560,20 @@ function showError() {
   `;
 }
 
-// Format date
+// formats an ISO date string (e.g. '2025-06-01') into a readable date like '1 June 2025'
 function formatDate(dateString) {
   const date = new Date(dateString);
   const options = { year: 'numeric', month: 'long', day: 'numeric' };
-  return date.toLocaleDateString('en-GB', options);
+  return date.toLocaleDateString('en-GB', options); // en-GB gives day-first format
 }
 
-// Show notification
+// shows a temporary slide-in notification in the top-right corner
 function showNotification(message, type = 'info') {
   const notification = document.createElement('div');
   notification.className = `notification notification-${type}`;
   notification.textContent = message;
   
+  // apply inline styles directly since this element is created dynamically
   notification.style.cssText = `
     position: fixed;
     top: 100px;
@@ -591,41 +589,41 @@ function showNotification(message, type = 'info') {
     max-width: 350px;
   `;
   
-  document.body.appendChild(notification);
+  document.body.appendChild(notification); // inject into the page
   
   setTimeout(() => {
-    notification.style.animation = 'slideOutRight 0.3s ease';
-    setTimeout(() => notification.remove(), 300);
-  }, 3000);
+    notification.style.animation = 'slideOutRight 0.3s ease'; // slide back out
+    setTimeout(() => notification.remove(), 300); // remove from DOM after animation
+  }, 3000); // visible for 3 seconds
 }
 
-// Setup delete button
+// checks whether the logged-in user is the room owner and shows the delete button if so
 async function setupDeleteButton(roomId, ownerEmail) {
   console.log('Setting up delete button for room:', roomId, 'owner:', ownerEmail);
   
-  // Check if user is logged in
   try {
     const response = await fetch(`${API_BASE_URL}/check-session/`, {
-      credentials: 'include'
+      credentials: 'include' // send session cookie to identify the logged-in user
     });
     
     const data = await response.json();
     console.log('Session check:', data);
     
     if (data.authenticated && data.student) {
-      const currentUserEmail = data.student.email;
+      const currentUserEmail = data.student.email; // the logged-in user's email
       console.log('Current user:', currentUserEmail, 'Room owner:', ownerEmail);
       
-      // Show delete button if current user is the owner
+      // only show the delete button if the logged-in user created this room
       if (currentUserEmail === ownerEmail) {
         console.log('User is owner - showing delete button');
         const deleteBtn = document.getElementById('deleteRoomBtn');
         if (deleteBtn) {
-          deleteBtn.style.display = 'flex';
+          deleteBtn.style.display = 'flex'; // make the hidden button visible
           deleteBtn.onclick = () => deleteRoom(roomId);
         }
       } else {
         console.log('User is not owner - hiding delete button');
+        // delete button stays hidden — only the owner can delete their own listing
       }
     }
   } catch (error) {
@@ -633,12 +631,13 @@ async function setupDeleteButton(roomId, ownerEmail) {
   }
 }
 
-// Delete room
+// sends a DELETE request to the API to remove the room, then redirects to the home page
 async function deleteRoom(roomId) {
+  // ask for confirmation before doing something irreversible
   const confirmed = confirm('Are you sure you want to delete this room? This action cannot be undone.');
   
   if (!confirmed) {
-    return;
+    return; // user changed their mind — do nothing
   }
   
   console.log('Deleting room:', roomId);
@@ -646,7 +645,7 @@ async function deleteRoom(roomId) {
   try {
     const response = await fetch(`${API_BASE_URL}/rooms/${roomId}/`, {
       method: 'DELETE',
-      credentials: 'include',
+      credentials: 'include', // send session cookie to prove ownership
       headers: {
         'Content-Type': 'application/json'
       }
@@ -659,7 +658,7 @@ async function deleteRoom(roomId) {
       console.log('Room deleted successfully:', data);
       showNotification('Room deleted successfully!', 'success');
       
-      // Redirect to home page after 1.5 seconds
+      // redirect to the listings page after a short delay so the user sees the message
       setTimeout(() => {
         window.location.href = 'home.html';
       }, 1500);
@@ -674,13 +673,13 @@ async function deleteRoom(roomId) {
   }
 }
 
-// Add CSS animations
+// inject the slide-in/slide-out animations used by showNotification
 const style = document.createElement('style');
 style.textContent = `
   @keyframes slideInRight {
     from {
       transform: translateX(400px);
-      opacity: 0;
+      opacity: 0; /* starts off-screen to the right */
     }
     to {
       transform: translateX(0);
@@ -695,30 +694,30 @@ style.textContent = `
     }
     to {
       transform: translateX(400px);
-      opacity: 0;
+      opacity: 0; /* slides off-screen to the right */
     }
   }
 `;
-document.head.appendChild(style);
+document.head.appendChild(style); // inject the keyframes into the document
 
-// Setup message modal
+// sets up the 'Contact Landlord' modal — open/close triggers and form submission
 function setupMessageModal() {
   const modal = document.getElementById('messageModal');
-  const contactBtn = document.getElementById('contactLandlordBtn');
-  const closeBtn = document.getElementById('closeMessageModal');
-  const cancelBtn = document.getElementById('cancelMessage');
+  const contactBtn = document.getElementById('contactLandlordBtn'); // button that opens the modal
+  const closeBtn = document.getElementById('closeMessageModal'); // X button in the modal
+  const cancelBtn = document.getElementById('cancelMessage'); // Cancel button in the form
   const messageForm = document.getElementById('messageForm');
   
-  // Open modal
   if (contactBtn) {
     contactBtn.addEventListener('click', async () => {
       console.log('Contact landlord clicked. Current user:', currentUser);
       
-      // Check if user is logged in using currentUser variable
       if (currentUser) {
+        // user is already confirmed as logged in — open the modal immediately
         openMessageModal();
       } else {
-        // Double-check with API before redirecting
+        // currentUser might be null because auth check hasn't finished yet
+        // do a fresh check before redirecting to avoid false redirects
         try {
           const response = await fetch(`${API_BASE_URL}/check-session/`, {
             method: 'GET',
@@ -730,7 +729,7 @@ function setupMessageModal() {
             console.log('Re-check auth data:', data);
             
             if (data.authenticated || data.isAuthenticated) {
-              currentUser = data.student;
+              currentUser = data.student; // update the global now that we have it
               openMessageModal();
               return;
             }
@@ -739,7 +738,7 @@ function setupMessageModal() {
           console.error('Error checking authentication:', error);
         }
         
-        // User not logged in, show notification and redirect
+        // genuinely not logged in — notify and redirect to login
         showNotification('Please login to contact the landlord', 'info');
         setTimeout(() => {
           window.location.href = 'index.html';
@@ -748,7 +747,6 @@ function setupMessageModal() {
     });
   }
   
-  // Close modal
   if (closeBtn) {
     closeBtn.addEventListener('click', closeMessageModal);
   }
@@ -757,20 +755,19 @@ function setupMessageModal() {
     cancelBtn.addEventListener('click', closeMessageModal);
   }
   
-  // Close on backdrop click
+  // clicking the backdrop (outside the modal box) also closes it
   modal.addEventListener('click', (e) => {
-    if (e.target === modal) {
+    if (e.target === modal) { // only if the click hit the overlay, not the modal box itself
       closeMessageModal();
     }
   });
   
-  // Handle form submission
   if (messageForm) {
     messageForm.addEventListener('submit', handleMessageSubmit);
   }
 }
 
-// Open message modal
+// opens the message modal and pre-fills the landlord name and room title
 function openMessageModal() {
   const modal = document.getElementById('messageModal');
   const modalLandlordAvatar = document.getElementById('modalLandlordAvatar');
@@ -778,47 +775,46 @@ function openMessageModal() {
   const modalRoomTitle = document.getElementById('modalRoomTitle');
   
   if (currentRoom) {
-    modalLandlordAvatar.textContent = currentRoom.landlord.initials;
+    modalLandlordAvatar.textContent = currentRoom.landlord.initials; // initials in the avatar circle
     modalLandlordName.textContent = currentRoom.landlord.name;
-    modalRoomTitle.textContent = currentRoom.title;
+    modalRoomTitle.textContent = currentRoom.title; // show which room the message is about
   }
   
-  // Reset form
+  // reset the form and clear any previous error messages
   document.getElementById('messageForm').reset();
   document.getElementById('messageFormError').classList.remove('show');
   document.getElementById('messageFormError').textContent = '';
   
-  modal.classList.add('active');
-  document.body.style.overflow = 'hidden';
+  modal.classList.add('active'); // CSS transition fades the modal in
+  document.body.style.overflow = 'hidden'; // prevent scrolling while modal is open
 }
 
-// Close message modal
+// closes the message modal and restores normal scrolling
 function closeMessageModal() {
   const modal = document.getElementById('messageModal');
-  modal.classList.remove('active');
-  document.body.style.overflow = '';
+  modal.classList.remove('active'); // CSS transition fades the modal out
+  document.body.style.overflow = ''; // re-enable page scrolling
 }
 
-// Handle message submission
+// handles the message form submission — validates input, calls the API, shows feedback
 async function handleMessageSubmit(e) {
-  e.preventDefault();
+  e.preventDefault(); // stop the form from doing a full page reload
   
   const subject = document.getElementById('messageSubject').value.trim();
   const content = document.getElementById('messageContent').value.trim();
-  const errorDiv = document.getElementById('messageFormError');
+  const errorDiv = document.getElementById('messageFormError'); // the inline error message area
   const sendBtn = document.getElementById('sendMessageBtn');
   
-  // Validation
+  // both subject and message body are required
   if (!subject || !content) {
     errorDiv.textContent = 'Please fill in all fields';
-    errorDiv.classList.add('show');
+    errorDiv.classList.add('show'); // CSS shows the error div
     return;
   }
   
-  // Hide error
-  errorDiv.classList.remove('show');
+  errorDiv.classList.remove('show'); // clear any previous error
   
-  // Disable submit button
+  // disable the send button and show a loading spinner while the request is in flight
   sendBtn.disabled = true;
   sendBtn.innerHTML = `
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: spin 1s linear infinite;">
@@ -829,15 +825,15 @@ async function handleMessageSubmit(e) {
   `;
   
   try {
-    // Send message to backend API
+    // send the message to the Django API
     const response = await fetch(`${API_BASE_URL}/messages/send/`, {
       method: 'POST',
-      credentials: 'include',
+      credentials: 'include', // send session cookie to identify the sender
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        room_id: currentRoom.id,
+        room_id: currentRoom.id, // which room the message is about
         subject: subject,
         content: content
       })
@@ -849,17 +845,16 @@ async function handleMessageSubmit(e) {
       const data = await response.json();
       console.log('Message sent:', data);
       
-      // Success
       showNotification('Message sent successfully! The landlord will respond soon.', 'success');
-      closeMessageModal();
+      closeMessageModal(); // close the modal after a successful send
     } else {
       const errorData = await response.json();
       console.error('Message send failed:', errorData);
       errorDiv.textContent = errorData.message || 'Failed to send message. Please try again.';
-      errorDiv.classList.add('show');
+      errorDiv.classList.add('show'); // show the error inside the modal
     }
     
-    // Reset button
+    // restore the send button to its original state
     sendBtn.disabled = false;
     sendBtn.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -870,11 +865,11 @@ async function handleMessageSubmit(e) {
     `;
     
   } catch (error) {
+    // network error — show error inside the modal and re-enable the send button
     console.error('Error sending message:', error);
     errorDiv.textContent = 'Failed to send message. Please try again.';
     errorDiv.classList.add('show');
     
-    // Reset button
     sendBtn.disabled = false;
     sendBtn.innerHTML = `
       <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -886,10 +881,10 @@ async function handleMessageSubmit(e) {
   }
 }
 
-// Add spinning animation for loading state
+// inject the 'spin' animation used by the loading spinner in the send button
 const spinKeyframes = `
   @keyframes spin {
-    to { transform: rotate(360deg); }
+    to { transform: rotate(360deg); } /* full rotation in 1 second */
   }
   .spin {
     animation: spin 1s linear infinite;
@@ -899,66 +894,76 @@ const styleSheet = document.createElement("style");
 styleSheet.textContent = spinKeyframes;
 document.head.appendChild(styleSheet);
 
-// Map initialization with geocoding
+// Leaflet map instance and its marker — stored globally so they can be updated later
 let map = null;
 let marker = null;
 
+// populates the university dropdown on the map overlay
+// uses dataset flags to prevent duplicate population or listener binding on re-runs
 function setupUniversitySelector() {
   const select = document.getElementById('universitySelect');
-  if (!select) return;
+  if (!select) return; // element might not exist on this page
 
   if (!select.dataset.populated) {
+    // add an <option> for each university in the UNIVERSITY_LOCATIONS array
     UNIVERSITY_LOCATIONS.forEach((uni, index) => {
       const option = document.createElement('option');
-      option.value = String(index);
+      option.value = String(index); // use the array index as the value
       option.textContent = uni.name;
       select.appendChild(option);
     });
-    select.dataset.populated = '1';
+    select.dataset.populated = '1'; // mark as populated so we don't add duplicates
   }
 
   if (!select.dataset.bound) {
     select.addEventListener('change', (e) => {
       const value = e.target.value;
-      if (value === '' || !map) return;
+      if (value === '' || !map) return; // ignore the blank/placeholder option or if map not ready
 
-      const uni = UNIVERSITY_LOCATIONS[Number(value)];
+      const uni = UNIVERSITY_LOCATIONS[Number(value)]; // look up the selected university
       if (!uni) return;
 
-      map.flyTo([uni.lat, uni.lon], 14, { duration: 1.1 });
+      // fly the map view to the selected university
+      map.flyTo([uni.lat, uni.lon], 14, { duration: 1.1 }); // smooth animated pan + zoom
       L.popup({ closeButton: true })
         .setLatLng([uni.lat, uni.lon])
-        .setContent(`<strong>${uni.name}</strong>`)
+        .setContent(`<strong>${uni.name}</strong>`) // show a popup with the university name
         .openOn(map);
     });
-    select.dataset.bound = '1';
+    select.dataset.bound = '1'; // mark as bound so we don't attach a second listener
   }
 }
 
+// normalises a UK postcode string to the standard format with a space before the last 3 chars
+// e.g. 'NW12DA' → 'NW1 2DA', 'EC1A1BB' → 'EC1A 1BB'
 function normalizeUKPostcode(value) {
   if (!value) return '';
-  const compact = String(value).trim().toUpperCase().replace(/\s+/g, '');
-  // Standard UK postcode formatting: split before final 3 chars (e.g., NW12FA -> NW1 2FA)
+  const compact = String(value).trim().toUpperCase().replace(/\s+/g, ''); // strip all spaces first
+  // standard UK postcode always has 3 chars in the inward part (the second half)
   if (compact.length > 3) {
-    return `${compact.slice(0, -3)} ${compact.slice(-3)}`;
+    return `${compact.slice(0, -3)} ${compact.slice(-3)}`; // insert space before last 3 chars
   }
-  return compact;
+  return compact; // short string — return as-is
 }
 
+// builds an ordered list of geocoding query strings to try
+// tries the most specific (postcode + location) first, then falls back to less specific queries
 function createGeocodeQueries(searchQuery, locationName) {
-  const postcode = normalizeUKPostcode(searchQuery);
+  const postcode = normalizeUKPostcode(searchQuery); // normalise the postcode
   const location = (locationName || '').trim();
   const queries = [];
 
-  // Most accurate query first: combine location context with postcode.
+  // most accurate: combine the area name with the normalised postcode
   if (postcode && location) queries.push(`${location}, ${postcode}, United Kingdom`);
-  if (postcode) queries.push(`${postcode}, United Kingdom`);
-  if (location) queries.push(`${location}, United Kingdom`);
-  if (searchQuery) queries.push(String(searchQuery).trim());
+  if (postcode) queries.push(`${postcode}, United Kingdom`); // postcode alone
+  if (location) queries.push(`${location}, United Kingdom`); // location name alone
+  if (searchQuery) queries.push(String(searchQuery).trim()); // raw search query as last resort
 
-  return [...new Set(queries.filter(Boolean))];
+  return [...new Set(queries.filter(Boolean))]; // remove empty strings and duplicates
 }
 
+// iterates through the geocoding queries until one returns a result
+// uses Nominatim (OpenStreetMap's free geocoder) with UK country filter
 async function geocodeWithFallback(searchQuery, locationName) {
   const queries = createGeocodeQueries(searchQuery, locationName);
   let lastError = null;
@@ -966,9 +971,10 @@ async function geocodeWithFallback(searchQuery, locationName) {
   for (const query of queries) {
     try {
       const geocodeUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=gb&limit=5&addressdetails=1`;
+      // countrycodes=gb restricts results to the UK
       const response = await fetch(geocodeUrl, {
         headers: {
-          'User-Agent': 'StudentNest/1.0'
+          'User-Agent': 'StudentNest/1.0' // Nominatim requires a User-Agent header
         }
       });
 
@@ -979,50 +985,56 @@ async function geocodeWithFallback(searchQuery, locationName) {
       const results = await response.json();
       if (Array.isArray(results) && results.length > 0) {
         return {
-          query,
-          result: results[0],
+          query, // which query string produced this result
+          result: results[0], // use the top result
           results
         };
       }
+      // no results for this query — fall through to the next one
     } catch (error) {
       lastError = error;
       console.warn('Geocode attempt failed:', query, error.message);
     }
   }
 
+  // all queries exhausted — throw the last error (or a generic one)
   if (lastError) throw lastError;
   throw new Error('Location not found');
 }
 
+// geocodes the room's postcode/location and renders a Leaflet map centred on it
+// uses CARTO tiles as the primary tile layer to avoid referrer-blocking issues with OSM
 async function initializeMap(searchQuery, locationName) {
   console.log('Initializing map for:', searchQuery);
   
   try {
-    // Use Nominatim API for geocoding (free, no API key needed) with fallback queries.
+    // try to geocode the postcode (or location name) using Nominatim with fallback queries
     const geocode = await geocodeWithFallback(searchQuery, locationName);
     console.log('Geocoding result:', geocode);
 
-    const bestResult = geocode.result;
+    const bestResult = geocode.result; // use the top Nominatim result
     const lat = parseFloat(bestResult.lat);
     const lon = parseFloat(bestResult.lon);
     
-    // Initialize map
+    // if a map already exists from a previous call, remove it before creating a new one
     if (map) {
-      map.remove(); // Remove existing map if any
+      map.remove();
     }
     
-    map = L.map('map').setView([lat, lon], 15);
-    setupUniversitySelector();
+    map = L.map('map').setView([lat, lon], 15); // zoom level 15 gives a street-level view
+    setupUniversitySelector(); // re-initialise the selector now that the map exists
     
-    // Add map tile layer. Carto is used as primary to avoid OSM referrer blocking in some environments.
+    // CARTO light_all tiles are used as the primary layer
+    // they don't require a referrer header, avoiding the 'Access blocked: Referer is required' error
     const primaryTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       maxZoom: 19,
-      subdomains: 'abcd'
+      subdomains: 'abcd' // CARTO uses subdomains a/b/c/d for load balancing
     });
 
     primaryTiles.on('tileerror', () => {
-      // Fallback to OSM HOT tiles if the primary provider fails.
+      // if any CARTO tile fails to load, switch to the OSM HOT humanitarian tiles as a fallback
+      // the _studentnestTilesFallbackApplied flag prevents adding multiple fallback layers
       if (!map || map._studentnestTilesFallbackApplied) return;
       map._studentnestTilesFallbackApplied = true;
 
@@ -1032,9 +1044,9 @@ async function initializeMap(searchQuery, locationName) {
       }).addTo(map);
     });
 
-    primaryTiles.addTo(map);
+    primaryTiles.addTo(map); // add the CARTO tiles to the map
     
-    // Custom icon for marker
+    // custom house-shaped icon for the map marker
     const customIcon = L.divIcon({
       className: 'custom-marker',
       html: `
@@ -1056,11 +1068,11 @@ async function initializeMap(searchQuery, locationName) {
         </div>
       `,
       iconSize: [40, 40],
-      iconAnchor: [20, 40],
-      popupAnchor: [0, -40]
+      iconAnchor: [20, 40], // anchor point at the bottom of the diamond so it points at the exact location
+      popupAnchor: [0, -40] // popup appears above the marker
     });
     
-    // Add marker with popup
+    // place the marker and show a popup with the room's address
     marker = L.marker([lat, lon], { icon: customIcon }).addTo(map);
     marker.bindPopup(`
       <div style="text-align: center; padding: 8px;">
@@ -1070,27 +1082,28 @@ async function initializeMap(searchQuery, locationName) {
       </div>
     `).openPopup();
     
-    // Add circle to show approximate area
+    // add a semi-transparent circle to indicate the approximate area
     L.circle([lat, lon], {
       color: '#007bff',
       fillColor: '#007bff',
       fillOpacity: 0.1,
-      radius: 500 // 500 meters radius
+      radius: 500 // 500 metre radius
     }).addTo(map);
     
-    // Hide error message if any
-    document.getElementById('mapError').style.display = 'none';
+    document.getElementById('mapError').style.display = 'none'; // hide any previous error message
     
     console.log('Map initialized successfully');
     
   } catch (error) {
     console.error('Error initializing map:', error);
     
-    // Show error message
+    // if geocoding fails, hide the map container and show an error message instead
     document.getElementById('map').style.display = 'none';
     document.getElementById('mapError').style.display = 'block';
   }
 }
+
+// inject a second spin keyframe block for the submit report button loading spinner
 const spinStyle = document.createElement('style');
 spinStyle.textContent = `
   @keyframes spin {
@@ -1103,13 +1116,15 @@ document.head.appendChild(spinStyle);
 
 // ============================================
 // REPORT ROOM FUNCTIONALITY
+// students can flag a listing if it appears fraudulent, offensive, or inaccurate
 // ============================================
 
+// attaches all event listeners for the report modal (open, close, submit)
 function setupReportModal() {
-  const reportBtn = document.getElementById('reportRoomBtn');
-  const reportModal = document.getElementById('reportModalOverlay');
-  const closeReportBtn = document.getElementById('closeReportModal');
-  const cancelReportBtn = document.getElementById('cancelReportBtn');
+  const reportBtn = document.getElementById('reportRoomBtn'); // the 'Report' link
+  const reportModal = document.getElementById('reportModalOverlay'); // the full-screen overlay
+  const closeReportBtn = document.getElementById('closeReportModal'); // X button in the modal
+  const cancelReportBtn = document.getElementById('cancelReportBtn'); // Cancel button
   const reportForm = document.getElementById('reportForm');
   
   if (reportBtn) {
@@ -1124,34 +1139,37 @@ function setupReportModal() {
     cancelReportBtn.addEventListener('click', closeReportModal);
   }
   
+  // clicking the backdrop outside the modal box also closes it
   if (reportModal) {
     reportModal.addEventListener('click', (e) => {
-      if (e.target === reportModal) {
+      if (e.target === reportModal) { // only if the backdrop itself was clicked
         closeReportModal();
       }
     });
   }
   
   if (reportForm) {
-    reportForm.addEventListener('submit', submitReport);
+    reportForm.addEventListener('submit', submitReport); // hand off to the submit function
   }
 }
 
+// shows the report modal overlay
 function openReportModal() {
   const reportModal = document.getElementById('reportModalOverlay');
   if (reportModal) {
-    reportModal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
+    reportModal.style.display = 'flex'; // flex centres the modal box inside the overlay
+    document.body.style.overflow = 'hidden'; // prevent scrolling while the modal is open
   }
 }
 
+// hides the report modal overlay and resets the form
 function closeReportModal() {
   const reportModal = document.getElementById('reportModalOverlay');
   if (reportModal) {
-    reportModal.style.display = 'none';
-    document.body.style.overflow = 'auto';
+    reportModal.style.display = 'none'; // hide the overlay
+    document.body.style.overflow = 'auto'; // restore normal scrolling
     
-    // Reset form
+    // reset the form so the user starts fresh if they open the modal again
     const reportForm = document.getElementById('reportForm');
     if (reportForm) {
       reportForm.reset();
@@ -1159,24 +1177,27 @@ function closeReportModal() {
   }
 }
 
+// sends the report to the Django API and handles the response
 async function submitReport(e) {
-  e.preventDefault();
+  e.preventDefault(); // stop the form from doing a full page reload
   
   const submitBtn = document.getElementById('submitReportBtn');
-  const reportType = document.getElementById('reportType').value;
-  const description = document.getElementById('reportDescription').value.trim();
+  const reportType = document.getElementById('reportType').value; // e.g. 'fraud', 'offensive'
+  const description = document.getElementById('reportDescription').value.trim(); // the written reason
   
+  // both the category and a description are required
   if (!reportType || !description) {
     showNotification('Please fill in all required fields', 'error');
     return;
   }
   
   if (!currentRoom) {
+    // shouldn't happen, but safe guard if the room data never loaded
     showNotification('Room information not available', 'error');
     return;
   }
   
-  // Disable submit button
+  // disable the submit button and show a loading indicator while the request is in flight
   const originalText = submitBtn.innerHTML;
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<span style="display: inline-block; animation: spin 1s linear infinite;">⏳</span> Submitting...';
@@ -1184,14 +1205,14 @@ async function submitReport(e) {
   try {
     const response = await fetch(`${API_BASE_URL}/reports/create/`, {
       method: 'POST',
-      credentials: 'include',
+      credentials: 'include', // send session cookie to identify the reporter
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        room_id: currentRoom.id,
-        report_type: reportType,
-        description: description
+        room_id: currentRoom.id, // which room is being reported
+        report_type: reportType, // the category selected in the dropdown
+        description: description // the student's written explanation
       })
     });
     
@@ -1199,7 +1220,7 @@ async function submitReport(e) {
     
     if (response.ok) {
       showNotification(data.message || 'Report submitted successfully!', 'success');
-      closeReportModal();
+      closeReportModal(); // close after a successful report
     } else {
       showNotification(data.message || 'Failed to submit report. Please try again.', 'error');
     }
@@ -1207,6 +1228,7 @@ async function submitReport(e) {
     console.error('Error submitting report:', error);
     showNotification('An error occurred. Please try again later.', 'error');
   } finally {
+    // always re-enable the button, whether the request succeeded or failed
     submitBtn.disabled = false;
     submitBtn.innerHTML = originalText;
   }

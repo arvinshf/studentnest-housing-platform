@@ -1,5 +1,16 @@
 {% load static %}
 <!DOCTYPE html>
+<!-- ====================================================
+     signup.html — User Registration page
+     New users sign up here. The page contains:
+       1. Sticky navigation bar with a Login CTA
+       2. Video hero section with a diagonal clip-path
+       3. Multi-step account setup form (tabbed stepper)
+       4. Trust/security bento-grid section
+       5. Global footer
+     Registration is handled by auth-backend.js via the
+     /api/register/ endpoint.
+     ==================================================== -->
 <html lang="en">
   <head>
     <title>Signup - StudentNest</title>
@@ -8,9 +19,11 @@
     <meta charset="utf-8" />
     <meta property="twitter:card" content="summary_large_image" />
 
+    <!-- Teleport builder reset stylesheet — normalises browser defaults -->
     <style data-tag="reset-style-sheet">
       html {  line-height: 1.15;}body {  margin: 0;}* {  box-sizing: border-box;  border-width: 0;  border-style: solid;  -webkit-font-smoothing: antialiased;}p,li,ul,pre,div,h1,h2,h3,h4,h5,h6,figure,blockquote,figcaption {  margin: 0;  padding: 0;}button {  background-color: transparent;}button,input,optgroup,select,textarea {  font-family: inherit;  font-size: 100%;  line-height: 1.15;  margin: 0;}button,select {  text-transform: none;}button,[type="button"],[type="reset"],[type="submit"] {  -webkit-appearance: button;  color: inherit;}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner {  border-style: none;  padding: 0;}button:-moz-focus,[type="button"]:-moz-focus,[type="reset"]:-moz-focus,[type="submit"]:-moz-focus {  outline: 1px dotted ButtonText;}a {  color: inherit;  text-decoration: inherit;}pre {  white-space: normal;}input {  padding: 2px 4px;}img {  display: block;}details {  display: block;  margin: 0;  padding: 0;}summary::-webkit-details-marker {  display: none;}[data-thq="accordion"] [data-thq="accordion-content"] {  max-height: 0;  overflow: hidden;  transition: max-height 0.3s ease-in-out;  padding: 0;}[data-thq="accordion"] details[data-thq="accordion-trigger"][open] + [data-thq="accordion-content"] {  max-height: 1000vh;}details[data-thq="accordion-trigger"][open] summary [data-thq="accordion-icon"] {  transform: rotate(180deg);}html { scroll-behavior: smooth  }
     </style>
+    <!-- Base page defaults: Inter font, dark surface background -->
     <style data-tag="default-style-sheet">
       html {
         font-family: Inter;
@@ -30,10 +43,12 @@
         fill: var(--color-on-surface);
       }
     </style>
+    <!-- Animate.css — Teleport entry/exit component animations -->
     <link
       rel="stylesheet"
       href="https://unpkg.com/animate.css@4.1.1/animate.css"
     />
+    <!-- Web fonts: Inter (body), STIX Two Text (serif), Noto Sans, Orbitron (headings) -->
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap"
@@ -60,16 +75,20 @@
     />
   </head>
   <body>
+    <!-- Global design system (tokens, navigation, footer, signup component styles) -->
     <link rel="stylesheet" href="/static/style.css" />
     <div>
+      <!-- Page-level CSS: navigation stubs + signup-specific classes -->
       <link href="/static/signup.css" rel="stylesheet" />
 
+      <!-- Top-level wrapper for the entire signup page layout -->
       <div class="signup-container10">
+        <!-- navigation-wrapper is a Teleport custom element wrapping the sticky navigation bar -->
         <navigation-wrapper
           class="navigation-wrapper"
           rootclassname="navigationundefined"
         >
-          <!--Navigation component-->
+          <!-- Navigation component: brand logo, Login CTA, and hamburger for mobile -->
           <div class="navigation-container1 navigationroot-class-name">
             <nav id="main-navigation" class="navigation-wrapper">
               <div class="navigation-container">
@@ -134,8 +153,7 @@
                   </button>
                 </div>
               </div>
-            </nav>
-            <div id="mobile-overlay" class="navigation-mobile-overlay">
+            </nav>              <!-- Mobile overlay: full-screen slide-in drawer with Housing Portal / Locations / etc. links -->            <div id="mobile-overlay" class="navigation-mobile-overlay">
               <div class="navigation-overlay-header">
                 <span class="navigation-logo-text section-title">
                   StudentNest
@@ -205,7 +223,8 @@
                 </div>
               </div>
             </div>
-            <div class="navigation-container2">
+              <!-- Reduced-motion accessibility override for nav animations -->
+              <div class="navigation-container2">
               <div class="navigation-container3">
                 <style>
                   @media (prefers-reduced-motion: reduce) {
@@ -222,7 +241,8 @@
                 </style>
               </div>
             </div>
-            <div class="navigation-container4">
+              <!-- Deferred navigation JS: hamburger toggle, scroll glassmorphism effect -->
+              <div class="navigation-container4">
               <div class="navigation-container5">
                 <script defer="" data-name="navigation-logic">
                   document.addEventListener('DOMContentLoaded', function() {
@@ -280,6 +300,7 @@
             </div>
           </div>
         </navigation-wrapper>
+        <!-- Hero section: looping background video with diagonal clip-path + CTA button -->
         <section class="signup-hero">
           <div class="signup-hero-media">
             <video
@@ -291,8 +312,10 @@
               src="https://videos.pexels.com/video-files/2759477/2759477-hd_1920_1080_30fps.mp4"
               class="signup-hero-video"
             ></video>
+            <!-- Diagonal gradient overlay that keeps the hero text readable over the video -->
             <div class="signup-hero-overlay"></div>
           </div>
+          <!-- Hero text column: title, subtitle, and 'Start Registration' scroll-to-form button -->
           <div class="signup-hero-content">
             <div class="signup-hero-text">
               <h1 class="hero-title">Elevate Your Living Experience</h1>
@@ -323,10 +346,12 @@
             </div>
           </div>
         </section>
+        <!-- Multi-step account setup form (single step: identity details) -->
         <section class="signup-form-section">
           <div class="signup-container">
             <h2 class="section-title">Account Setup</h2>
             <div class="signup-tabs-wrapper">
+              <!-- Step tab navigation on the left side of the card -->
               <div role="tablist" class="signup-tabs-nav">
                 <button
                   role="tab"
@@ -338,10 +363,12 @@
                   <span class="step-label">Identity</span>
                 </button>
               </div>
+              <!-- Registration form: collects first name, surname, email, phone, city, password -->
               <form
                 data-form-id="17d45129-67b3-4195-ba1f-d6321ae2258a"
                 class="signup-tabs-content"
                id="signupForm">
+                <!-- Inline status bar (shown/hidden by auth-backend.js on submit result) -->
                 <div id="authMsg" style="display:none; margin: 14px 0; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.18); background: rgba(0,0,0,0.15); color: rgba(255,255,255,0.92); font-weight: 700;"></div>
                 <div id="step-1" class="signup-step-panel active">
                   <div class="input-group">
@@ -453,6 +480,7 @@
         <section
           class="signup-thq-signup-upload-section-elm signup-upload-section"
         ></section>
+        <!-- Trust / security bento-grid section below the form -->
         <section class="signup-trust-section">
           <div class="signup-container">
             <div class="trust-bento">
@@ -693,6 +721,7 @@
         </div>
     </div>
 <script src="/static/auth-backend.js?v=14"></script>
+<!-- Debug helper: logs whether the signup form rendered correctly after DOM load -->
 <script>
   console.log("DEBUG: Page loaded, checking for form...");
   setTimeout(() => {

@@ -1,21 +1,26 @@
+/* outermost nav wrapper — display:contents makes it invisible to the layout engine */
 .navigation-container1 {
-  display: contents;
+  display: contents; /* children render as direct children of the parent — no extra box */
 }
  
+/* hidden nav variant — used as a conditional slot (e.g. a mobile nav that starts hidden) */
 .navigation-container2 {
-  display: none;
+  display: none; /* hidden by default */
 }
  
+/* second transparent nav wrapper — contributes no visual box */
 .navigation-container3 {
-  display: contents;
+  display: contents; /* no box rendered */
 }
  
+/* second hidden nav slot — another variant hidden until activated */
 .navigation-container4 {
-  display: none;
+  display: none; /* hidden by default */
 }
  
+/* final nav wrapper — also transparent in the layout */
 .navigation-container5 {
-  display: contents;
+  display: contents; /* no box rendered */
 }
  
 
