@@ -2,7 +2,6 @@
    Global Design System — style.css
    Contains:
      • CSS custom properties (design tokens) for the dark sci-fi theme
-     • Teleport (THQ) design-builder utility classes
      • Navigation, footer, signup, and login-form component styles
      • Responsive media queries
    The dark surface colour (#05060a) and cyan/purple accent palette
@@ -103,7 +102,7 @@
   --dl-layout-space-oneandhalfunits: 24px;
 }
  
-/* --- Base component primitives from the Teleport design builder ---
+/* --- Base component primitives from the project design system ---
    These are the default styled elements (button, input, textarea)
    that components inherit from before component-specific overrides apply. */
 .button {
@@ -143,17 +142,17 @@
 /* list item — keeps the default list bullet behaviour */
 .list-item {
  
-/* utility used by the Teleport builder to override display:none and transform hidden elements */
-.teleport-show {
+/* utility class that overrides display:none and restores a hidden element's transform to its natural state */
+.show-override {
   transform: none !important;
 }
  
-/* --- Teleport (THQ) design-system utility classes ---
-   These implement the design-builder's grid, flex, card, image,
-   button, input, and animation utilities.
-   Class names follow the pattern thq-<purpose>-<variant>.         */
+/* --- Design-system utility classes ---
+   Implements the shared grid, flex, card, image, button, input, and
+   animation helpers used across all page components.
+   Class names use the thq- prefix as a design-system namespace.    */
 
-/* styled text input following the Teleport design system */
+
 .thq-input {
   padding: 0.5rem 1rem;
   align-self: stretch;
@@ -243,7 +242,7 @@
   background-color: var(--dl-color-theme-primary2);
 }
  
-/* --- Teleport typography scale --- */
+/* ---  typography scale --- */
 /* H1 — large page title */
 .thq-heading-1 {
   font-family: STIX Two Text;
@@ -281,7 +280,7 @@
   border-radius: 50%;
 }
  
-/* --- Teleport layout utility classes --- */
+/* ---  layout utility classes --- */
 /* full-width section with generous vertical padding */
 .thq-section-padding {
   position: relative;
@@ -531,7 +530,6 @@
  
 /* ----------------------------------------------------------------
    Custom button utility classes
-   These extend the THQ buttons with a consistent set of semantic
    variants (primary, secondary, accent, outline, link) and sizes
    (sm, lg, xl) used throughout the hand-crafted page components.
    ---------------------------------------------------------------- */
@@ -1947,3 +1945,4 @@
     flex-direction: column;
   }
 }
+
