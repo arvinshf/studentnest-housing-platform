@@ -1233,4 +1233,3 @@ async function submitReport(e) {
     submitBtn.innerHTML = originalText;
   }
 }
-
