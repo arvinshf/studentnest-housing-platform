@@ -139,9 +139,6 @@
   list-style-position: outside;
 }
  
-/* list item — keeps the default list bullet behaviour */
-.list-item {
- 
 /* utility class that overrides display:none and restores a hidden element's transform to its natural state */
 .show-override {
   transform: none !important;
@@ -288,9 +285,6 @@
   flex-direction: column;
 }
  
-/* constrains section content to the max-width design token */
-.thq-section-max-width {
- 
 /* 1:1 square image with rounded corners */
 .thq-img-ratio-1-1 {
   border-radius: var(--dl-layout-radius-imageradius);
@@ -336,6 +330,7 @@
   border-radius: var(--dl-layout-radius-cardradius);
   flex-direction: column;
 }
+}}
  
 /* subtle box-shadow utility for cards */
 .thq-box-shadow {
@@ -738,6 +733,7 @@
   transition: filter 0.3s ease;
   letter-spacing: 0.1em;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
  
