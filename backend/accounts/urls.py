@@ -84,4 +84,3 @@ urlpatterns = [
     path('password-reset/confirm/', views.reset_password, name='reset_password'),
     # POST /api/password-reset/confirm/ — set a new password using the token
 ]
-

@@ -1,4 +1,4 @@
-﻿// Home Page Functionality
+// Home Page Functionality
 // this file handles everything on the home/browse page â€” room listings, search, favorites, and navigation
 
 (function() {
@@ -665,4 +665,3 @@
   document.head.appendChild(style); // inject the styles into the page head
 
 })(); // close the IIFE â€” all variables above are scoped inside it
-

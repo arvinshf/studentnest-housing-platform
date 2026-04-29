@@ -129,4 +129,3 @@ studentnest-housing-platform/
 ## Final note
 
 If behavior differs between local and hosted versions, always treat repository source files (not environment internals) as the primary implementation record.
-

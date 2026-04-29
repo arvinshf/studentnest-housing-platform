@@ -1234,4 +1234,3 @@ async function submitReport(e) {
   }
 }
 
-

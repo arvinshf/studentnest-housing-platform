@@ -100,4 +100,3 @@ def send_email(to, subject, body):
     # log the success with the Gmail message ID for debugging
 
     return resp.json()
-

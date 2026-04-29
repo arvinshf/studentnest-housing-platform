@@ -79,4 +79,3 @@ You can keep `auth.js` (localStorage version) and `auth-backend.js` (Django vers
 - `POST http://127.0.0.1:8000/api/login/` - Login
 - `POST http://127.0.0.1:8000/api/logout/` - Logout  
 - `GET http://127.0.0.1:8000/api/check-session/` - Check if logged in
-

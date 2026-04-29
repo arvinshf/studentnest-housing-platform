@@ -237,4 +237,3 @@ If something goes wrong:
 ---
 
 **🎉 Congratulations! Your StudentNest is now live on the internet!**
-

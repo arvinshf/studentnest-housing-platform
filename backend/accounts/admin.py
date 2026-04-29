@@ -224,4 +224,3 @@ class ReportAdmin(admin.ModelAdmin):
             updated += 1
         self.message_user(request, f'{updated} report(s) marked as dismissed.')
     mark_dismissed.short_description = '❌ Mark as Dismissed'  # label shown in the Actions dropdown
-

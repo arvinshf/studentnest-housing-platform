@@ -1,2 +1,1 @@
 # Accounts app initialization
-

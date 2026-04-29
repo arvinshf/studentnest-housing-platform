@@ -419,4 +419,3 @@ class PasswordResetToken(models.Model):
     def is_expired(self):
         """Token expires after 1 hour"""
         return (timezone.now() - self.created_at).total_seconds() > 3600
-
