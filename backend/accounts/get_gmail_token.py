@@ -1,6 +1,6 @@
 """
 One-time script to get a Gmail API refresh token.
-Run this on your LOCAL machine (not on PythonAnywhere).
+
 
 Steps before running:
   1. Go to https://console.cloud.google.com/
@@ -24,43 +24,67 @@ Usage:
 import sys
 import urllib.parse
 import webbrowser
+import http.server
+import threading
+import subprocess
 
 import requests
 
-REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
+REDIRECT_URI = 'http://localhost:8765'
 SCOPE = 'https://www.googleapis.com/auth/gmail.send'
+
+_auth_code = None
+
+class _Handler(http.server.BaseHTTPRequestHandler):
+    def do_GET(self):
+        global _auth_code
+        parsed = urllib.parse.urlparse(self.path)
+        params = urllib.parse.parse_qs(parsed.query)
+        _auth_code = params.get('code', [None])[0]
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b'<h2>Authorization received. You can close this tab.</h2>')
+
+    def log_message(self, *args):
+        pass  # silence server logs
 
 
 def main():
     client_id = input('Paste your Client ID: ').strip()
     client_secret = input('Paste your Client Secret: ').strip()
 
+    # start local server to capture the redirect
+    server = http.server.HTTPServer(('localhost', 8765), _Handler)
+    thread = threading.Thread(target=server.handle_request)
+    thread.daemon = True
+    thread.start()
+
     # open the Google consent screen in the browser
     auth_url = (
         'https://accounts.google.com/o/oauth2/v2/auth?'
-        f'client_id={client_id}&'
-        f'redirect_uri={REDIRECT_URI}&'
+        f'client_id={urllib.parse.quote(client_id)}&'
+        f'redirect_uri={urllib.parse.quote(REDIRECT_URI)}&'
         'response_type=code&'
-        f'scope={SCOPE}&'
+        f'scope={urllib.parse.quote(SCOPE)}&'
         'access_type=offline&'
         'prompt=consent'
     )
-    print('\nOpening Chrome for authorization...')
-    print('After you click Allow, Google will show you an authorization code.')
-    print('Copy that code and paste it back here.\n')
-    import subprocess
+    print('\nOpening browser for authorization...')
+    print('Sign in, click Allow, then come back here.\n')
     chrome_path = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
     try:
         subprocess.Popen([chrome_path, auth_url])
     except FileNotFoundError:
-        print('Chrome not found, opening default browser instead')
         webbrowser.open(auth_url)
 
-    auth_code = input('Paste the authorization code here: ').strip()
+    thread.join(timeout=120)
+    auth_code = _auth_code
 
     if not auth_code:
-        print('ERROR: No authorization code entered.')
+        print('ERROR: No authorization code received.')
         sys.exit(1)
+
+    print('Authorization code received!\n')
 
     # swap the auth code for tokens
     resp = requests.post('https://oauth2.googleapis.com/token', data={
