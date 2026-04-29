@@ -511,3 +511,4 @@
   setupImageUploads(); // sets up all three types of image interaction: pick, preview, remove
   console.log('setupImageUploads() called');
 })(); // close the IIFE — all functions and variables are scoped inside here
+

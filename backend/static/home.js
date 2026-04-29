@@ -665,3 +665,4 @@
   document.head.appendChild(style); // inject the styles into the page head
 
 })(); // close the IIFE â€” all variables above are scoped inside it
+

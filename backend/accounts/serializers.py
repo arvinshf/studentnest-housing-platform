@@ -302,3 +302,4 @@ class MessageCreateSerializer(serializers.Serializer):
         if not value or not value.strip():
             raise serializers.ValidationError("Message cannot be empty.")
         return value
+

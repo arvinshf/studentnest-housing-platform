@@ -279,3 +279,4 @@ if not DEBUG:
 
     X_FRAME_OPTIONS = 'DENY'
     # blocks the site from being loaded inside an iframe — prevents clickjacking
+

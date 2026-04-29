@@ -14,3 +14,4 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'studentnest.settings')
 # tells Django which settings file to use when the app starts up
 
 application = get_wsgi_application()
+

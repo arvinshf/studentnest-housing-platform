@@ -36,3 +36,4 @@ class Migration(migrations.Migration):
             field=models.ImageField(blank=True, max_length=500, null=True, upload_to='room_images/'),
         ),
     ]
+

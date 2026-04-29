@@ -1020,3 +1020,4 @@ def reset_password(request):
         'message': 'Your password has been reset successfully! You can now log in.'
     }, status=status.HTTP_200_OK)
 
+

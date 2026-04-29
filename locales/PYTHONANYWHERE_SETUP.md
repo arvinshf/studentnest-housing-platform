@@ -136,3 +136,4 @@ python manage.py collectstatic --no-input  # if you changed CSS/JS
 - Website: `https://yourusername.pythonanywhere.com`
 - Admin: `https://yourusername.pythonanywhere.com/admin/`
 - API: `https://yourusername.pythonanywhere.com/api/`
+

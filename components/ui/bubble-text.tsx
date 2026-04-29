@@ -38,3 +38,4 @@ export const BubbleText = () => {
     </h2>
   );
 };
+

@@ -9,3 +9,4 @@ class AccountsConfig(AppConfig):
     # sets the default primary key type for all models in this app to BigAutoField
     # BigAutoField is an auto-incrementing 64-bit integer (1, 2, 3, ...)
     name = 'accounts'
+

@@ -34,3 +34,4 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     # in development mode, Django serves uploaded images from the /media/ URL
     # in production, PythonAnywhere handles this through its static files configuration
+

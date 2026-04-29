@@ -14,3 +14,4 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'studentnest.settings')
 # tells Django which settings file to load
 
 application = get_asgi_application()
+

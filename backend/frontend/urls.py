@@ -36,3 +36,4 @@ urlpatterns = [
     path('404.html', views.not_found, name='not_found'),
     # custom 404 error page
 ]
+

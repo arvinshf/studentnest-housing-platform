@@ -46,3 +46,4 @@ def reset_password(request):
 def not_found(request):
     """Custom 404 error page"""
     return render(request, '404.html')
+
